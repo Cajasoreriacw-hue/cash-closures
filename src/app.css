@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 /* 2. OBLIGATORIO: El resto de directivas de Tailwind (que no son @import) */
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin 'flowbite/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -15,26 +15,25 @@
 */
 
 :root {
-  font-family: 'Poppins', system-ui, sans-serif;
+	font-family: 'Poppins', system-ui, sans-serif;
 }
 
 @font-face {
-  /* Este es el nombre que usarás para referenciar la fuente en tu CSS */
-  font-family: 'Agile Regular';
+	/* Este es el nombre que usarás para referenciar la fuente en tu CSS */
+	font-family: 'Agile Regular';
 
-  /* Indica la ubicación del archivo de la fuente. Ajusta la ruta si es necesario */
-  src: url('/fonts/agile.ttf') format('truetype');
-
+	/* Indica la ubicación del archivo de la fuente. Ajusta la ruta si es necesario */
+	src: url('/fonts/agile.ttf') format('truetype');
 }
 
 body {
-  @apply bg-neutral-50 text-slate-900;
+	@apply bg-neutral-50 text-slate-900;
 }
 
 main {
-  @apply max-w-5xl mx-auto to-neutral-50;
+	@apply max-w-5xl mx-auto to-neutral-50;
 }
 
 .squada-one-regular {
-  font-family: "Agile Regular", sans-serif;
+	font-family: 'Agile Regular', sans-serif;
 }

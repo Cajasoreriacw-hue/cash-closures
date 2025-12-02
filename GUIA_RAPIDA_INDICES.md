@@ -3,20 +3,23 @@
 ## ⚡ Paso a Paso (5 minutos)
 
 ### 1. Acceder a Supabase
+
 1. Ve a [https://supabase.com](https://supabase.com)
 2. Inicia sesión en tu proyecto
 3. En el menú lateral, haz clic en **SQL Editor**
 
 ### 2. Ejecutar Script de Índices
+
 1. Haz clic en **+ New Query**
 2. Copia y pega el contenido del archivo `supabase-performance-indexes.sql`
 3. Haz clic en **Run** (o presiona `Ctrl+Enter` / `Cmd+Enter`)
 
 ### 3. Verificar Índices Creados
+
 Ejecuta esta query para verificar:
 
 ```sql
-SELECT 
+SELECT
     tablename,
     indexname,
     indexdef
@@ -29,6 +32,7 @@ ORDER BY tablename, indexname;
 Deberías ver **11 índices nuevos** creados.
 
 ### 4. ✅ ¡Listo!
+
 Los índices están activos inmediatamente. No necesitas reiniciar nada.
 
 ---
@@ -37,11 +41,11 @@ Los índices están activos inmediatamente. No necesitas reiniciar nada.
 
 Después de implementar los índices:
 
-| Query | Antes | Después | Mejora |
-|-------|-------|---------|--------|
+| Query                        | Antes  | Después   | Mejora        |
+| ---------------------------- | ------ | --------- | ------------- |
 | Dashboard - Carga de cierres | ~800ms | ~80-150ms | **80-85%** ⬇️ |
-| Closures - Filtro por fecha | ~600ms | ~60-100ms | **85-90%** ⬇️ |
-| Sobres - Filtro por estado | ~400ms | ~40-80ms | **80-90%** ⬇️ |
+| Closures - Filtro por fecha  | ~600ms | ~60-100ms | **85-90%** ⬇️ |
+| Sobres - Filtro por estado   | ~400ms | ~40-80ms  | **80-90%** ⬇️ |
 
 ---
 
@@ -50,7 +54,7 @@ Después de implementar los índices:
 Después de 1 semana de uso, ejecuta esta query para ver el uso de índices:
 
 ```sql
-SELECT 
+SELECT
     tablename,
     indexname,
     idx_scan as veces_usado,
@@ -78,12 +82,15 @@ Los índices con `veces_usado` alto son los más útiles.
 ## 🆘 Solución de Problemas
 
 ### Si ves un error "permission denied"
+
 Asegúrate de estar usando el **Service Role Key** en Supabase, no el Anon Key.
 
 ### Si un índice ya existe
+
 El script usa `CREATE INDEX IF NOT EXISTS`, así que es seguro ejecutarlo múltiples veces.
 
 ### Si quieres eliminar un índice
+
 ```sql
 DROP INDEX IF EXISTS idx_nombre_del_indice;
 ```
@@ -93,6 +100,7 @@ DROP INDEX IF EXISTS idx_nombre_del_indice;
 ## 📞 Soporte
 
 Si tienes problemas:
+
 1. Verifica que estás en el proyecto correcto de Supabase
 2. Asegúrate de tener permisos de administrador
 3. Revisa la consola de errores en Supabase SQL Editor

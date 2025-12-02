@@ -66,7 +66,9 @@
 </script>
 
 <!-- Toast Container: Fixed position at top-right -->
-<div class="toast-container fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+<div
+	class="toast-container fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"
+>
 	{#each toastList as toast (toast.id)}
 		<div
 			class="toast pointer-events-auto rounded-lg border shadow-lg px-4 py-3 flex items-start gap-3 {getColorClasses(

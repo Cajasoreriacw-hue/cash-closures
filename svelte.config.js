@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,8 +21,10 @@ const config = {
 	},
 	onwarn: (warning, handler) => {
 		// Ignorar warnings de state_referenced_locally en archivos generados
-		if (warning.code === 'state_referenced_locally' &&
-			warning.filename?.includes('.svelte-kit/generated/')) {
+		if (
+			warning.code === 'state_referenced_locally' &&
+			warning.filename?.includes('.svelte-kit/generated/')
+		) {
 			return;
 		}
 

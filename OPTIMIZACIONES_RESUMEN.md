@@ -3,27 +3,32 @@
 ## ✅ Optimizaciones Implementadas
 
 ### 1. **Sistema de Caché Inteligente**
+
 - ✅ Creado sistema de caché en memoria (`/src/lib/stores/cache.ts`)
 - ✅ Caché con expiración automática (5 minutos por defecto)
 - ✅ Métodos para invalidar caché selectivamente
 - **Resultado**: 70-80% menos llamadas API redundantes
 
 ### 2. **Optimización de Servicios de Datos**
+
 - ✅ `getCashiers()` y `getStores()` ahora usan caché
 - ✅ Datos se reutilizan entre páginas
 - **Resultado**: Navegación 3-5x más rápida
 
 ### 3. **Debouncing en Filtros del Dashboard**
+
 - ✅ Agregado debouncing de 300ms a filtros
 - ✅ Previene llamadas API excesivas
 - **Resultado**: 60-70% menos llamadas al cambiar filtros
 
 ### 4. **Eliminación de Duplicación de Cliente Supabase**
+
 - ✅ Removida creación duplicada en página de login
 - ✅ Uso consistente del cliente del layout
 - **Resultado**: Menor uso de memoria, mejor consistencia
 
 ### 5. **Utilidades de API Reutilizables**
+
 - ✅ Función `retryWithBackoff()` para reintentos automáticos
 - ✅ Función `debounce()` reutilizable
 - ✅ Función `batchQueries()` para agrupar consultas
@@ -33,12 +38,12 @@
 
 ## 📊 Mejoras de Rendimiento Esperadas
 
-| Métrica | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| Navegación entre páginas | 1-2s | 200-400ms | **70-80%** ⬇️ |
-| Cambio de filtros | 800ms-1s | 100-200ms | **75-80%** ⬇️ |
-| Llamadas API redundantes | 60-70% | 10-15% | **80-85%** ⬇️ |
-| Tiempo de carga inicial | 2-3s | 1.5-2s | **25-33%** ⬇️ |
+| Métrica                  | Antes    | Después   | Mejora        |
+| ------------------------ | -------- | --------- | ------------- |
+| Navegación entre páginas | 1-2s     | 200-400ms | **70-80%** ⬇️ |
+| Cambio de filtros        | 800ms-1s | 100-200ms | **75-80%** ⬇️ |
+| Llamadas API redundantes | 60-70%   | 10-15%    | **80-85%** ⬇️ |
+| Tiempo de carga inicial  | 2-3s     | 1.5-2s    | **25-33%** ⬇️ |
 
 ---
 
@@ -57,6 +62,7 @@
 ## 🎯 Próximos Pasos Recomendados
 
 ### Prioridad Alta (Implementar Ahora)
+
 1. **Ejecutar índices de base de datos**
    ```bash
    # Abre Supabase SQL Editor y ejecuta:
@@ -65,6 +71,7 @@
    **Impacto**: Queries 5-10x más rápidas
 
 ### Prioridad Media (Próxima Semana)
+
 2. **Virtualización de tablas grandes**
    - Instalar: `npm install svelte-virtual-list`
    - Implementar en `/closures` y `/sobres`
@@ -75,6 +82,7 @@
    - **Impacto**: Bundle inicial 100KB más pequeño
 
 ### Prioridad Baja (Futuro)
+
 4. **Paginación del lado del servidor**
    - Implementar paginación real en Supabase
    - **Impacto**: 80-90% menos transferencia de datos
@@ -148,6 +156,7 @@ npm run dev
 ## 🎉 Resultado Final
 
 La aplicación ahora es **significativamente más rápida** con:
+
 - ✅ Navegación casi instantánea entre páginas
 - ✅ Filtros que responden suavemente
 - ✅ Menos carga en el servidor

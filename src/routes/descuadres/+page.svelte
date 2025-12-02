@@ -87,38 +87,40 @@
 		}
 	};
 
-	const descuadresBase = $derived(closures.flatMap<Descuadre>((c) => {
-		const rows: Descuadre[] = [];
+	const descuadresBase = $derived(
+		closures.flatMap<Descuadre>((c) => {
+			const rows: Descuadre[] = [];
 
-		// Descuadre en efectivo: solo consideramos si diferencia es negativa
-		if (c.efectivo.diferencia < 0) {
-			rows.push({
-				id: `${c.id}-efectivo`,
-				date: c.date,
-				cashier: c.cashier,
-				store: c.store,
-				metodo: 'Efectivo',
-				valor: c.efectivo.diferencia,
-				createdAt: c.createdAt
-			});
-		}
+			// Descuadre en efectivo: solo consideramos si diferencia es negativa
+			if (c.efectivo.diferencia < 0) {
+				rows.push({
+					id: `${c.id}-efectivo`,
+					date: c.date,
+					cashier: c.cashier,
+					store: c.store,
+					metodo: 'Efectivo',
+					valor: c.efectivo.diferencia,
+					createdAt: c.createdAt
+				});
+			}
 
-		// Descuadre en datáfono: solo si real - sistema es negativo
-		const diffDataphone = c.channels.dataphone.real - c.channels.dataphone.system;
-		if (diffDataphone < 0) {
-			rows.push({
-				id: `${c.id}-dataphone`,
-				date: c.date,
-				cashier: c.cashier,
-				store: c.store,
-				metodo: 'Datáfono',
-				valor: diffDataphone,
-				createdAt: c.createdAt
-			});
-		}
+			// Descuadre en datáfono: solo si real - sistema es negativo
+			const diffDataphone = c.channels.dataphone.real - c.channels.dataphone.system;
+			if (diffDataphone < 0) {
+				rows.push({
+					id: `${c.id}-dataphone`,
+					date: c.date,
+					cashier: c.cashier,
+					store: c.store,
+					metodo: 'Datáfono',
+					valor: diffDataphone,
+					createdAt: c.createdAt
+				});
+			}
 
-		return rows;
-	}));
+			return rows;
+		})
+	);
 
 	const inDateRange = (dateStr: string) => {
 		if (!filterFrom && !filterTo) return true;
@@ -128,27 +130,29 @@
 		return true;
 	};
 
-	let filteredDescuadres = $derived(descuadresBase.filter((d) => {
-		if (filterCashier && d.cashier !== filterCashier) return false;
-		if (filterStore && d.store !== filterStore) return false;
+	let filteredDescuadres = $derived(
+		descuadresBase.filter((d) => {
+			if (filterCashier && d.cashier !== filterCashier) return false;
+			if (filterStore && d.store !== filterStore) return false;
 
-		const efectivoSelected = filterMetodoEfectivo;
-		const dataphoneSelected = filterMetodoDatafono;
+			const efectivoSelected = filterMetodoEfectivo;
+			const dataphoneSelected = filterMetodoDatafono;
 
-		// Si ningún método está seleccionado, no mostramos resultados
-		if (!efectivoSelected && !dataphoneSelected) return false;
+			// Si ningún método está seleccionado, no mostramos resultados
+			if (!efectivoSelected && !dataphoneSelected) return false;
 
-		// Solo efectivo
-		if (efectivoSelected && !dataphoneSelected && d.metodo !== 'Efectivo') return false;
+			// Solo efectivo
+			if (efectivoSelected && !dataphoneSelected && d.metodo !== 'Efectivo') return false;
 
-		// Solo datáfono
-		if (!efectivoSelected && dataphoneSelected && d.metodo !== 'Datáfono') return false;
+			// Solo datáfono
+			if (!efectivoSelected && dataphoneSelected && d.metodo !== 'Datáfono') return false;
 
-		// Si ambos están seleccionados, no filtramos por método
+			// Si ambos están seleccionados, no filtramos por método
 
-		if (!inDateRange(d.date)) return false;
-		return true;
-	}));
+			if (!inDateRange(d.date)) return false;
+			return true;
+		})
+	);
 
 	// Pagination calculations
 	let totalPages = $derived(Math.ceil(filteredDescuadres.length / itemsPerPage));
@@ -355,7 +359,7 @@
 					style: 'currency',
 					currency: 'COP',
 					minimumFractionDigits: 0,
-    				maximumFractionDigits: 0
+					maximumFractionDigits: 0
 				});
 
 				if (d.valor < 0) {
@@ -391,7 +395,7 @@
 				style: 'currency',
 				currency: 'COP',
 				minimumFractionDigits: 0,
-    			maximumFractionDigits: 0
+				maximumFractionDigits: 0
 			});
 			if (totalValor < 0) doc.setTextColor(colors.danger[0], colors.danger[1], colors.danger[2]);
 			doc.text(totalStr, colX.value, y, { align: 'right' });
@@ -427,13 +431,13 @@
 					const centerX = boxX + boxSize / 2;
 					const centerY = boxY + boxSize / 2;
 					const angle = -12; // Ajusta este valor (-15 a 15 funciona bien)
-					
+
 					doc.addImage(
-						selloBase64, 
-						'PNG', 
-						boxX, 
-						boxY, 
-						boxSize, 
+						selloBase64,
+						'PNG',
+						boxX,
+						boxY,
+						boxSize,
 						boxSize,
 						undefined,
 						undefined,

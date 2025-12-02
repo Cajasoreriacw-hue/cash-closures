@@ -5,12 +5,14 @@ Esta guía te ayudará a configurar Cloudflare para tu aplicación Cash Closures
 ## 1. Configuración Inicial de Cloudflare
 
 ### Paso 1: Crear cuenta y agregar sitio
+
 1. Ve a [Cloudflare](https://www.cloudflare.com/) y crea una cuenta
 2. Haz clic en "Add a Site"
 3. Ingresa tu dominio (ej: `cashclosures.com`)
 4. Selecciona el plan Free (o Pro si necesitas más funciones)
 
 ### Paso 2: Configurar DNS
+
 1. Cloudflare te mostrará los nameservers que debes usar
 2. Ve a tu registrador de dominios y actualiza los nameservers
 3. Espera a que se propague (puede tomar hasta 24 horas)
@@ -18,12 +20,14 @@ Esta guía te ayudará a configurar Cloudflare para tu aplicación Cash Closures
 ## 2. Configuración de SSL/TLS
 
 ### Habilitar SSL Completo
+
 1. Ve a **SSL/TLS** en el panel de Cloudflare
 2. Selecciona **Full (strict)** como modo de encriptación
 3. Habilita **Always Use HTTPS**
 4. Habilita **Automatic HTTPS Rewrites**
 
 ### Configurar certificados
+
 ```bash
 # Cloudflare proporciona certificados SSL gratuitos automáticamente
 # No necesitas configurar nada adicional
@@ -32,6 +36,7 @@ Esta guía te ayudará a configurar Cloudflare para tu aplicación Cash Closures
 ## 3. Protección y Seguridad
 
 ### Configurar Firewall Rules
+
 1. Ve a **Security** > **WAF**
 2. Habilita el **Managed Rules** (disponible en plan Free)
 3. Crea reglas personalizadas:
@@ -45,6 +50,7 @@ Esta guía te ayudará a configurar Cloudflare para tu aplicación Cash Closures
 ```
 
 ### Configurar Rate Limiting
+
 1. Ve a **Security** > **Rate Limiting Rules**
 2. Crea regla para proteger login:
 
@@ -52,13 +58,14 @@ Esta guía te ayudará a configurar Cloudflare para tu aplicación Cash Closures
 Rule name: Protect Login
 When incoming requests match:
   URI Path equals /login
-  
+
 Then:
   Block for 1 hour
   When rate exceeds 5 requests per 1 minute
 ```
 
 ### Habilitar DDoS Protection
+
 1. Ve a **Security** > **DDoS**
 2. El DDoS protection está habilitado automáticamente
 3. Configura **Sensitivity Level** a "High"
@@ -66,11 +73,13 @@ Then:
 ## 4. Optimización de Rendimiento
 
 ### Configurar Caching
+
 1. Ve a **Caching** > **Configuration**
 2. Configura **Browser Cache TTL** a "4 hours"
 3. Habilita **Always Online**
 
 ### Page Rules para PWA
+
 1. Ve a **Rules** > **Page Rules**
 2. Crea las siguientes reglas:
 
@@ -96,6 +105,7 @@ Settings:
 ```
 
 ### Habilitar Auto Minify
+
 1. Ve a **Speed** > **Optimization**
 2. Habilita **Auto Minify** para:
    - JavaScript
@@ -103,6 +113,7 @@ Settings:
    - HTML
 
 ### Habilitar Brotli
+
 1. Ve a **Speed** > **Optimization**
 2. Habilita **Brotli** compression
 
@@ -121,6 +132,7 @@ Root directory: /
 ```
 
 4. Variables de entorno:
+
 ```
 VITE_SUPABASE_URL=tu_supabase_url
 VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
@@ -147,6 +159,7 @@ wrangler pages deploy build --project-name=cash-closures
 ## 6. Configuración Adicional para PWA
 
 ### Headers personalizados
+
 1. Crea un archivo `_headers` en tu carpeta `static/`:
 
 ```
@@ -173,24 +186,27 @@ npm install -D @sveltejs/adapter-cloudflare
 ```
 
 Actualiza `svelte.config.js`:
+
 ```javascript
 import adapter from '@sveltejs/adapter-cloudflare';
 
 export default {
-  kit: {
-    adapter: adapter()
-  }
+	kit: {
+		adapter: adapter()
+	}
 };
 ```
 
 ## 7. Monitoreo y Analytics
 
 ### Habilitar Web Analytics
+
 1. Ve a **Analytics** > **Web Analytics**
 2. Habilita **Web Analytics**
 3. Copia el código de tracking (ya incluido automáticamente con Cloudflare Pages)
 
 ### Configurar Alerts
+
 1. Ve a **Notifications**
 2. Configura alertas para:
    - Traffic anomalies
@@ -200,6 +216,7 @@ export default {
 ## 8. Testing
 
 ### Verificar configuración
+
 ```bash
 # Test SSL
 curl -I https://tu-dominio.com
@@ -212,6 +229,7 @@ curl -I https://tu-dominio.com/service-worker.js
 ```
 
 ### Verificar PWA
+
 1. Abre Chrome DevTools
 2. Ve a **Application** > **Manifest**
 3. Verifica que el manifest se carga correctamente
@@ -220,18 +238,22 @@ curl -I https://tu-dominio.com/service-worker.js
 ## 9. Mejores Prácticas
 
 ### Security Headers
+
 Asegúrate de que estos headers estén configurados:
+
 - `Content-Security-Policy`
 - `X-Frame-Options`
 - `X-Content-Type-Options`
 - `Strict-Transport-Security`
 
 ### Performance
+
 - Usa Cloudflare CDN para servir assets estáticos
 - Habilita HTTP/3
 - Usa Early Hints para mejorar tiempo de carga
 
 ### Monitoring
+
 - Revisa regularmente el **Security Center**
 - Monitorea el **Analytics Dashboard**
 - Configura alertas para eventos críticos
@@ -246,16 +268,19 @@ Asegúrate de que estos headers estén configurados:
 ## Troubleshooting
 
 ### Problema: Service Worker no se registra
+
 - Verifica que estés usando HTTPS
 - Revisa la consola del navegador
 - Asegúrate de que el path del service worker sea correcto
 
 ### Problema: Manifest no se carga
+
 - Verifica el Content-Type header
 - Asegúrate de que el archivo esté en `/static/manifest.json`
 - Revisa que los iconos existan
 
 ### Problema: Errores de CORS
+
 - Configura headers CORS en Cloudflare
 - Verifica la configuración de tu API
 

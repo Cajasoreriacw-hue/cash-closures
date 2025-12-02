@@ -22,7 +22,12 @@
 
 	const AlertAny = Alert as any;
 
-	let pageState = $state<{ sobres: Sobre[]; updateError: string; loading: boolean; error: string | null }>({
+	let pageState = $state<{
+		sobres: Sobre[];
+		updateError: string;
+		loading: boolean;
+		error: string | null;
+	}>({
 		sobres: [],
 		updateError: '',
 		loading: true,
@@ -113,7 +118,9 @@
 
 			if (updateError) throw updateError;
 
-			pageState.sobres = pageState.sobres.map((s: Sobre) => (s.id === sobreId ? { ...s, status: newStatus } : s));
+			pageState.sobres = pageState.sobres.map((s: Sobre) =>
+				s.id === sobreId ? { ...s, status: newStatus } : s
+			);
 			pageState.updateError = '';
 		} catch (err: any) {
 			Logger.error(err);

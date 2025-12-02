@@ -16,7 +16,7 @@ Sistema ERP moderno para gestión y control de cierres de caja, construido con S
 
 ## 📋 Requisitos Previos
 
-- Node.js 18+ 
+- Node.js 18+
 - npm o pnpm
 - Cuenta de Supabase (gratis)
 - Cuenta de Cloudflare (opcional, para deployment)
@@ -24,12 +24,14 @@ Sistema ERP moderno para gestión y control de cierres de caja, construido con S
 ## 🛠️ Instalación
 
 1. **Clonar el repositorio**
+
 ```bash
 git clone <tu-repo>
 cd cash-closures
 ```
 
 2. **Instalar dependencias**
+
 ```bash
 npm install
 ```
@@ -46,11 +48,13 @@ VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
 4. **Generar iconos de PWA**
 
 Abre `icon-generator.html` en tu navegador para generar los iconos:
+
 ```bash
 open icon-generator.html
 ```
 
 Esto descargará `icon-192.png` y `icon-512.png`. Muévelos a la carpeta `static/`:
+
 ```bash
 mv icon-*.png static/
 ```
@@ -58,6 +62,7 @@ mv icon-*.png static/
 ## 🏃 Desarrollo
 
 Iniciar servidor de desarrollo:
+
 ```bash
 npm run dev
 ```
@@ -67,11 +72,13 @@ La aplicación estará disponible en `http://localhost:5173`
 ## 🏗️ Build
 
 Construir para producción:
+
 ```bash
 npm run build
 ```
 
 Preview del build:
+
 ```bash
 npm run preview
 ```
@@ -89,6 +96,7 @@ npm run preview
 ### Crear tablas necesarias
 
 Ejecuta los scripts SQL en tu proyecto de Supabase:
+
 - `supabase-schema.sql`
 - `supabase-envelopes.sql`
 - `supabase-envelope-status.sql`
@@ -127,6 +135,7 @@ wrangler pages deploy .svelte-kit/cloudflare --project-name=cash-closures
 ## 🛡️ Configuración de Cloudflare
 
 Sigue la guía completa en [CLOUDFLARE_SETUP.md](./CLOUDFLARE_SETUP.md) para:
+
 - Configurar SSL/TLS
 - Habilitar protección DDoS
 - Configurar WAF (Web Application Firewall)
@@ -137,16 +146,19 @@ Sigue la guía completa en [CLOUDFLARE_SETUP.md](./CLOUDFLARE_SETUP.md) para:
 ## 📱 Instalación como PWA
 
 ### En Desktop (Chrome/Edge)
+
 1. Abre la aplicación en tu navegador
 2. Busca el ícono de instalación en la barra de direcciones
 3. Haz clic en "Instalar"
 
 ### En Mobile (iOS)
+
 1. Abre la aplicación en Safari
 2. Toca el botón de compartir
 3. Selecciona "Agregar a pantalla de inicio"
 
 ### En Mobile (Android)
+
 1. Abre la aplicación en Chrome
 2. Toca el menú (tres puntos)
 3. Selecciona "Instalar aplicación"
@@ -190,24 +202,28 @@ cash-closures/
 ## 📝 Funcionalidades Principales
 
 ### Sistema de Autenticación
+
 - Login seguro con Supabase
 - Protección de rutas
 - Sesión persistente
 - Logout con limpieza de sesión
 
 ### Navegación
+
 - Logo y nombre de app en la izquierda
 - Links de navegación en el centro
 - Información de usuario y logout en la derecha
 - Diseño responsive
 
 ### PWA
+
 - Instalable en cualquier dispositivo
 - Funciona offline
 - Caché inteligente
 - Actualizaciones automáticas
 
 ### Seguridad (Cloudflare)
+
 - Protección DDoS automática
 - WAF (Web Application Firewall)
 - SSL/TLS automático
@@ -217,16 +233,19 @@ cash-closures/
 ## 🐛 Troubleshooting
 
 ### Service Worker no se registra
+
 - Asegúrate de estar usando HTTPS (o localhost)
 - Limpia el caché del navegador
 - Verifica la consola de DevTools
 
 ### Error de autenticación
+
 - Verifica que las variables de entorno estén correctas
 - Asegúrate de que el usuario existe en Supabase
 - Revisa que las tablas estén creadas
 
 ### Build falla
+
 - Limpia node_modules: `rm -rf node_modules && npm install`
 - Limpia .svelte-kit: `rm -rf .svelte-kit`
 - Verifica que todas las dependencias estén instaladas

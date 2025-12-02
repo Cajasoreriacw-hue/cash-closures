@@ -288,7 +288,10 @@
 				],
 				envelopes: [
 					{
-						number: selectedClosure.efectivo.real - selectedClosure.efectivo.base > 0 ? 'AUTOMATICO' : 'SIN SOBRE',
+						number:
+							selectedClosure.efectivo.real - selectedClosure.efectivo.base > 0
+								? 'AUTOMATICO'
+								: 'SIN SOBRE',
 						amount: Math.max(0, selectedClosure.efectivo.real - selectedClosure.efectivo.base)
 					}
 				],
@@ -318,14 +321,14 @@
 			// Reload closures
 			await loadClosures();
 
-		// Update selected closure with new data
-		const currentClosure = selectedClosure;
-		if (currentClosure) {
-			const updated = closures.find((c) => c.id === currentClosure.id);
-			if (updated) {
-				selectedClosure = updated;
+			// Update selected closure with new data
+			const currentClosure = selectedClosure;
+			if (currentClosure) {
+				const updated = closures.find((c) => c.id === currentClosure.id);
+				if (updated) {
+					selectedClosure = updated;
+				}
 			}
-		}
 			setTimeout(() => {
 				saveSuccess = '';
 			}, 3000);
@@ -538,150 +541,150 @@
 			tabindex="-1"
 		>
 			<div
-			class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-10"
-		>
-			<h2 class="text-lg font-semibold">
-				{editMode ? 'Editar Cierre' : 'Detalle del Cierre'}
-			</h2>
-			<div class="flex items-center gap-2">
-				{#if !editMode}
-					<button
-						type="button"
-						onclick={enableEditMode}
-						class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-					>
-						✏️ Editar
-					</button>
-				{:else}
-					<button
-						type="button"
-						onclick={handleSave}
-						disabled={saving}
-						class="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-					>
-						{saving ? 'Guardando...' : '💾 Guardar'}
-					</button>
-					<button
-						type="button"
-						onclick={() => (editMode = false)}
-						disabled={saving}
-						class="px-3 py-1.5 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
-					>
-						❌ Cancelar
-					</button>
-				{/if}
-				<button
-					type="button"
-					onclick={closeModal}
-					class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button
-				>
-			</div>
-		</div>
-
-		<div class="p-6 space-y-4">
-			<!-- Success/Error Alerts -->
-			{#if saveSuccess}
-				<AlertAny color="green" dismissable>
-					<svelte:fragment slot="icon">
-						<svg
-							class="w-5 h-5"
-							fill="currentColor"
-							viewBox="0 0 20 20"
-							xmlns="http://www.w3.org/2000/svg"
+				class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-10"
+			>
+				<h2 class="text-lg font-semibold">
+					{editMode ? 'Editar Cierre' : 'Detalle del Cierre'}
+				</h2>
+				<div class="flex items-center gap-2">
+					{#if !editMode}
+						<button
+							type="button"
+							onclick={enableEditMode}
+							class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
 						>
-							<path
-								fill-rule="evenodd"
-								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-								clip-rule="evenodd"
-							/>
-						</svg>
-					</svelte:fragment>
-					<span class="font-medium">Éxito:</span>
-					{saveSuccess}
-				</AlertAny>
-			{/if}
-
-			{#if saveError}
-				<AlertAny color="red" dismissable>
-					<svelte:fragment slot="icon">
-						<svg
-							class="w-5 h-5"
-							fill="currentColor"
-							viewBox="0 0 20 20"
-							xmlns="http://www.w3.org/2000/svg"
+							✏️ Editar
+						</button>
+					{:else}
+						<button
+							type="button"
+							onclick={handleSave}
+							disabled={saving}
+							class="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
 						>
-							<path
-								fill-rule="evenodd"
-								d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-								clip-rule="evenodd"
-							/>
-						</svg>
-					</svelte:fragment>
-					<span class="font-medium">Error:</span>
-					{saveError}
-				</AlertAny>
-			{/if}
-
-			<!-- Datos Generales -->
-			<section>
-				<h3 class="text-sm font-semibold text-slate-700 mb-2">Datos Generales</h3>
-				<div class="grid grid-cols-2 gap-3 text-sm">
-					<div>
-						<span class="text-slate-600">Fecha:</span>
-						{#if editMode}
-							<input
-								type="date"
-								bind:value={selectedClosure.date}
-								class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
-							/>
-						{:else}
-							<span class="font-medium">{selectedClosure.date}</span>
-						{/if}
-					</div>
-					<div>
-						<span class="text-slate-600">Cajero:</span>
-						{#if editMode}
-							<select
-								bind:value={selectedClosure.cashier}
-								class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
-							>
-								{#each cashierOptions as cashier}
-									<option value={cashier}>{cashier}</option>
-								{/each}
-							</select>
-						{:else}
-							<span class="font-medium">{selectedClosure.cashier}</span>
-						{/if}
-					</div>
-					<div>
-						<span class="text-slate-600">Tienda:</span>
-						{#if editMode}
-							<select
-								bind:value={selectedClosure.store}
-								class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
-							>
-								{#each storeOptions as store}
-									<option value={store}>{store}</option>
-								{/each}
-							</select>
-						{:else}
-							<span class="font-medium">{selectedClosure.store}</span>
-						{/if}
-					</div>
-					<div>
-						<span class="text-slate-600">Nota:</span>
-						{#if editMode}
-							<input
-								type="text"
-								bind:value={selectedClosure.note}
-								class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm w-full"
-							/>
-						{:else}
-							<span class="font-medium">{selectedClosure.note || 'N/A'}</span>
-						{/if}
-					</div>
+							{saving ? 'Guardando...' : '💾 Guardar'}
+						</button>
+						<button
+							type="button"
+							onclick={() => (editMode = false)}
+							disabled={saving}
+							class="px-3 py-1.5 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+						>
+							❌ Cancelar
+						</button>
+					{/if}
+					<button
+						type="button"
+						onclick={closeModal}
+						class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button
+					>
 				</div>
-			</section>
+			</div>
+
+			<div class="p-6 space-y-4">
+				<!-- Success/Error Alerts -->
+				{#if saveSuccess}
+					<AlertAny color="green" dismissable>
+						<svelte:fragment slot="icon">
+							<svg
+								class="w-5 h-5"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+									clip-rule="evenodd"
+								/>
+							</svg>
+						</svelte:fragment>
+						<span class="font-medium">Éxito:</span>
+						{saveSuccess}
+					</AlertAny>
+				{/if}
+
+				{#if saveError}
+					<AlertAny color="red" dismissable>
+						<svelte:fragment slot="icon">
+							<svg
+								class="w-5 h-5"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+									clip-rule="evenodd"
+								/>
+							</svg>
+						</svelte:fragment>
+						<span class="font-medium">Error:</span>
+						{saveError}
+					</AlertAny>
+				{/if}
+
+				<!-- Datos Generales -->
+				<section>
+					<h3 class="text-sm font-semibold text-slate-700 mb-2">Datos Generales</h3>
+					<div class="grid grid-cols-2 gap-3 text-sm">
+						<div>
+							<span class="text-slate-600">Fecha:</span>
+							{#if editMode}
+								<input
+									type="date"
+									bind:value={selectedClosure.date}
+									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+								/>
+							{:else}
+								<span class="font-medium">{selectedClosure.date}</span>
+							{/if}
+						</div>
+						<div>
+							<span class="text-slate-600">Cajero:</span>
+							{#if editMode}
+								<select
+									bind:value={selectedClosure.cashier}
+									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+								>
+									{#each cashierOptions as cashier}
+										<option value={cashier}>{cashier}</option>
+									{/each}
+								</select>
+							{:else}
+								<span class="font-medium">{selectedClosure.cashier}</span>
+							{/if}
+						</div>
+						<div>
+							<span class="text-slate-600">Tienda:</span>
+							{#if editMode}
+								<select
+									bind:value={selectedClosure.store}
+									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+								>
+									{#each storeOptions as store}
+										<option value={store}>{store}</option>
+									{/each}
+								</select>
+							{:else}
+								<span class="font-medium">{selectedClosure.store}</span>
+							{/if}
+						</div>
+						<div>
+							<span class="text-slate-600">Nota:</span>
+							{#if editMode}
+								<input
+									type="text"
+									bind:value={selectedClosure.note}
+									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm w-full"
+								/>
+							{:else}
+								<span class="font-medium">{selectedClosure.note || 'N/A'}</span>
+							{/if}
+						</div>
+					</div>
+				</section>
 
 				<!-- Venta Total -->
 				<section>

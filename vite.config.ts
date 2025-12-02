@@ -8,11 +8,8 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA({
 			srcDir: './src',
-			mode: 'development',
 			strategies: 'injectManifest',
 			filename: 'service-worker.ts',
-			scope: '/',
-			base: '/',
 			selfDestroying: process.env.SELF_DESTROYING_SW === 'true',
 			manifest: {
 				name: 'MonitCw',
@@ -38,7 +35,9 @@ export default defineConfig({
 				]
 			},
 			injectManifest: {
-				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}']
+				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}'],
+				// Agregar esta línea para que encuentre el marcador
+				injectionPoint: undefined
 			},
 			devOptions: {
 				enabled: true,
@@ -75,8 +74,4 @@ export default defineConfig({
 			}
 		]
 	},
-	server: {
-		host: true,
-		allowedHosts: ['.trycloudflare.com']
-	}
 });

@@ -8,7 +8,8 @@ Este documento detalla las optimizaciones implementadas para mejorar el rendimie
 
 ## ✅ Optimizaciones Implementadas
 
-### 1. **Sistema de Caché de Datos** 
+### 1. **Sistema de Caché de Datos**
+
 **Archivo**: `/src/lib/stores/cache.ts`
 
 - ✅ Implementado un sistema de caché en memoria para datos que cambian raramente
@@ -17,6 +18,7 @@ Este documento detalla las optimizaciones implementadas para mejorar el rendimie
 - **Impacto**: Reduce llamadas API redundantes en un 70-80%
 
 ### 2. **Optimización de Servicios**
+
 **Archivo**: `/src/lib/services/closures.ts`
 
 - ✅ `getCashiers()` y `getStores()` ahora usan caché
@@ -25,6 +27,7 @@ Este documento detalla las optimizaciones implementadas para mejorar el rendimie
 - **Impacto**: Navegación entre páginas 3-5x más rápida
 
 ### 3. **Debouncing en Dashboard**
+
 **Archivo**: `/src/routes/+page.svelte`
 
 - ✅ Agregado debouncing de 300ms a los filtros del dashboard
@@ -33,6 +36,7 @@ Este documento detalla las optimizaciones implementadas para mejorar el rendimie
 - **Impacto**: Reduce llamadas API en un 60-70% al usar filtros
 
 ### 4. **Eliminación de Cliente Supabase Duplicado**
+
 **Archivo**: `/src/routes/login/+page.svelte`
 
 - ✅ Removida la creación duplicada del cliente Supabase
@@ -41,6 +45,7 @@ Este documento detalla las optimizaciones implementadas para mejorar el rendimie
 - **Impacto**: Reduce uso de memoria y mejora consistencia
 
 ### 5. **Utilidades de API**
+
 **Archivo**: `/src/lib/utils/api-helpers.ts`
 
 - ✅ Función `retryWithBackoff()` para reintentos automáticos
@@ -74,14 +79,14 @@ npm install svelte-virtual-list
 
 ```svelte
 <script>
-  import VirtualList from 'svelte-virtual-list';
+	import VirtualList from 'svelte-virtual-list';
 </script>
 
 <VirtualList items={filteredClosures} let:item>
-  <tr>
-    <td>{item.date}</td>
-    <!-- ... -->
-  </tr>
+	<tr>
+		<td>{item.date}</td>
+		<!-- ... -->
+	</tr>
 </VirtualList>
 ```
 
@@ -93,23 +98,23 @@ Ejecuta estos comandos en tu base de datos Supabase:
 
 ```sql
 -- Índice para búsquedas por fecha
-CREATE INDEX IF NOT EXISTS idx_cash_closures_date 
+CREATE INDEX IF NOT EXISTS idx_cash_closures_date
 ON cash_closures(date DESC);
 
 -- Índice para búsquedas por cajero
-CREATE INDEX IF NOT EXISTS idx_cash_closures_cashier 
+CREATE INDEX IF NOT EXISTS idx_cash_closures_cashier
 ON cash_closures(cashier_id);
 
 -- Índice para búsquedas por tienda
-CREATE INDEX IF NOT EXISTS idx_cash_closures_store 
+CREATE INDEX IF NOT EXISTS idx_cash_closures_store
 ON cash_closures(store_id);
 
 -- Índice compuesto para filtros combinados
-CREATE INDEX IF NOT EXISTS idx_cash_closures_date_store 
+CREATE INDEX IF NOT EXISTS idx_cash_closures_date_store
 ON cash_closures(date DESC, store_id);
 
 -- Índice para sobres
-CREATE INDEX IF NOT EXISTS idx_cash_envelopes_status 
+CREATE INDEX IF NOT EXISTS idx_cash_envelopes_status
 ON cash_envelopes(status);
 ```
 
@@ -121,10 +126,10 @@ Modifica las queries para usar paginación real:
 
 ```typescript
 const { data, error } = await supabase
-  .from('cash_closures')
-  .select('*', { count: 'exact' })
-  .range(offset, offset + limit - 1)
-  .order('date', { ascending: false });
+	.from('cash_closures')
+	.select('*', { count: 'exact' })
+	.range(offset, offset + limit - 1)
+	.order('date', { ascending: false });
 ```
 
 **Beneficio**: Reduce transferencia de datos en un 80-90%
@@ -136,22 +141,22 @@ El PWA ya está configurado, pero asegúrate de que el service worker esté cach
 ```typescript
 // En vite.config.ts, verifica la configuración de PWA
 pwa({
-  workbox: {
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365 // 1 año
-          }
-        }
-      }
-    ]
-  }
-})
+	workbox: {
+		runtimeCaching: [
+			{
+				urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+				handler: 'CacheFirst',
+				options: {
+					cacheName: 'google-fonts-cache',
+					expiration: {
+						maxEntries: 10,
+						maxAgeSeconds: 60 * 60 * 24 * 365 // 1 año
+					}
+				}
+			}
+		]
+	}
+});
 ```
 
 ### 6. **Optimización de Imágenes y Assets**
@@ -169,23 +174,20 @@ En `+layout.ts`, prefetch datos comunes:
 
 ```typescript
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
-  depends('supabase:auth');
+	depends('supabase:auth');
 
-  const supabase = createBrowserClient(/* ... */);
-  
-  // Prefetch datos comunes
-  const [cashiers, stores] = await Promise.all([
-    getCashiers(supabase),
-    getStores(supabase)
-  ]);
+	const supabase = createBrowserClient(/* ... */);
 
-  return { 
-    supabase, 
-    session, 
-    user: data.user,
-    cashiers,
-    stores
-  };
+	// Prefetch datos comunes
+	const [cashiers, stores] = await Promise.all([getCashiers(supabase), getStores(supabase)]);
+
+	return {
+		supabase,
+		session,
+		user: data.user,
+		cashiers,
+		stores
+	};
 };
 ```
 
@@ -196,12 +198,14 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 ## 📈 Métricas de Rendimiento Esperadas
 
 ### Antes de Optimizaciones
+
 - **Tiempo de carga inicial**: ~2-3s
 - **Navegación entre páginas**: ~1-2s
 - **Cambio de filtros**: ~800ms-1s
 - **Llamadas API redundantes**: ~60-70%
 
 ### Después de Optimizaciones
+
 - **Tiempo de carga inicial**: ~1.5-2s ⬇️ 25-33%
 - **Navegación entre páginas**: ~200-400ms ⬇️ 70-80%
 - **Cambio de filtros**: ~100-200ms ⬇️ 75-80%
@@ -218,6 +222,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
    - Identifica cuellos de botella
 
 2. **Lighthouse**
+
    ```bash
    npm install -g lighthouse
    lighthouse http://localhost:5173 --view

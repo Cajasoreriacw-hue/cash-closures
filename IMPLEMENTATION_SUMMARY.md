@@ -5,6 +5,7 @@
 ### 1. **Progressive Web App (PWA)**
 
 #### Archivos creados/modificados:
+
 - ✅ `static/manifest.json` - Configuración de la PWA
 - ✅ `src/service-worker.ts` - Service worker para funcionalidad offline
 - ✅ `vite.config.ts` - Configuración del plugin PWA
@@ -13,6 +14,7 @@
 - ✅ `static/icon-512.svg` - Icono 512x512
 
 #### Características:
+
 - ✅ Instalable en dispositivos móviles y desktop
 - ✅ Funciona offline con caché inteligente
 - ✅ Actualizaciones automáticas
@@ -24,6 +26,7 @@
 ### 2. **Sistema de Autenticación con Supabase**
 
 #### Archivos creados:
+
 - ✅ `src/hooks.server.ts` - Hooks de autenticación del servidor
 - ✅ `src/routes/+layout.server.ts` - Carga de datos de sesión
 - ✅ `src/routes/login/+page.svelte` - Página de login
@@ -31,6 +34,7 @@
 - ✅ `src/app.d.ts` - Tipos de TypeScript para Supabase
 
 #### Características:
+
 - ✅ Login seguro con email y contraseña
 - ✅ Protección automática de rutas (redirect a /login si no autenticado)
 - ✅ Sesión persistente con cookies
@@ -38,6 +42,7 @@
 - ✅ UI moderna con gradientes y animaciones
 
 #### Dependencias instaladas:
+
 ```bash
 @supabase/ssr
 ```
@@ -47,12 +52,14 @@
 ### 3. **Navegación Mejorada**
 
 #### Archivo modificado:
+
 - ✅ `src/routes/+layout.svelte`
 
 #### Características:
+
 - ✅ **Izquierda**: Logo con gradiente + nombre de la app "Cash Closures"
 - ✅ **Centro**: Links de navegación (Panel, Cierres, Sobres, Descuadres)
-- ✅ **Derecha**: 
+- ✅ **Derecha**:
   - Avatar circular con inicial del usuario
   - Nombre de usuario (extraído del email)
   - Email completo
@@ -67,16 +74,19 @@
 ### 4. **Integración con Cloudflare**
 
 #### Archivos creados:
+
 - ✅ `CLOUDFLARE_SETUP.md` - Guía completa de configuración
 - ✅ `static/_headers` - Headers de seguridad y caché
 - ✅ `svelte.config.js` - Adaptador de Cloudflare configurado
 
 #### Dependencias instaladas:
+
 ```bash
 @sveltejs/adapter-cloudflare
 ```
 
 #### Configuraciones incluidas en la guía:
+
 - ✅ SSL/TLS automático
 - ✅ Protección DDoS
 - ✅ WAF (Web Application Firewall)
@@ -93,6 +103,7 @@
 ### 5. **Documentación**
 
 #### Archivos creados/actualizados:
+
 - ✅ `README.md` - Documentación completa del proyecto
 - ✅ `CLOUDFLARE_SETUP.md` - Guía de Cloudflare
 - ✅ `icon-generator.html` - Herramienta para generar iconos
@@ -103,15 +114,15 @@
 
 ```json
 {
-  "dependencies": {
-    "@supabase/ssr": "^latest"
-  },
-  "devDependencies": {
-    "@vite-pwa/sveltekit": "^latest",
-    "vite-plugin-pwa": "^latest",
-    "workbox-window": "^latest",
-    "@sveltejs/adapter-cloudflare": "^latest"
-  }
+	"dependencies": {
+		"@supabase/ssr": "^latest"
+	},
+	"devDependencies": {
+		"@vite-pwa/sveltekit": "^latest",
+		"vite-plugin-pwa": "^latest",
+		"workbox-window": "^latest",
+		"@sveltejs/adapter-cloudflare": "^latest"
+	}
 }
 ```
 
@@ -130,6 +141,7 @@ VITE_SUPABASE_ANON_KEY=tu_anon_key
 ```
 
 **Pasos:**
+
 1. Ve a [Supabase](https://supabase.com)
 2. Crea un proyecto (o usa uno existente)
 3. Ve a Settings > API
@@ -139,6 +151,7 @@ VITE_SUPABASE_ANON_KEY=tu_anon_key
 ### 2. Crear Usuario de Prueba
 
 En Supabase:
+
 1. Ve a Authentication > Users
 2. Haz clic en "Add user"
 3. Ingresa un email y contraseña
@@ -154,6 +167,7 @@ npm run dev
 ```
 
 **Probar funcionalidades:**
+
 - ✅ Ir a `/login` y autenticarte
 - ✅ Verificar que la navegación muestra tu usuario
 - ✅ Probar el logout
@@ -164,6 +178,7 @@ npm run dev
 ### 4. Instalar como PWA
 
 **En Chrome/Edge:**
+
 1. Abre la app en el navegador
 2. Busca el icono de instalación en la barra de direcciones
 3. Haz clic en "Instalar"
@@ -181,6 +196,7 @@ npm run preview
 ### 6. Deploy a Cloudflare Pages
 
 **Opción A: Desde GitHub (Recomendado)**
+
 1. Push tu código a GitHub
 2. Ve a Cloudflare Pages
 3. Conecta tu repo
@@ -191,6 +207,7 @@ npm run preview
 6. Deploy!
 
 **Opción B: CLI**
+
 ```bash
 npm install -g wrangler
 wrangler login
@@ -201,6 +218,7 @@ wrangler pages deploy .svelte-kit/cloudflare --project-name=cash-closures
 ### 7. Configurar Cloudflare (Post-Deploy)
 
 Sigue la guía en `CLOUDFLARE_SETUP.md` para:
+
 - Configurar SSL/TLS
 - Habilitar protección DDoS
 - Configurar WAF
@@ -213,6 +231,7 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 ## 🎨 Características de UI
 
 ### Página de Login
+
 - ✅ Diseño centrado con gradiente de fondo
 - ✅ Logo circular con gradiente
 - ✅ Formulario con validación
@@ -221,6 +240,7 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 - ✅ Responsive design
 
 ### Navegación
+
 - ✅ Logo + nombre de app (izquierda)
 - ✅ Links de navegación (centro)
 - ✅ Info de usuario + logout (derecha)
@@ -230,6 +250,7 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 - ✅ Backdrop blur
 
 ### Main Layout
+
 - ✅ Fondo con gradiente sutil
 - ✅ Padding consistente
 - ✅ Min-height para pantalla completa
@@ -239,6 +260,7 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 ## 🔒 Seguridad
 
 ### Implementado:
+
 - ✅ Autenticación con Supabase (SSR)
 - ✅ Protección de rutas en servidor
 - ✅ Cookies seguras (httpOnly)
@@ -247,6 +269,7 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 - ✅ Rate limiting (configuración en Cloudflare)
 
 ### Headers de Seguridad (en `static/_headers`):
+
 - ✅ X-Frame-Options: DENY
 - ✅ X-Content-Type-Options: nosniff
 - ✅ X-XSS-Protection
@@ -259,16 +282,19 @@ Sigue la guía en `CLOUDFLARE_SETUP.md` para:
 ## 🐛 Troubleshooting
 
 ### Service Worker no se registra
+
 - Verifica que estés usando HTTPS (o localhost)
 - Limpia el caché del navegador
 - Revisa la consola de DevTools
 
 ### Error de autenticación
+
 - Verifica las variables de entorno
 - Asegúrate de que el usuario existe en Supabase
 - Revisa la consola del navegador
 
 ### Build falla
+
 ```bash
 rm -rf node_modules .svelte-kit
 npm install
@@ -276,6 +302,7 @@ npm run build
 ```
 
 ### Iconos no se muestran
+
 - Los iconos están en `static/icon-192.svg` y `static/icon-512.svg`
 - Si prefieres PNG, abre `icon-generator.html` en tu navegador
 
@@ -283,15 +310,15 @@ npm run build
 
 ## 📊 Estado del Proyecto
 
-| Característica | Estado | Notas |
-|---------------|--------|-------|
-| PWA | ✅ Completo | Manifest, SW, iconos |
-| Autenticación | ✅ Completo | Login, logout, protección de rutas |
-| Navegación | ✅ Completo | Logo, usuario, logout |
-| Cloudflare Setup | ✅ Completo | Guía + adaptador + headers |
-| Documentación | ✅ Completo | README + guía Cloudflare |
-| Testing | ⚠️ Pendiente | Requiere configurar Supabase |
-| Deploy | ⚠️ Pendiente | Listo para deploy |
+| Característica   | Estado       | Notas                              |
+| ---------------- | ------------ | ---------------------------------- |
+| PWA              | ✅ Completo  | Manifest, SW, iconos               |
+| Autenticación    | ✅ Completo  | Login, logout, protección de rutas |
+| Navegación       | ✅ Completo  | Logo, usuario, logout              |
+| Cloudflare Setup | ✅ Completo  | Guía + adaptador + headers         |
+| Documentación    | ✅ Completo  | README + guía Cloudflare           |
+| Testing          | ⚠️ Pendiente | Requiere configurar Supabase       |
+| Deploy           | ⚠️ Pendiente | Listo para deploy                  |
 
 ---
 
@@ -312,6 +339,7 @@ npm run build
 ## 🎉 ¡Listo!
 
 Tu aplicación ahora es una PWA completa con:
+
 - ✅ Autenticación segura
 - ✅ Navegación moderna
 - ✅ Funcionalidad offline
