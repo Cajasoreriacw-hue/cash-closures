@@ -4,11 +4,14 @@
 	import { Chart, registerables } from 'chart.js';
 	import { Logger } from '$lib/utils/logger';
 
+	import type { Store } from '$lib/services/closures';
+	import { getStoresData } from '$lib/services/closures';
+
 	let { data } = $props();
 	let { supabase } = $derived(data);
 
 	let selectedStore = $state('');
-	let stores: string[] = $state([]);
+	let stores: Store[] = $state([]);
 	let loading = $state(true);
 
 	// Métricas
@@ -31,78 +34,65 @@
 		try {
 			if (!supabase) throw new Error('Supabase not initialized');
 
-			// Cargar tiendas
-			stores = await getStores(supabase);
+			// 1. Iniciar cargas independientes en paralelo
+			const storesPromise = getStoresData(supabase);
+			const cajerosPromise = supabase.from('cashiers').select('*', { count: 'exact', head: true });
+			const tiendasPromise = supabase.from('stores').select('*', { count: 'exact', head: true });
 
-			// 1. Total sobres activos (filtrado por tienda si está seleccionada)
+			// Esperar a que las tiendas carguen para poder filtrar por ID si es necesario
+			const [storesData, cajerosRes, tiendasRes] = await Promise.all([
+				storesPromise,
+				cajerosPromise,
+				tiendasPromise
+			]);
+
+			stores = storesData;
+			totalCajeros = cajerosRes.count || 0;
+			totalTiendas = tiendasRes.count || 0;
+
+			// Obtener ID de la tienda seleccionada
+			const selectedStoreObj = stores.find((s) => s.name === selectedStore);
+			const selectedStoreId = selectedStoreObj?.id;
+
+			// 2. Preparar consultas dependientes del filtro
+			// Sobres Activos
 			let sobresQuery = supabase
 				.from('cash_envelopes')
-				.select('id, cash_closures!inner(stores!inner(name))', { count: 'exact', head: true })
+				.select('id, cash_closures!inner(store_id)', { count: 'exact', head: true })
 				.eq('status', 'activo en tienda');
 
-			if (selectedStore) {
-				sobresQuery = sobresQuery.eq('cash_closures.stores.name', selectedStore);
+			if (selectedStoreId) {
+				sobresQuery = sobresQuery.eq('cash_closures.store_id', selectedStoreId);
 			}
 
-			const { count: sobresCount } = await sobresQuery;
-			totalSobresActivos = sobresCount || 0;
-
-			// 2. Total Cajeros
-			const { count: cajerosCount } = await supabase
-				.from('cashiers')
-				.select('*', { count: 'exact', head: true });
-			totalCajeros = cajerosCount || 0;
-
-			// 3. Total Tiendas
-			const { count: tiendasCount } = await supabase
-				.from('stores')
-				.select('*', { count: 'exact', head: true });
-			totalTiendas = tiendasCount || 0;
-
-			// 4. Total Cierres (filtrado por tienda si está seleccionada)
+			// Total Cierres
 			let cierresCountQuery = supabase
 				.from('cash_closures')
-				.select('id, stores!inner(name)', { count: 'exact', head: true });
+				.select('id', { count: 'exact', head: true });
 
-			if (selectedStore) {
-				cierresCountQuery = cierresCountQuery.eq('stores.name', selectedStore);
+			if (selectedStoreId) {
+				cierresCountQuery = cierresCountQuery.eq('store_id', selectedStoreId);
 			}
 
-			const { count: cierresCount } = await cierresCountQuery;
-			totalCierres = cierresCount || 0;
-
-			// 5. Total ventas (filtrado por tienda si está seleccionada)
+			// Total Ventas
 			let ventasQuery = supabase.from('cash_closures').select(`
           ef_real,
           cash_closure_channels (
             real_amount
           )
-          ${selectedStore ? ', stores!inner (name)' : ''}
         `);
 
-			if (selectedStore) {
-				ventasQuery = ventasQuery.eq('stores.name', selectedStore);
+			if (selectedStoreId) {
+				ventasQuery = ventasQuery.eq('store_id', selectedStoreId);
 			}
 
-			const { data: ventasData } = await ventasQuery;
-
-			totalVentas = (ventasData || []).reduce((sum, closure: any) => {
-				const efectivoReal = closure.ef_real || 0;
-				const channelsTotal = (closure.cash_closure_channels || []).reduce(
-					(chSum: number, ch: any) => chSum + (ch.real_amount || 0),
-					0
-				);
-				return sum + efectivoReal + channelsTotal;
-			}, 0);
-
-			// 3. Descuadres por mes (últimos 12 meses)
+			// Descuadres por Mes
 			let closuresDataQuery = supabase
 				.from('cash_closures')
 				.select(
 					`
           date,
           ef_diferencia,
-          stores!inner(name),
           cash_closure_channels (
             channel_name,
             system_amount,
@@ -112,23 +102,56 @@
 				)
 				.gte('date', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
 
-			if (selectedStore) {
-				closuresDataQuery = closuresDataQuery.eq('stores.name', selectedStore);
+			if (selectedStoreId) {
+				closuresDataQuery = closuresDataQuery.eq('store_id', selectedStoreId);
 			}
 
-			const { data: closuresData } = await closuresDataQuery;
+			// Descuadres por Cajero
+			let closuresWithCashierQuery = supabase.from('cash_closures').select(`
+          ef_diferencia,
+          cashiers (name),
+          cash_closure_channels (
+            channel_name,
+            system_amount,
+            real_amount
+          )
+        `);
 
+			if (selectedStoreId) {
+				closuresWithCashierQuery = closuresWithCashierQuery.eq('store_id', selectedStoreId);
+			}
+
+			// 3. Ejecutar todas las consultas de datos en paralelo
+			const [sobresRes, cierresRes, ventasRes, closuresDataRes, closuresWithCashierRes] =
+				await Promise.all([
+					sobresQuery,
+					cierresCountQuery,
+					ventasQuery,
+					closuresDataQuery,
+					closuresWithCashierQuery
+				]);
+
+			// 4. Procesar resultados
+			totalSobresActivos = sobresRes.count || 0;
+			totalCierres = cierresRes.count || 0;
+
+			// Procesar Ventas
+			totalVentas = (ventasRes.data || []).reduce((sum, closure: any) => {
+				const efectivoReal = closure.ef_real || 0;
+				const channelsTotal = (closure.cash_closure_channels || []).reduce(
+					(chSum: number, ch: any) => chSum + (ch.real_amount || 0),
+					0
+				);
+				return sum + efectivoReal + channelsTotal;
+			}, 0);
+
+			// Procesar Descuadres por Mes
 			const descuadresByMonth: Record<string, number> = {};
-
-			(closuresData || []).forEach((closure: any) => {
-				const month = closure.date.substring(0, 7); // YYYY-MM
-
-				// Descuadre en efectivo (negativo)
+			(closuresDataRes.data || []).forEach((closure: any) => {
+				const month = closure.date.substring(0, 7);
 				if (closure.ef_diferencia < 0) {
 					descuadresByMonth[month] = (descuadresByMonth[month] || 0) + 1;
 				}
-
-				// Descuadres en canales (negativo)
 				(closure.cash_closure_channels || []).forEach((ch: any) => {
 					const diff = ch.real_amount - ch.system_amount;
 					if (diff < 0) {
@@ -142,40 +165,14 @@
 				.sort((a, b) => a.month.localeCompare(b.month))
 				.slice(-12);
 
-			// 4. Descuadres por cajero
-			let closuresWithCashierQuery = supabase.from('cash_closures').select(`
-          ef_diferencia,
-          cashiers (name),
-          stores!inner(name),
-          cash_closure_channels (
-            channel_name,
-            system_amount,
-            real_amount
-          )
-        `);
-
-			if (selectedStore) {
-				closuresWithCashierQuery = closuresWithCashierQuery.eq('stores.name', selectedStore);
-			}
-
-			const { data: closuresWithCashier } = await closuresWithCashierQuery;
-
+			// Procesar Descuadres por Cajero
 			const descuadresByCashier: Record<string, number> = {};
-
-			(closuresWithCashier || []).forEach((closure: any) => {
+			(closuresWithCashierRes.data || []).forEach((closure: any) => {
 				const cashierName = closure.cashiers?.name || 'Desconocido';
-
-				// Descuadre en efectivo (negativo)
 				if (closure.ef_diferencia < 0) {
 					descuadresByCashier[cashierName] = (descuadresByCashier[cashierName] || 0) + 1;
 				}
-
-				// Descuadres en canales (negativo) - SOLO: dataphone, nequi, bancolombia
-				const allowedChannels = [
-					'dataphone',
-					'transferencia_nequi',
-					'transferencia_bancolombia'
-				];
+				const allowedChannels = ['dataphone', 'transferencia_nequi', 'transferencia_bancolombia'];
 				(closure.cash_closure_channels || []).forEach((ch: any) => {
 					if (allowedChannels.includes(ch.channel_name)) {
 						const diff = ch.real_amount - ch.system_amount;
@@ -399,7 +396,7 @@
 			>
 				<option value="">Todas las tiendas</option>
 				{#each stores as store}
-					<option value={store}>{store}</option>
+					<option value={store.name}>{store.name}</option>
 				{/each}
 			</select>
 		</label>
