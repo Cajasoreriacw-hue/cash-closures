@@ -5,10 +5,12 @@
 	//const AlertAny = Alert as any;
 	import {
 		getCashiers,
-		getStores,
+		getStoresData,
+		checkExistingClosure,
 		createClosure,
 		type ChannelData,
-		type EnvelopeData
+		type EnvelopeData,
+		type Store
 	} from '$lib/services/closures';
 	import { Logger } from '$lib/utils/logger';
 
@@ -21,7 +23,7 @@
 	let store = $state('');
 
 	let cashiers: string[] = $state([]);
-	let stores: string[] = $state([]);
+	let stores: Store[] = $state([]);
 	let loadingOptions = $state(true);
 	let optionsError: string | null = $state(null);
 
@@ -43,7 +45,9 @@
 	let efectivoReal = $state(0);
 
 	// Envelopes (Automatic)
-	let envelopeAmount = $derived(efectivoReal - efectivoBase);
+	let selectedStoreObj = $derived(stores.find((s) => s.name === store));
+	let fixedBase = $derived(selectedStoreObj?.fixed_base || 0);
+	let envelopeAmount = $derived(efectivoReal - fixedBase);
 	let envelopeStatus = $derived(envelopeAmount > 0 ? 'Generar Sobre' : 'Sin Sobre');
 
 	let efectivoPos = $derived(
@@ -80,7 +84,7 @@
 		optionsError = null;
 
 		try {
-			const [c, s] = await Promise.all([getCashiers(supabase), getStores(supabase)]);
+			const [c, s] = await Promise.all([getCashiers(supabase), getStoresData(supabase)]);
 			cashiers = c;
 			stores = s;
 		} catch (err: any) {
@@ -103,6 +107,21 @@
 		// Validación
 		if (!cashier || !store) {
 			validationError = 'Debes seleccionar un cajero y una tienda.';
+			saving = false;
+			return;
+		}
+
+		// Check for existing closure
+		try {
+			const exists = await checkExistingClosure(supabase, store, date);
+			if (exists) {
+				validationError = `Ya existe un cierre para la sede ${store} en la fecha ${date}.`;
+				saving = false;
+				return;
+			}
+		} catch (err) {
+			Logger.error(err);
+			saveError = 'Error al verificar cierres existentes.';
 			saving = false;
 			return;
 		}
@@ -275,7 +294,7 @@
 					>{loadingOptions ? 'Cargando...' : 'Selecciona una tienda'}</option
 				>
 				{#each stores as s}
-					<option value={s}>{s}</option>
+					<option value={s.name}>{s.name}</option>
 				{/each}
 			</select>
 		</label>
@@ -582,7 +601,7 @@
 			</span>
 		</div>
 		<div class="flex items-center justify-between text-sm mt-2">
-			<span class="text-slate-600">Valor a guardar (Real - Base):</span>
+			<span class="text-slate-600">Valor a guardar (Real - Base Fija {fixedBase > 0 ? `$${fixedBase.toLocaleString('es-CO')}` : ''}):</span>
 			<span class="font-bold text-lg">
 				${envelopeAmount > 0
 					? envelopeAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })

@@ -10,16 +10,17 @@ export type Cashier = {
 export type Store = {
 	id: string;
 	name: string;
+	fixed_base?: number;
 };
 
 export type ChannelData = {
 	name:
-		| 'dataphone'
-		| 'rappi'
-		| 'justo'
-		| 'apparta_pay'
-		| 'transferencia_nequi'
-		| 'transferencia_bancolombia';
+	| 'dataphone'
+	| 'rappi'
+	| 'justo'
+	| 'apparta_pay'
+	| 'transferencia_nequi'
+	| 'transferencia_bancolombia';
 	system: number;
 	real: number;
 };
@@ -91,6 +92,55 @@ export const getStores = async (supabase: SupabaseClient): Promise<string[]> => 
 	dataCache.set('stores', stores, 5 * 60 * 1000);
 
 	return stores;
+};
+
+export const getStoresData = async (supabase: SupabaseClient): Promise<Store[]> => {
+	const { data, error } = await supabase
+		.from('stores')
+		.select('id, name, fixed_base')
+		.order('name');
+
+	if (error) {
+		Logger.error('Error fetching stores data:', error);
+		throw error;
+	}
+
+	return data.map((s) => ({
+		id: s.id,
+		name: s.name,
+		fixed_base: s.fixed_base
+	}));
+};
+
+export const checkExistingClosure = async (
+	supabase: SupabaseClient,
+	storeName: string,
+	date: string
+): Promise<boolean> => {
+	// 1. Get Store ID
+	const { data: storeData, error: storeError } = await supabase
+		.from('stores')
+		.select('id')
+		.eq('name', storeName)
+		.single();
+
+	if (storeError || !storeData) {
+		return false; // Or throw error
+	}
+
+	// 2. Check for existing closure
+	const { count, error } = await supabase
+		.from('cash_closures')
+		.select('*', { count: 'exact', head: true })
+		.eq('store_id', storeData.id)
+		.eq('date', date);
+
+	if (error) {
+		Logger.error('Error checking existing closure:', error);
+		throw error;
+	}
+
+	return (count || 0) > 0;
 };
 
 export const createClosure = async (supabase: SupabaseClient, closure: ClosureData) => {

@@ -38,14 +38,13 @@
 	let filterStore = $state('');
 	let filterFrom = $state('');
 	let filterTo = $state('');
-	let resultLimit = $state(50);
 
 	let cashierOptions: string[] = $state([]);
 	let storeOptions: string[] = $state([]);
 
 	// Pagination state
 	let currentPage = $state(1);
-	let itemsPerPage = $state(20);
+	let itemsPerPage = $state(8);
 
 	const statusOptions = [
 		'activo en tienda',
@@ -83,8 +82,7 @@
           )
         `
 				)
-				.order('cash_closures(date)', { ascending: false })
-				.limit(resultLimit);
+				.order('cash_closures(date)', { ascending: false });
 
 			if (fetchError) throw fetchError;
 
@@ -179,7 +177,7 @@
 
 <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-3 md:p-4 mb-4">
 	<h2 class="text-xs md:text-sm font-semibold text-slate-700 mb-3">Filtros</h2>
-	<div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+	<div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 		<label class="flex flex-col gap-1.5">
 			<span class="text-xs md:text-sm text-slate-600">Cajero</span>
 			<select
@@ -219,19 +217,6 @@
 				bind:value={filterTo}
 				class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 			/>
-		</label>
-		<label class="flex flex-col gap-1.5">
-			<span class="text-xs md:text-sm text-slate-600">Límite</span>
-			<select
-				bind:value={resultLimit}
-				onchange={loadSobres}
-				class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-			>
-				<option value={10}>10</option>
-				<option value={50}>50</option>
-				<option value={100}>100</option>
-				<option value={1000}>1000</option>
-			</select>
 		</label>
 	</div>
 </section>

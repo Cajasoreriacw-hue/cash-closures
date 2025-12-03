@@ -59,21 +59,20 @@
 	let filterTo = $state('');
 	let filterMetodoEfectivo = $state(true);
 	let filterMetodoDatafono = $state(true);
-	let resultLimit = $state(50);
 
 	let cashierOptions = $state<string[]>([]);
 	let storeOptions = $state<string[]>([]);
 
 	// Pagination state
 	let currentPage = $state(1);
-	let itemsPerPage = $state(20);
+	let itemsPerPage = $state(8);
 
 	const loadClosures = async () => {
 		loading = true;
 		error = null;
 
 		try {
-			const res = await fetch(`/api/closures?limit=${resultLimit}`);
+			const res = await fetch(`/api/closures`);
 			if (!res.ok) throw new Error('Error al cargar cierres');
 			const data = await res.json();
 			closures = data.closures ?? [];
@@ -576,19 +575,7 @@
 				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
 			/>
 		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Límite</span>
-			<select
-				bind:value={resultLimit}
-				onchange={loadClosures}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value={10}>10</option>
-				<option value={50}>50</option>
-				<option value={100}>100</option>
-				<option value={1000}>1000</option>
-			</select>
-		</label>
+
 	</div>
 </section>
 

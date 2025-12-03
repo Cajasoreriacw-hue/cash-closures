@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getCashiers, getStores, updateClosure, type ClosureData } from '$lib/services/closures';
+	import {
+		getCashiers,
+		getStoresData,
+		updateClosure,
+		type ClosureData,
+		type Store
+	} from '$lib/services/closures';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { Alert } from 'flowbite-svelte';
 	import { Logger } from '$lib/utils/logger';
@@ -52,10 +58,9 @@
 	let filterStore = $state('');
 	let filterFrom = $state('');
 	let filterTo = $state('');
-	let resultLimit = $state(50);
 
 	let cashierOptions = $state<string[]>([]);
-	let storeOptions = $state<string[]>([]);
+	let storeOptions = $state<Store[]>([]);
 
 	let selectedClosure = $state<CashClosure | null>(null);
 	let showModal = $state(false);
@@ -66,7 +71,7 @@
 
 	// Pagination state
 	let currentPage = $state(1);
-	let itemsPerPage = $state(20);
+	let itemsPerPage = $state(8);
 
 	const loadClosures = async () => {
 		loading = true;
@@ -76,7 +81,7 @@
 			if (!supabase) throw new Error('Supabase client not initialized');
 
 			// Load filter options
-			const [cashiers, stores] = await Promise.all([getCashiers(supabase), getStores(supabase)]);
+			const [cashiers, stores] = await Promise.all([getCashiers(supabase), getStoresData(supabase)]);
 			cashierOptions = cashiers;
 			storeOptions = stores;
 
@@ -107,8 +112,7 @@
           )
         `
 				)
-				.order('date', { ascending: false })
-				.limit(resultLimit);
+				.order('date', { ascending: false });
 
 			if (fetchError) throw fetchError;
 
@@ -248,6 +252,11 @@
 		saveSuccess = '';
 
 		try {
+			// Calculate envelope amount using fixed base
+			const selectedStoreObj = storeOptions.find((s) => s.name === selectedClosure.store);
+			const fixedBase = selectedStoreObj?.fixed_base || 0;
+			const envelopeAmount = Math.max(0, selectedClosure.efectivo.real - fixedBase);
+
 			// Prepare closure data
 			const closureData: ClosureData = {
 				date: selectedClosure.date,
@@ -288,11 +297,8 @@
 				],
 				envelopes: [
 					{
-						number:
-							selectedClosure.efectivo.real - selectedClosure.efectivo.base > 0
-								? 'AUTOMATICO'
-								: 'SIN SOBRE',
-						amount: Math.max(0, selectedClosure.efectivo.real - selectedClosure.efectivo.base)
+						number: envelopeAmount > 0 ? 'AUTOMATICO' : 'SIN SOBRE',
+						amount: envelopeAmount
 					}
 				],
 				efectivo: {
@@ -347,7 +353,7 @@
 
 <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4 text-sm">
 	<h2 class="text-xs font-semibold text-slate-700 mb-3">Filtros</h2>
-	<div class="grid gap-3 md:grid-cols-5">
+	<div class="grid gap-3 md:grid-cols-4">
 		<label class="flex flex-col gap-1">
 			<span class="text-slate-600">Cajero</span>
 			<select
@@ -368,7 +374,7 @@
 			>
 				<option value="">Todas</option>
 				{#each storeOptions as s}
-					<option value={s}>{s}</option>
+					<option value={s.name}>{s.name}</option>
 				{/each}
 			</select>
 		</label>
@@ -388,19 +394,7 @@
 				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
 			/>
 		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Límite de resultados</span>
-			<select
-				bind:value={resultLimit}
-				onchange={loadClosures}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value={10}>10</option>
-				<option value={50}>50</option>
-				<option value={100}>100</option>
-				<option value={1000}>1000</option>
-			</select>
-		</label>
+
 	</div>
 </section>
 
@@ -664,7 +658,7 @@
 									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
 								>
 									{#each storeOptions as store}
-										<option value={store}>{store}</option>
+										<option value={store.name}>{store.name}</option>
 									{/each}
 								</select>
 							{:else}

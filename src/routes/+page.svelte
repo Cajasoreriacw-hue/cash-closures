@@ -34,12 +34,17 @@
 			// Cargar tiendas
 			stores = await getStores(supabase);
 
-			// 1. Total sobres activos
-			const { count: sobresCount } = await supabase
+			// 1. Total sobres activos (filtrado por tienda si está seleccionada)
+			let sobresQuery = supabase
 				.from('cash_envelopes')
-				.select('*', { count: 'exact', head: true })
+				.select('id, cash_closures!inner(stores!inner(name))', { count: 'exact', head: true })
 				.eq('status', 'activo en tienda');
 
+			if (selectedStore) {
+				sobresQuery = sobresQuery.eq('cash_closures.stores.name', selectedStore);
+			}
+
+			const { count: sobresCount } = await sobresQuery;
 			totalSobresActivos = sobresCount || 0;
 
 			// 2. Total Cajeros
@@ -91,12 +96,13 @@
 			}, 0);
 
 			// 3. Descuadres por mes (últimos 12 meses)
-			const { data: closuresData } = await supabase
+			let closuresDataQuery = supabase
 				.from('cash_closures')
 				.select(
 					`
           date,
           ef_diferencia,
+          stores!inner(name),
           cash_closure_channels (
             channel_name,
             system_amount,
@@ -105,6 +111,12 @@
         `
 				)
 				.gte('date', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+
+			if (selectedStore) {
+				closuresDataQuery = closuresDataQuery.eq('stores.name', selectedStore);
+			}
+
+			const { data: closuresData } = await closuresDataQuery;
 
 			const descuadresByMonth: Record<string, number> = {};
 
@@ -131,15 +143,22 @@
 				.slice(-12);
 
 			// 4. Descuadres por cajero
-			const { data: closuresWithCashier } = await supabase.from('cash_closures').select(`
+			let closuresWithCashierQuery = supabase.from('cash_closures').select(`
           ef_diferencia,
           cashiers (name),
+          stores!inner(name),
           cash_closure_channels (
             channel_name,
             system_amount,
             real_amount
           )
         `);
+
+			if (selectedStore) {
+				closuresWithCashierQuery = closuresWithCashierQuery.eq('stores.name', selectedStore);
+			}
+
+			const { data: closuresWithCashier } = await closuresWithCashierQuery;
 
 			const descuadresByCashier: Record<string, number> = {};
 
@@ -151,11 +170,18 @@
 					descuadresByCashier[cashierName] = (descuadresByCashier[cashierName] || 0) + 1;
 				}
 
-				// Descuadres en canales (negativo)
+				// Descuadres en canales (negativo) - SOLO: dataphone, nequi, bancolombia
+				const allowedChannels = [
+					'dataphone',
+					'transferencia_nequi',
+					'transferencia_bancolombia'
+				];
 				(closure.cash_closure_channels || []).forEach((ch: any) => {
-					const diff = ch.real_amount - ch.system_amount;
-					if (diff < 0) {
-						descuadresByCashier[cashierName] = (descuadresByCashier[cashierName] || 0) + 1;
+					if (allowedChannels.includes(ch.channel_name)) {
+						const diff = ch.real_amount - ch.system_amount;
+						if (diff < 0) {
+							descuadresByCashier[cashierName] = (descuadresByCashier[cashierName] || 0) + 1;
+						}
 					}
 				});
 			});
