@@ -252,7 +252,7 @@ cash-closures/
 
 ## 📄 Licencia
 
-Todos los derechos reservados © 2024
+Todos los derechos reservados Andres Laureano © 2025
 
 ## 🤝 Soporte
 
