@@ -69,6 +69,24 @@
 	let saveError = $state('');
 	let saveSuccess = $state('');
 
+	let selectedClosureTotalSales = $derived(
+		selectedClosure
+			? selectedClosure.channels.dataphone.real +
+					selectedClosure.channels.rappi.real +
+					selectedClosure.channels.justo.real +
+					selectedClosure.channels.appartaPay.real +
+					selectedClosure.channels.nequi.real +
+					selectedClosure.channels.bancolombia.real +
+					selectedClosure.efectivo.ventas
+			: 0
+	);
+
+	let selectedClosureCashPercentage = $derived(
+		selectedClosure && selectedClosureTotalSales > 0
+			? (selectedClosure.efectivo.ventas / selectedClosureTotalSales) * 100
+			: 0
+	);
+
 	// Pagination state
 	let currentPage = $state(1);
 	let itemsPerPage = $state(8);
@@ -81,7 +99,10 @@
 			if (!supabase) throw new Error('Supabase client not initialized');
 
 			// Load filter options
-			const [cashiers, stores] = await Promise.all([getCashiers(supabase), getStoresData(supabase)]);
+			const [cashiers, stores] = await Promise.all([
+				getCashiers(supabase),
+				getStoresData(supabase)
+			]);
 			cashierOptions = cashiers;
 			storeOptions = stores;
 
@@ -245,7 +266,8 @@
 	};
 
 	const handleSave = async () => {
-		if (!selectedClosure || !supabase) return;
+		const closureToSave = selectedClosure;
+		if (!closureToSave || !supabase) return;
 
 		saving = true;
 		saveError = '';
@@ -253,46 +275,46 @@
 
 		try {
 			// Calculate envelope amount using fixed base
-			const selectedStoreObj = storeOptions.find((s) => s.name === selectedClosure.store);
+			const selectedStoreObj = storeOptions.find((s) => s.name === closureToSave.store);
 			const fixedBase = selectedStoreObj?.fixed_base || 0;
-			const envelopeAmount = Math.max(0, selectedClosure.efectivo.real - fixedBase);
+			const envelopeAmount = Math.max(0, closureToSave.efectivo.real - fixedBase);
 
 			// Prepare closure data
 			const closureData: ClosureData = {
-				date: selectedClosure.date,
-				note: selectedClosure.note,
-				cashierName: selectedClosure.cashier,
-				storeName: selectedClosure.store,
+				date: closureToSave.date,
+				note: closureToSave.note,
+				cashierName: closureToSave.cashier,
+				storeName: closureToSave.store,
 				channels: [
 					{
 						name: 'dataphone',
-						system: selectedClosure.channels.dataphone.system,
-						real: selectedClosure.channels.dataphone.real
+						system: closureToSave.channels.dataphone.system,
+						real: closureToSave.channels.dataphone.real
 					},
 					{
 						name: 'rappi',
-						system: selectedClosure.channels.rappi.system,
-						real: selectedClosure.channels.rappi.real
+						system: closureToSave.channels.rappi.system,
+						real: closureToSave.channels.rappi.real
 					},
 					{
 						name: 'justo',
-						system: selectedClosure.channels.justo.system,
-						real: selectedClosure.channels.justo.real
+						system: closureToSave.channels.justo.system,
+						real: closureToSave.channels.justo.real
 					},
 					{
 						name: 'apparta_pay',
-						system: selectedClosure.channels.appartaPay.system,
-						real: selectedClosure.channels.appartaPay.real
+						system: closureToSave.channels.appartaPay.system,
+						real: closureToSave.channels.appartaPay.real
 					},
 					{
 						name: 'transferencia_nequi',
-						system: selectedClosure.channels.nequi.system,
-						real: selectedClosure.channels.nequi.real
+						system: closureToSave.channels.nequi.system,
+						real: closureToSave.channels.nequi.real
 					},
 					{
 						name: 'transferencia_bancolombia',
-						system: selectedClosure.channels.bancolombia.system,
-						real: selectedClosure.channels.bancolombia.real
+						system: closureToSave.channels.bancolombia.system,
+						real: closureToSave.channels.bancolombia.real
 					}
 				],
 				envelopes: [
@@ -302,24 +324,24 @@
 					}
 				],
 				efectivo: {
-					...selectedClosure.efectivo,
+					...closureToSave.efectivo,
 					pos:
-						selectedClosure.efectivo.base +
-						selectedClosure.efectivo.ventas +
-						selectedClosure.efectivo.ingresos -
-						selectedClosure.efectivo.gastos -
-						selectedClosure.efectivo.egresos,
+						closureToSave.efectivo.base +
+						closureToSave.efectivo.ventas +
+						closureToSave.efectivo.ingresos -
+						closureToSave.efectivo.gastos -
+						closureToSave.efectivo.egresos,
 					diferencia:
-						selectedClosure.efectivo.real -
-						(selectedClosure.efectivo.base +
-							selectedClosure.efectivo.ventas +
-							selectedClosure.efectivo.ingresos -
-							selectedClosure.efectivo.gastos -
-							selectedClosure.efectivo.egresos)
+						closureToSave.efectivo.real -
+						(closureToSave.efectivo.base +
+							closureToSave.efectivo.ventas +
+							closureToSave.efectivo.ingresos -
+							closureToSave.efectivo.gastos -
+							closureToSave.efectivo.egresos)
 				}
 			};
 
-			await updateClosure(supabase, selectedClosure.id, closureData);
+			await updateClosure(supabase, closureToSave.id, closureData);
 
 			saveSuccess = 'Cierre actualizado exitosamente';
 			editMode = false;
@@ -394,7 +416,6 @@
 				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
 			/>
 		</label>
-
 	</div>
 </section>
 
@@ -681,6 +702,7 @@
 				</section>
 
 				<!-- Venta Total -->
+				<!-- Venta Total -->
 				<section>
 					<h3 class="text-sm font-semibold text-slate-700 mb-2">Venta Total</h3>
 					<div class="p-3 bg-blue-50 border border-blue-200 rounded">
@@ -688,21 +710,16 @@
 							<div>
 								<span class="text-slate-600">Total De Venta Del Día:</span>
 								<span class="ml-2 text-xl font-bold text-blue-700">
-									{(
-										selectedClosure.channels.dataphone.real +
-										selectedClosure.channels.rappi.real +
-										selectedClosure.channels.justo.real +
-										selectedClosure.channels.appartaPay.real +
-										selectedClosure.channels.nequi.real +
-										selectedClosure.channels.bancolombia.real +
-										selectedClosure.efectivo.ventas
-									).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+									{selectedClosureTotalSales.toLocaleString('es-CO', {
+										style: 'currency',
+										currency: 'COP'
+									})}
 								</span>
 							</div>
 							<div class="text-right">
 								<span class="text-slate-600 block text-xs">Porcentaje Efectivo</span>
 								<span class="text-lg font-bold text-slate-700">
-									{selectedClosure.efectivo.porcentaje.toFixed(2)}%
+									{selectedClosureCashPercentage.toFixed(2)}%
 								</span>
 							</div>
 						</div>

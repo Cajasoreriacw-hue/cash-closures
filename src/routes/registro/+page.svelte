@@ -27,12 +27,12 @@
 	let loadingOptions = $state(true);
 	let optionsError: string | null = $state(null);
 
-	let dataphone: ChannelData = { name: 'dataphone', system: 0, real: 0 };
-	let rappi: ChannelData = { name: 'rappi', system: 0, real: 0 };
-	let justo: ChannelData = { name: 'justo', system: 0, real: 0 };
-	let appartaPay: ChannelData = { name: 'apparta_pay', system: 0, real: 0 };
-	let nequi: ChannelData = { name: 'transferencia_nequi', system: 0, real: 0 };
-	let bancolombia: ChannelData = { name: 'transferencia_bancolombia', system: 0, real: 0 };
+	let dataphone: ChannelData = $state({ name: 'dataphone', system: 0, real: 0 });
+	let rappi: ChannelData = $state({ name: 'rappi', system: 0, real: 0 });
+	let justo: ChannelData = $state({ name: 'justo', system: 0, real: 0 });
+	let appartaPay: ChannelData = $state({ name: 'apparta_pay', system: 0, real: 0 });
+	let nequi: ChannelData = $state({ name: 'transferencia_nequi', system: 0, real: 0 });
+	let bancolombia: ChannelData = $state({ name: 'transferencia_bancolombia', system: 0, real: 0 });
 
 	let showOtherMethods = $state(false);
 
@@ -601,7 +601,11 @@
 			</span>
 		</div>
 		<div class="flex items-center justify-between text-sm mt-2">
-			<span class="text-slate-600">Valor a guardar (Real - Base Fija {fixedBase > 0 ? `$${fixedBase.toLocaleString('es-CO')}` : ''}):</span>
+			<span class="text-slate-600"
+				>Valor a guardar (Real - Base Fija {fixedBase > 0
+					? `$${fixedBase.toLocaleString('es-CO')}`
+					: ''}):</span
+			>
 			<span class="font-bold text-lg">
 				${envelopeAmount > 0
 					? envelopeAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })
