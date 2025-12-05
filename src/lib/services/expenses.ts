@@ -134,14 +134,30 @@ export const parseExpenseRow = (
     row: ExpenseCSVRow,
     stores: { id: string; name: string }[]
 ): ProcessedExpense => {
-    // Parse date (assuming format DD/MM/YYYY or YYYY-MM-DD)
+    // Parse date
     let date = row['Fecha Gasto'];
-    if (date.includes('/')) {
+
+    // Check if date is an Excel serial number (e.g., "45659.54...")
+    if (!isNaN(Number(date)) && !date.includes('/') && !date.includes('-')) {
+        const serial = Number(date);
+        // Excel date to JS Date conversion (Excel starts at 1900-01-01, JS at 1970-01-01)
+        // 25569 is the number of days between 1900-01-01 and 1970-01-01
+        const dateObj = new Date(Math.round((serial - 25569) * 86400 * 1000));
+        // Format as YYYY-MM-DD
+        const year = dateObj.getUTCFullYear();
+        const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getUTCDate()).padStart(2, '0');
+        date = `${year}-${month}-${day}`;
+    } else if (date.includes('/')) {
+        // Handle DD/MM/YYYY format
         const parts = date.split('/');
         if (parts.length === 3) {
-            // Convert DD/MM/YYYY to YYYY-MM-DD
+            // Convert to YYYY-MM-DD
             date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
         }
+    } else if (date.includes('T')) {
+        // Handle ISO format (e.g. 2024-12-01T00:00:00.000Z)
+        date = date.split('T')[0];
     }
 
     // Parse numbers
@@ -189,19 +205,14 @@ export const batchInsertExpenses = async (
             const { data, error } = await supabase.from('expenses').insert(batch).select();
 
             if (error) {
-                Logger.error(`Batch insert error (batch ${i / batchSize + 1}):`, error);
-                Logger.error('Error details:', {
-                    message: error.message,
-                    details: error.details,
-                    hint: error.hint,
-                    code: error.code
-                });
+                // Log generic error message without sensitive details
+                Logger.error(`Batch insert error (batch ${i / batchSize + 1})`);
                 errors += batch.length;
             } else {
                 success += batch.length;
             }
         } catch (err) {
-            Logger.error(`Batch insert exception (batch ${i / batchSize + 1}):`, err);
+            Logger.error(`Batch insert exception (batch ${i / batchSize + 1})`);
             errors += batch.length;
         }
 

@@ -53,7 +53,12 @@ class LoggerService {
 			message = String(err);
 		}
 
-		this.log('error', message, ...args);
+		// En producción, no mostramos los argumentos adicionales para evitar fugas de información
+		if (isProduction) {
+			this.log('error', message);
+		} else {
+			this.log('error', message, ...args);
+		}
 	}
 
 	debug(message: string, ...args: any[]) {

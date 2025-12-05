@@ -423,8 +423,8 @@
 			uploadStatus = `Vista previa: ${expenseData.length} registros encontrados`;
 			uploading = false;
 		} catch (err: any) {
-			Logger.error('Error previewing file:', err);
-			uploadError = 'Error al procesar el archivo: ' + (err.message || 'Error desconocido');
+			Logger.error('Error previewing file');
+			uploadError = 'Error al procesar el archivo';
 			uploading = false;
 		}
 	};
@@ -506,8 +506,8 @@
 
 			uploading = false;
 		} catch (err: any) {
-			Logger.error('Error uploading file:', err);
-			uploadError = 'Error al procesar el archivo: ' + (err.message || 'Error desconocido');
+			Logger.error('Error uploading file');
+			uploadError = 'Error al procesar el archivo';
 			uploading = false;
 		}
 	};
