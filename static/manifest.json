@@ -4,7 +4,7 @@
     "description": "Sistema ERP para gestión y control de cierres de caja",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#EAEAEA",
+    "background_color": "#FEF3C7",
     "theme_color": "#f4bd08",
     "orientation": "portrait-primary",
     "icons": [
@@ -26,5 +26,6 @@
         "finance",
         "productivity"
     ],
-    "screenshots": []
+    "screenshots": [],
+    "splash_pages": null
 }
