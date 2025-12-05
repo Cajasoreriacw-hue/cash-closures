@@ -4,6 +4,8 @@
 
 /* 2. OBLIGATORIO: El resto de directivas de Tailwind (que no son @import) */
 @import 'tailwindcss';
+@config "../tailwind.config.cjs";
+
 @plugin 'flowbite/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
 

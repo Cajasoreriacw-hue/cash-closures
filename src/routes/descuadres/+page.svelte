@@ -528,7 +528,9 @@
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
 			<!-- Date Range -->
 			<div class="space-y-2">
-				<label for="filter-from" class="text-xs font-semibold text-gray-500 uppercase">Fecha Inicio</label>
+				<label for="filter-from" class="text-xs font-semibold text-gray-500 uppercase"
+					>Fecha Inicio</label
+				>
 				<input
 					id="filter-from"
 					type="date"
@@ -547,23 +549,6 @@
 					bind:value={filterTo}
 					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
 				/>
-			</div>
-
-			<div class="space-y-2">
-				<label for="results-limit" class="block text-xs font-medium text-gray-500 mb-1"
-					>Resultados</label
-				>
-				<select
-					id="results-limit"
-					bind:value={itemsPerPage}
-					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
-				>
-					<option value="10">10</option>
-					<option value="25">25</option>
-					<option value="50">50</option>
-					<option value="100">100</option>
-					<option value="0">Todos</option>
-				</select>
 			</div>
 
 			<!-- Store Filter -->
