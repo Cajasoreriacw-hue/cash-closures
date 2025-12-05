@@ -383,7 +383,7 @@
 		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Dashboard</h1>
 		<a
 			href="/registro"
-			class="w-full sm:w-auto px-6 py-3 bg-linear-to-r from-dark-orange-500 to-dark-orange-600 text-white text-sm font-semibold rounded-xl shadow-soft hover:shadow-soft-lg hover:from-dark-orange-600 hover:to-dark-orange-700 transition-all duration-200 text-center active:scale-95"
+			class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-dark-orange-500 to-dark-orange-600 text-white text-sm font-semibold rounded-xl shadow-soft hover:shadow-soft-lg hover:from-dark-orange-600 hover:to-dark-orange-700 transition-all duration-200 text-center active:scale-95"
 		>
 			Registrar Cierre
 		</a>
@@ -419,7 +419,7 @@
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
 			<!-- Total Sobres Activos -->
 			<div
-				class="relative overflow-hidden bg-linear-to-br from-dark-orange-500/90 to-dark-orange-600/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
+				class="relative overflow-hidden bg-gradient-to-br from-dark-orange-500/90 to-dark-orange-600/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
 				<!-- Background decoration -->
 				<div
@@ -454,7 +454,7 @@
 
 			<!-- Total Ventas -->
 			<div
-				class="relative overflow-hidden bg-linear-to-br from-dark-orange-600/90 to-dark-orange-700/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
+				class="relative overflow-hidden bg-gradient-to-br from-dark-orange-600/90 to-dark-orange-700/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
 				<div
 					class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16 group-hover:scale-110 transition-transform duration-500"
@@ -490,7 +490,7 @@
 
 			<!-- Cajeros Registrados -->
 			<div
-				class="relative overflow-hidden bg-linear-to-br from-dark-orange-400/90 to-dark-orange-500/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
+				class="relative overflow-hidden bg-gradient-to-br from-dark-orange-400/90 to-dark-orange-500/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
 				<div
 					class="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-500"
@@ -524,7 +524,7 @@
 
 			<!-- Tiendas -->
 			<div
-				class="relative overflow-hidden bg-linear-to-br from-dark-orange-300/90 to-dark-orange-400/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
+				class="relative overflow-hidden bg-gradient-to-br from-dark-orange-300/90 to-dark-orange-400/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
 				<div
 					class="absolute bottom-0 right-0 w-28 h-28 bg-white/5 rounded-full -mr-14 -mb-14 group-hover:scale-110 transition-transform duration-500"
@@ -558,7 +558,7 @@
 
 			<!-- Total Cierres -->
 			<div
-				class="relative overflow-hidden bg-linear-to-br from-dark-orange-200/90 to-dark-orange-300/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-dark-orange-900 hover:shadow-soft-xl transition-all duration-300 group"
+				class="relative overflow-hidden bg-gradient-to-br from-dark-orange-200/90 to-dark-orange-300/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-dark-orange-900 hover:shadow-soft-xl transition-all duration-300 group"
 			>
 				<div
 					class="absolute top-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mt-12 group-hover:scale-110 transition-transform duration-500"

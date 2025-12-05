@@ -73,13 +73,15 @@
 					type="button"
 					onclick={() => goToPage(page as number)}
 					class="min-w-10 px-3 py-2 text-sm font-medium rounded-lg transition-colors"
-					class:bg-blue-600={currentPage === page}
+					class:bg-dark-orange-600={currentPage === page}
 					class:text-white={currentPage === page}
 					class:text-slate-700={currentPage !== page}
 					class:bg-white={currentPage !== page}
 					class:border={currentPage !== page}
 					class:border-slate-300={currentPage !== page}
-					class:hover:bg-slate-50={currentPage !== page}
+					class:hover:bg-dark-orange-50={currentPage !== page}
+					class:hover:text-dark-orange-700={currentPage !== page}
+					class:hover:border-dark-orange-200={currentPage !== page}
 				>
 					{page}
 				</button>
@@ -92,7 +94,7 @@
 		type="button"
 		onclick={() => goToPage(currentPage + 1)}
 		disabled={currentPage === totalPages}
-		class="px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+		class="px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-dark-orange-700 hover:border-dark-orange-200"
 	>
 		Siguiente →
 	</button>

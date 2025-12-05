@@ -214,8 +214,8 @@
 	};
 
 	const getCellClass = (value: number) => {
-		if (value === 0) return 'bg-slate-50';
-		return 'bg-pink-50 text-pink-700 font-medium';
+		if (value === 0) return 'text-gray-500';
+		return 'bg-red-50 text-red-600 font-bold rounded-lg';
 	};
 
 	const formatDateDisplay = (dateStr: string) => {
@@ -255,7 +255,7 @@
 	};
 </script>
 
-<h1 class="text-xl font-semibold mb-4 text-slate-800">Informe Diario por Sedes</h1>
+<h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Informe Diario por Sedes</h1>
 
 {#if validationError}
 	<Alert color="yellow" dismissable class="mb-4">
@@ -264,58 +264,77 @@
 	</Alert>
 {/if}
 
-<!-- Selector de fecha -->
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<div class="flex items-end gap-4 flex-wrap">
-		<label class="flex flex-col gap-1.5 flex-1 min-w-[200px] max-w-xs">
-			<span class="text-xs font-semibold text-slate-700">Seleccionar Fecha</span>
+<!-- Selector de fecha y controles -->
+<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 mb-6">
+	<div class="flex flex-col md:flex-row items-end md:items-center gap-4 flex-wrap">
+		<label class="flex flex-col gap-2 w-full md:w-auto md:min-w-[200px]">
+			<span class="text-xs font-semibold text-gray-500 uppercase">Seleccionar Fecha</span>
 			<input
 				type="date"
 				bind:value={selectedDate}
-				class="h-9 rounded-md border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+				class="h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
 			/>
 		</label>
-		<button
-			type="button"
-			onclick={loadInformeData}
-			disabled={loading || !selectedDate}
-			class="h-9 px-5 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors"
-		>
-			{loading ? 'Cargando...' : 'Cargar Datos'}
-		</button>
-		<button
-			type="button"
-			onclick={() => (showColumnToggle = !showColumnToggle)}
-			class="h-9 px-5 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
-		>
-			{showColumnToggle ? 'Ocultar' : 'Mostrar'} Columnas
-		</button>
+		<div class="flex gap-3 w-full md:w-auto">
+			<button
+				type="button"
+				onclick={loadInformeData}
+				disabled={loading || !selectedDate}
+				class="flex-1 md:flex-none h-11 px-6 rounded-xl bg-linear-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold shadow-soft hover:shadow-soft-lg hover:from-black hover:to-gray-900 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+			>
+				{loading ? 'Cargando...' : 'Cargar Datos'}
+			</button>
+			<button
+				type="button"
+				onclick={() => (showColumnToggle = !showColumnToggle)}
+				class="h-11 px-4 rounded-xl border border-gray-200 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-colors"
+			>
+				{showColumnToggle ? 'Ocultar' : 'Mostrar'} Columnas
+			</button>
+		</div>
 	</div>
 
 	{#if selectedDate}
-		<p class="mt-3 text-xs text-slate-600">
-			Mostrando datos para: <strong class="text-slate-800">{formatDateDisplay(selectedDate)}</strong
+		<div
+			class="mt-4 flex items-center gap-2 text-sm text-gray-600 bg-gray-50/50 p-3 rounded-xl border border-gray-100"
+		>
+			<svg
+				class="w-4 h-4 text-dark-orange-500"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				><path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+				></path></svg
 			>
-		</p>
+			<span
+				>Mostrando datos para: <strong class="text-gray-900"
+					>{formatDateDisplay(selectedDate)}</strong
+				></span
+			>
+		</div>
 	{/if}
 
 	<!-- Panel de control de columnas -->
 	{#if showColumnToggle}
-		<div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
-			<div class="flex items-center justify-between mb-2">
-				<span class="text-xs font-semibold text-slate-700">Seleccionar Sedes Visibles</span>
+		<div class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+			<div class="flex items-center justify-between mb-3">
+				<span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Sedes Visibles</span>
 				<div class="flex gap-2">
 					<button
 						type="button"
 						onclick={() => toggleAllStores(true)}
-						class="text-xs px-2 py-1 rounded bg-green-600 text-white hover:bg-green-700"
+						class="text-xs px-2.5 py-1 rounded-md bg-white border border-gray-200 text-gray-600 hover:text-dark-orange-600 hover:border-dark-orange-200 transition-colors font-medium"
 					>
 						Todas
 					</button>
 					<button
 						type="button"
 						onclick={() => toggleAllStores(false)}
-						class="text-xs px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700"
+						class="text-xs px-2.5 py-1 rounded-md bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-colors font-medium"
 					>
 						Ninguna
 					</button>
@@ -324,15 +343,15 @@
 			<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
 				{#each stores as store}
 					<label
-						class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-100 p-1.5 rounded"
+						class="flex items-center gap-2 text-sm cursor-pointer hover:bg-white p-2 rounded-lg transition-colors border border-transparent hover:border-gray-200"
 					>
 						<input
 							type="checkbox"
 							checked={visibleStores[store]}
 							onchange={() => toggleStoreVisibility(store)}
-							class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+							class="w-4 h-4 rounded border-gray-300 text-dark-orange-600 focus:ring-dark-orange-500/20"
 						/>
-						<span class="text-slate-700">{store}</span>
+						<span class="text-gray-700 font-medium">{store}</span>
 					</label>
 				{/each}
 			</div>
@@ -347,7 +366,8 @@
 {/if}
 
 <!-- Tabla de informe -->
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<!-- Tabla de informe -->
+<section class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
 	<div class="overflow-x-auto">
 		<table class="w-full text-xs border-collapse table-fixed">
 			<colgroup>
@@ -357,16 +377,14 @@
 				{/each}
 			</colgroup>
 			<thead>
-				<tr class="bg-slate-800">
+				<tr class="bg-gray-900">
 					<th
-						class="border border-slate-600 px-2 py-2 text-left text-xs font-bold text-white uppercase tracking-wide"
+						class="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider first:rounded-tl-xl"
 					>
 						Método de Pago
 					</th>
 					{#each filteredStores as store}
-						<th
-							class="border border-slate-600 px-2 py-2 text-center text-xs font-bold text-white uppercase tracking-tight"
-						>
+						<th class="px-4 py-3 text-center text-xs font-bold text-white uppercase tracking-tight">
 							{store}
 						</th>
 					{/each}
@@ -374,61 +392,42 @@
 			</thead>
 			<tbody class="text-xs">
 				<!-- DATÁFONO -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Datáfono</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Datáfono</td>
 					{#each filteredStores as store}
-						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
-								informeData.datáfono[store]
-							)}"
-						>
+						<td class="px-4 py-3 text-center {getCellClass(informeData.datáfono[store])}">
 							{formatCurrency(informeData.datáfono[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- EFECTIVO -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Efectivo</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Efectivo</td>
 					{#each filteredStores as store}
-						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
-								informeData.efectivo[store]
-							)}"
-						>
+						<td class="px-4 py-3 text-center {getCellClass(informeData.efectivo[store])}">
 							{formatCurrency(informeData.efectivo[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- APPARTA -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Apparta</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Apparta</td>
 					{#each filteredStores as store}
-						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
-								informeData.apparta[store]
-							)}"
-						>
+						<td class="px-4 py-3 text-center {getCellClass(informeData.apparta[store])}">
 							{formatCurrency(informeData.apparta[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- TRANSFERENCIAS BANCARIAS -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Transferencias Bancarias</td
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Transferencias Bancarias</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
+							class="px-4 py-3 text-center {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -438,25 +437,21 @@
 				</tr>
 
 				<!-- Separador -->
-				<tr class="bg-blue-50">
+				<tr class="bg-dark-orange-50/50">
 					<td
 						colspan={filteredStores.length + 1}
-						class="border border-slate-200 px-2 py-1.5 text-center text-xs font-bold text-blue-900 uppercase tracking-wide"
+						class="px-4 py-2 text-center text-xs font-bold text-dark-orange-800 uppercase tracking-widest"
 					>
 						Plataformas Domicilio
 					</td>
 				</tr>
 
 				<!-- TRANSFERENCIA RAPPI -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Transferencia Rappi</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Transferencia Rappi</td>
 					{#each filteredStores as store}
 						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
-								informeData.transferencia_rappi[store]
-							)}"
+							class="px-4 py-3 text-center {getCellClass(informeData.transferencia_rappi[store])}"
 						>
 							{formatCurrency(informeData.transferencia_rappi[store])}
 						</td>
@@ -464,15 +459,11 @@
 				</tr>
 
 				<!-- TRANSFERENCIA JUSTO -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Transferencia Justo</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-200">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Transferencia Justo</td>
 					{#each filteredStores as store}
 						<td
-							class="border border-slate-200 px-2 py-1.5 text-center {getCellClass(
-								informeData.transferencia_justo[store]
-							)}"
+							class="px-4 py-3 text-center {getCellClass(informeData.transferencia_justo[store])}"
 						>
 							{formatCurrency(informeData.transferencia_justo[store])}
 						</td>
@@ -480,76 +471,76 @@
 				</tr>
 
 				<!-- TOTAL DESCUADRE -->
-				<tr class="bg-blue-600 hover:bg-blue-700 transition-colors">
-					<td class="border border-blue-700 px-2 py-2 font-bold text-white bg-blue-600"
-						>Total Descuadre</td
-					>
+				<tr class="bg-gray-900 hover:bg-gray-800 transition-colors shadow-sm">
+					<td class="px-4 py-3 font-bold text-white">Total Descuadre</td>
 					{#each filteredStores as store}
-						<td class="border border-blue-700 px-2 py-2 text-center font-bold text-white">
+						<td class="px-4 py-3 text-center font-bold text-white">
 							{formatCurrency(informeData.total_descuadre[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- DESCUENTOS (Editable) -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Descuentos</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Descuentos</td>
 					{#each filteredStores as store}
-						<td class="border border-slate-200 p-0 text-center bg-white">
+						<td
+							class="p-0 text-center bg-white border-b border-gray-100 last:border-0 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.descuentos[store]}
-								class="w-full h-full text-center border-0 focus:outline-none focus:bg-blue-50 text-xs py-1.5"
+								class="w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-dark-orange-50/30 text-sm font-medium text-gray-700"
 								placeholder="0"
 							/>
+							<div class="h-10"></div>
+							<!-- Spacer to give height -->
 						</td>
 					{/each}
 				</tr>
 
 				<!-- GASTOS DE CAJA (Editable) -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Gastos de Caja</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Gastos de Caja</td>
 					{#each filteredStores as store}
-						<td class="border border-slate-200 p-0 text-center bg-white">
+						<td
+							class="p-0 text-center bg-white border-b border-gray-100 last:border-0 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.gastos_caja[store]}
-								class="w-full h-full text-center border-0 focus:outline-none focus:bg-blue-50 text-xs py-1.5"
+								class="w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-dark-orange-50/30 text-sm font-medium text-gray-700"
 								placeholder="0"
 							/>
+							<div class="h-10"></div>
 						</td>
 					{/each}
 				</tr>
 
 				<!-- SOBRE DIARIO (Editable) -->
-				<tr class="hover:bg-slate-50 transition-colors">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Sobre Diario</td
-					>
+				<tr class="hover:bg-dark-orange-50/30 transition-colors border-b-2 border-gray-100">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Sobre Diario</td>
 					{#each filteredStores as store}
-						<td class="border border-slate-200 p-0 text-center bg-white">
+						<td
+							class="p-0 text-center bg-white border-b border-gray-100 last:border-0 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.sobre_diario[store]}
-								class="w-full h-full text-center border-0 focus:outline-none focus:bg-blue-50 text-xs py-1.5"
+								class="w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-dark-orange-50/30 text-sm font-medium text-gray-700"
 								placeholder="0"
 							/>
+							<div class="h-10"></div>
 						</td>
 					{/each}
 				</tr>
 
 				<!-- RESPONSABLE -->
-				<tr class="bg-slate-100">
-					<td class="border border-slate-300 px-2 py-1.5 font-bold text-slate-700 bg-slate-100"
-						>Responsable</td
-					>
+				<tr class="bg-gray-50/50 border-b border-gray-100">
+					<td class="px-4 py-3 font-bold text-gray-700 bg-gray-100/50">Responsable</td>
 					{#each filteredStores as store}
 						<td
-							class="border border-slate-300 px-2 py-1.5 text-center font-medium text-xs text-slate-700"
+							class="px-4 py-3 text-center font-semibold text-xs text-gray-600 uppercase tracking-wide"
 						>
 							{responsables[store] || '-'}
 						</td>
@@ -557,12 +548,10 @@
 				</tr>
 
 				<!-- OBSERVACIONES -->
-				<tr class="bg-slate-50">
-					<td class="border border-slate-200 px-2 py-1.5 font-medium text-slate-700 bg-slate-50"
-						>Observaciones</td
-					>
+				<tr class="bg-white">
+					<td class="px-4 py-3 font-medium text-gray-700 bg-gray-50/50">Observaciones</td>
 					{#each filteredStores as store}
-						<td class="border border-slate-200 px-2 py-1.5 text-center text-xs text-slate-600">
+						<td class="px-4 py-3 text-center text-xs text-gray-500 italic">
 							{observaciones[store] || '-'}
 						</td>
 					{/each}
@@ -573,16 +562,16 @@
 </section>
 
 <!-- Leyenda de colores -->
-<section class="mt-4 bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-	<h3 class="text-xs font-semibold text-slate-700 mb-2.5">Leyenda</h3>
-	<div class="flex gap-4 text-xs flex-wrap">
+<section class="mt-6 bg-white rounded-2xl shadow-soft border border-gray-100 p-5">
+	<h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Leyenda</h3>
+	<div class="flex gap-6 text-sm flex-wrap">
 		<div class="flex items-center gap-2">
-			<div class="w-5 h-5 bg-slate-50 border border-slate-300 rounded"></div>
-			<span class="text-slate-600">Sin diferencia ($0)</span>
+			<div class="w-2 h-2 rounded-full bg-gray-300"></div>
+			<span class="text-gray-600">Sin diferencia ($0)</span>
 		</div>
 		<div class="flex items-center gap-2">
-			<div class="w-5 h-5 bg-pink-50 border border-pink-200 rounded"></div>
-			<span class="text-pink-700 font-medium">Diferencia (Sobrante o Faltante)</span>
+			<div class="w-2 h-2 rounded-full bg-red-500"></div>
+			<span class="text-red-700 font-medium">Diferencia (Sobrante o Faltante)</span>
 		</div>
 	</div>
 </section>
