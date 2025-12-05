@@ -24,6 +24,8 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/postcss": "^4.1.17",
 		"@types/node": "^24",
+		"@types/papaparse": "^5.5.1",
+		"@types/xlsx": "^0.0.35",
 		"@vite-pwa/sveltekit": "^1.1.0",
 		"@vitest/browser-playwright": "^4.0.10",
 		"autoprefixer": "^10.4.22",
@@ -52,8 +54,12 @@
 		"@supabase/ssr": "^0.8.0",
 		"@supabase/supabase-js": "^2.84.0",
 		"chart.js": "^4.5.1",
+		"fuse.js": "^7.1.0",
 		"jspdf": "^3.0.4",
+		"layerchart": "^1.0.12",
+		"papaparse": "^5.5.3",
 		"poppins-font": "^1.0.1",
-		"tailwind-merge": "^3.4.0"
+		"tailwind-merge": "^3.4.0",
+		"xlsx": "^0.18.5"
 	}
 }

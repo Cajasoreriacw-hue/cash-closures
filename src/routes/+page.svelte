@@ -406,18 +406,23 @@
 		<p class="text-slate-500">Cargando datos...</p>
 	{:else}
 		<!-- Tarjetas de métricas -->
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
 			<!-- Total Sobres Activos -->
 			<div
-				class="bg-linear-to-br from-yellow-900 to-yellow-950 rounded-xl shadow-lg p-4 text-white"
+				class="bg-linear-to-br from-yellow-900 to-yellow-950 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
 			>
 				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-amber-50 text-xs font-medium">Sobres Activos</p>
-						<p class="text-2xl font-bold mt-1">{totalSobresActivos}</p>
+					<div class="flex-1 min-w-0">
+						<p class="text-amber-50 text-[10px] md:text-xs font-medium truncate">Sobres Activos</p>
+						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalSobresActivos}</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-2 ml-2">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
+						<svg
+							class="w-4 h-4 md:w-5 md:h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -431,17 +436,22 @@
 
 			<!-- Total Ventas -->
 			<div
-				class="bg-linear-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-4 text-white"
+				class="bg-linear-to-br from-orange-500 to-orange-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
 			>
 				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-amber-50 text-xs font-medium">Total Ventas</p>
-						<p class="text-2xl font-bold mt-1">
+					<div class="flex-1 min-w-0">
+						<p class="text-amber-50 text-[10px] md:text-xs font-medium truncate">Total Ventas</p>
+						<p class="text-sm md:text-2xl font-bold mt-0.5 md:mt-1 truncate">
 							${totalVentas.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
 						</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-2 ml-2">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
+						<svg
+							class="w-4 h-4 md:w-5 md:h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -454,14 +464,21 @@
 			</div>
 
 			<!-- Cajeros Registrados -->
-			<div class="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-xl shadow-lg p-4 text-white">
+			<div
+				class="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+			>
 				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-cyan-50 text-xs font-medium">Cajeros</p>
-						<p class="text-2xl font-bold mt-1">{totalCajeros}</p>
+					<div class="flex-1 min-w-0">
+						<p class="text-cyan-50 text-[10px] md:text-xs font-medium truncate">Cajeros</p>
+						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalCajeros}</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-2 ml-2">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
+						<svg
+							class="w-4 h-4 md:w-5 md:h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -475,15 +492,20 @@
 
 			<!-- Tiendas -->
 			<div
-				class="bg-linear-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-4 text-white"
+				class="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
 			>
 				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-purple-50 text-xs font-medium">Tiendas</p>
-						<p class="text-2xl font-bold mt-1">{totalTiendas}</p>
+					<div class="flex-1 min-w-0">
+						<p class="text-purple-50 text-[10px] md:text-xs font-medium truncate">Tiendas</p>
+						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalTiendas}</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-2 ml-2">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
+						<svg
+							class="w-4 h-4 md:w-5 md:h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -496,14 +518,21 @@
 			</div>
 
 			<!-- Total Cierres -->
-			<div class="bg-linear-to-br from-lime-400 to-lime-500 rounded-xl shadow-lg p-4 text-white">
+			<div
+				class="bg-linear-to-br from-lime-400 to-lime-500 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+			>
 				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-lime-50 text-xs font-medium">Nº Cierres</p>
-						<p class="text-2xl font-bold mt-1">{totalCierres}</p>
+					<div class="flex-1 min-w-0">
+						<p class="text-lime-50 text-[10px] md:text-xs font-medium truncate">Nº Cierres</p>
+						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalCierres}</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-2 ml-2">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
+						<svg
+							class="w-4 h-4 md:w-5 md:h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
@@ -517,19 +546,23 @@
 		</div>
 
 		<!-- Gráficos -->
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
 			<!-- Gráfico de meses -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-				<h2 class="text-lg font-semibold text-slate-800 mb-4">Descuadres por Mes</h2>
-				<div class="h-80">
+			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
+				<h2 class="text-base md:text-lg font-semibold text-slate-800 mb-3 md:mb-4">
+					Descuadres por Mes
+				</h2>
+				<div class="h-64 md:h-80">
 					<canvas id="chartMeses"></canvas>
 				</div>
 			</div>
 
 			<!-- Gráfico de cajeros -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-				<h2 class="text-lg font-semibold text-slate-800 mb-4">Descuadres por Cajero</h2>
-				<div class="h-80">
+			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
+				<h2 class="text-base md:text-lg font-semibold text-slate-800 mb-3 md:mb-4">
+					Descuadres por Cajero
+				</h2>
+				<div class="h-64 md:h-80">
 					<canvas id="chartCajeros"></canvas>
 				</div>
 			</div>

@@ -58,6 +58,11 @@
 			icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'
 		},
 		{
+			href: '/gastos',
+			label: 'Gastos',
+			icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'
+		},
+		{
 			href: '/informe-diario',
 			label: 'Informe',
 			icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
@@ -275,11 +280,11 @@
 	<nav
 		class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50"
 	>
-		<div class="flex items-center justify-around px-2 py-2">
-			{#each navItems.slice(0, 5) as item}
+		<div class="flex items-center justify-around px-1 py-2">
+			{#each navItems as item}
 				<a
 					href={item.href}
-					class="flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px]"
+					class="flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition-all min-w-[50px]"
 					class:text-blue-600={$page.url.pathname === item.href}
 					class:bg-blue-50={$page.url.pathname === item.href}
 					class:text-slate-600={$page.url.pathname !== item.href}
@@ -287,7 +292,7 @@
 					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />
 					</svg>
-					<span class="text-[10px] font-medium">{item.label}</span>
+					<span class="text-[9px] font-medium">{item.label}</span>
 				</a>
 			{/each}
 		</div>
