@@ -99,207 +99,222 @@
 	const renderCharts = () => {
 		if (!stats) return;
 
+		// Helper to safely destroy chart
+		const destroyChart = (chart: Chart | null) => {
+			if (chart) {
+				chart.destroy();
+			}
+			return null;
+		};
+
 		// Destroy previous charts
-		if (chartCategory) chartCategory.destroy();
-		if (chartStore) chartStore.destroy();
-		if (chartMonth) chartMonth.destroy();
+		chartCategory = destroyChart(chartCategory);
+		chartStore = destroyChart(chartStore);
+		chartMonth = destroyChart(chartMonth);
 
-		// Category Chart (Donut)
-		const ctxCategory = document.getElementById('chartCategory') as HTMLCanvasElement;
-		if (ctxCategory && stats.byCategory.length > 0) {
-			chartCategory = new Chart(ctxCategory, {
-				type: 'doughnut',
-				data: {
-					labels: stats.byCategory.map((c) => c.category),
-					datasets: [
-						{
-							data: stats.byCategory.map((c) => c.total),
-							backgroundColor: [
-								'rgba(239, 68, 68, 0.8)',
-								'rgba(249, 115, 22, 0.8)',
-								'rgba(234, 179, 8, 0.8)',
-								'rgba(34, 197, 94, 0.8)',
-								'rgba(59, 130, 246, 0.8)',
-								'rgba(168, 85, 247, 0.8)',
-								'rgba(236, 72, 153, 0.8)',
-								'rgba(148, 163, 184, 0.8)'
-							],
-							borderColor: '#fff',
-							borderWidth: 3,
-							hoverBorderWidth: 4,
-							hoverOffset: 8
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: {
-							position: 'right',
-							labels: {
-								color: '#475569',
-								font: { size: 11, family: "'Inter', 'system-ui', sans-serif" },
+		// Wait for next tick to ensure canvas is ready/cleared
+		setTimeout(() => {
+			// Category Chart (Donut)
+			const ctxCategory = document.getElementById('chartCategory') as HTMLCanvasElement;
+			if (ctxCategory && stats?.byCategory && stats.byCategory.length > 0) {
+				chartCategory = new Chart(ctxCategory, {
+					type: 'doughnut',
+					data: {
+						labels: stats.byCategory.map((c) => c.category),
+						datasets: [
+							{
+								data: stats.byCategory.map((c) => c.total),
+								backgroundColor: [
+									'rgba(239, 68, 68, 0.8)',
+									'rgba(249, 115, 22, 0.8)',
+									'rgba(234, 179, 8, 0.8)',
+									'rgba(34, 197, 94, 0.8)',
+									'rgba(59, 130, 246, 0.8)',
+									'rgba(168, 85, 247, 0.8)',
+									'rgba(236, 72, 153, 0.8)',
+									'rgba(148, 163, 184, 0.8)'
+								],
+								borderColor: '#fff',
+								borderWidth: 3,
+								hoverBorderWidth: 4,
+								hoverOffset: 8
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'right',
+								labels: {
+									color: '#475569',
+									font: { size: 11, family: "'Inter', 'system-ui', sans-serif" },
+									padding: 12,
+									usePointStyle: true,
+									pointStyle: 'circle'
+								}
+							},
+							tooltip: {
+								backgroundColor: 'rgba(15, 23, 42, 0.95)',
+								titleColor: '#fff',
+								bodyColor: '#fff',
 								padding: 12,
-								usePointStyle: true,
-								pointStyle: 'circle'
-							}
-						},
-						tooltip: {
-							backgroundColor: 'rgba(15, 23, 42, 0.95)',
-							titleColor: '#fff',
-							bodyColor: '#fff',
-							padding: 12,
-							borderColor: 'rgba(148, 163, 184, 0.3)',
-							borderWidth: 1,
-							cornerRadius: 8,
-							callbacks: {
-								label: function (context) {
-									const label = context.label || '';
-									const value = context.parsed || 0;
-									const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-									return `${label}: $${formatted}`;
+								borderColor: 'rgba(148, 163, 184, 0.3)',
+								borderWidth: 1,
+								cornerRadius: 8,
+								callbacks: {
+									label: function (context) {
+										const label = context.label || '';
+										const value = context.parsed || 0;
+										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+										return `${label}: $${formatted}`;
+									}
 								}
 							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
 
-		// Store Chart (Bar)
-		const ctxStore = document.getElementById('chartStore') as HTMLCanvasElement;
-		if (ctxStore && stats.byStore.length > 0) {
-			chartStore = new Chart(ctxStore, {
-				type: 'bar',
-				data: {
-					labels: stats.byStore.map((s) => s.store),
-					datasets: [
-						{
-							label: 'Gastos',
-							data: stats.byStore.map((s) => s.total),
-							backgroundColor: 'rgba(59, 130, 246, 0.8)',
-							borderColor: 'rgba(37, 99, 235, 1)',
-							borderWidth: 2,
-							borderRadius: 8,
-							hoverBackgroundColor: 'rgba(37, 99, 235, 0.9)'
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					indexAxis: 'y',
-					plugins: {
-						legend: { display: false },
-						tooltip: {
-							backgroundColor: 'rgba(15, 23, 42, 0.95)',
-							titleColor: '#fff',
-							bodyColor: '#fff',
-							padding: 12,
-							borderColor: 'rgba(148, 163, 184, 0.3)',
-							borderWidth: 1,
-							cornerRadius: 8,
-							callbacks: {
-								label: function (context) {
-									const value = context.parsed.x || 0;
-									const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-									return `Total: $${formatted}`;
+			// Store Chart (Bar)
+			const ctxStore = document.getElementById('chartStore') as HTMLCanvasElement;
+			if (ctxStore && stats?.byStore && stats.byStore.length > 0) {
+				chartStore = new Chart(ctxStore, {
+					type: 'bar',
+					data: {
+						labels: stats.byStore.map((s) => s.store),
+						datasets: [
+							{
+								label: 'Gastos',
+								data: stats.byStore.map((s) => s.total),
+								backgroundColor: 'rgba(59, 130, 246, 0.8)',
+								borderColor: 'rgba(37, 99, 235, 1)',
+								borderWidth: 2,
+								borderRadius: 8,
+								hoverBackgroundColor: 'rgba(37, 99, 235, 0.9)'
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						indexAxis: 'y',
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								backgroundColor: 'rgba(15, 23, 42, 0.95)',
+								titleColor: '#fff',
+								bodyColor: '#fff',
+								padding: 12,
+								borderColor: 'rgba(148, 163, 184, 0.3)',
+								borderWidth: 1,
+								cornerRadius: 8,
+								callbacks: {
+									label: function (context) {
+										const value = context.parsed.x || 0;
+										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+										return `Total: $${formatted}`;
+									}
 								}
 							}
-						}
-					},
-					scales: {
-						x: {
-							beginAtZero: true,
-							ticks: {
-								color: '#64748b',
-								font: { size: 11 },
-								callback: function (value) {
-									return '$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 });
-								}
-							},
-							grid: { color: 'rgba(148, 163, 184, 0.1)' },
-							border: { display: false }
 						},
-						y: {
-							ticks: { color: '#64748b', font: { size: 11 } },
-							grid: { display: false },
-							border: { display: false }
+						scales: {
+							x: {
+								beginAtZero: true,
+								ticks: {
+									color: '#64748b',
+									font: { size: 11 },
+									callback: function (value) {
+										return (
+											'$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 })
+										);
+									}
+								},
+								grid: { color: 'rgba(148, 163, 184, 0.1)' },
+								border: { display: false }
+							},
+							y: {
+								ticks: { color: '#64748b', font: { size: 11 } },
+								grid: { display: false },
+								border: { display: false }
+							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
 
-		// Month Chart (Line)
-		const ctxMonth = document.getElementById('chartMonth') as HTMLCanvasElement;
-		if (ctxMonth && stats.byMonth.length > 0) {
-			chartMonth = new Chart(ctxMonth, {
-				type: 'line',
-				data: {
-					labels: stats.byMonth.map((m) => m.month),
-					datasets: [
-						{
-							label: 'Gastos Mensuales',
-							data: stats.byMonth.map((m) => m.total),
-							backgroundColor: 'rgba(168, 85, 247, 0.1)',
-							borderColor: 'rgba(168, 85, 247, 1)',
-							borderWidth: 3,
-							fill: true,
-							tension: 0.4,
-							pointBackgroundColor: 'rgba(168, 85, 247, 1)',
-							pointBorderColor: '#fff',
-							pointBorderWidth: 2,
-							pointRadius: 5,
-							pointHoverRadius: 7
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: { display: false },
-						tooltip: {
-							backgroundColor: 'rgba(15, 23, 42, 0.95)',
-							titleColor: '#fff',
-							bodyColor: '#fff',
-							padding: 12,
-							borderColor: 'rgba(148, 163, 184, 0.3)',
-							borderWidth: 1,
-							cornerRadius: 8,
-							callbacks: {
-								label: function (context) {
-									const value = context.parsed.y || 0;
-									const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-									return `Total: $${formatted}`;
+			// Month Chart (Line)
+			const ctxMonth = document.getElementById('chartMonth') as HTMLCanvasElement;
+			if (ctxMonth && stats?.byMonth && stats.byMonth.length > 0) {
+				chartMonth = new Chart(ctxMonth, {
+					type: 'line',
+					data: {
+						labels: stats.byMonth.map((m) => m.month),
+						datasets: [
+							{
+								label: 'Gastos Mensuales',
+								data: stats.byMonth.map((m) => m.total),
+								backgroundColor: 'rgba(168, 85, 247, 0.1)',
+								borderColor: 'rgba(168, 85, 247, 1)',
+								borderWidth: 3,
+								fill: true,
+								tension: 0.4,
+								pointBackgroundColor: 'rgba(168, 85, 247, 1)',
+								pointBorderColor: '#fff',
+								pointBorderWidth: 2,
+								pointRadius: 5,
+								pointHoverRadius: 7
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: { display: false },
+							tooltip: {
+								backgroundColor: 'rgba(15, 23, 42, 0.95)',
+								titleColor: '#fff',
+								bodyColor: '#fff',
+								padding: 12,
+								borderColor: 'rgba(148, 163, 184, 0.3)',
+								borderWidth: 1,
+								cornerRadius: 8,
+								callbacks: {
+									label: function (context) {
+										const value = context.parsed.y || 0;
+										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+										return `Total: $${formatted}`;
+									}
 								}
 							}
-						}
-					},
-					scales: {
-						y: {
-							beginAtZero: true,
-							ticks: {
-								color: '#64748b',
-								font: { size: 11 },
-								callback: function (value) {
-									return '$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 });
-								}
-							},
-							grid: { color: 'rgba(148, 163, 184, 0.1)' },
-							border: { display: false }
 						},
-						x: {
-							ticks: { color: '#64748b', font: { size: 11 } },
-							grid: { display: false },
-							border: { display: false }
+						scales: {
+							y: {
+								beginAtZero: true,
+								ticks: {
+									color: '#64748b',
+									font: { size: 11 },
+									callback: function (value) {
+										return (
+											'$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 })
+										);
+									}
+								},
+								grid: { color: 'rgba(148, 163, 184, 0.1)' },
+								border: { display: false }
+							},
+							x: {
+								ticks: { color: '#64748b', font: { size: 11 } },
+								grid: { display: false },
+								border: { display: false }
+							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
+		}, 0);
 	};
 
 	/**

@@ -198,164 +198,167 @@
 	};
 
 	const renderCharts = () => {
+		// Helper to safely destroy chart
+		const destroyChart = (chart: Chart | null) => {
+			if (chart) {
+				chart.destroy();
+			}
+			return null;
+		};
+
 		// Destruir gráficos anteriores
-		if (chartMeses) chartMeses.destroy();
-		if (chartCajeros) chartCajeros.destroy();
+		chartMeses = destroyChart(chartMeses);
+		chartCajeros = destroyChart(chartCajeros);
 
-		// Gráfico de meses
-		const ctxMeses = document.getElementById('chartMeses') as HTMLCanvasElement;
-		if (ctxMeses) {
-			chartMeses = new Chart(ctxMeses, {
-				type: 'bar',
-				data: {
-					labels: descuadresPorMes.map((d) => d.month),
-					datasets: [
-						{
-							label: 'Descuadres',
-							data: descuadresPorMes.map((d) => d.count),
-							backgroundColor: 'rgba(239, 68, 68, 0.8)',
-							borderColor: 'rgba(220, 38, 38, 1)',
-							borderWidth: 2,
-							borderRadius: 8,
-							hoverBackgroundColor: 'rgba(220, 38, 38, 0.9)'
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: {
-							display: false
-						},
-						tooltip: {
-							backgroundColor: 'rgba(15, 23, 42, 0.95)',
-							titleColor: '#fff',
-							bodyColor: '#fff',
-							padding: 12,
-							borderColor: 'rgba(148, 163, 184, 0.3)',
-							borderWidth: 1,
-							cornerRadius: 8,
-							titleFont: {
-								size: 13,
-								weight: 'bold'
-							},
-							bodyFont: {
-								size: 12
+		// Wait for next tick to ensure canvas is ready/cleared
+		setTimeout(() => {
+			// Gráfico de meses
+			const ctxMeses = document.getElementById('chartMeses') as HTMLCanvasElement;
+			if (ctxMeses) {
+				chartMeses = new Chart(ctxMeses, {
+					type: 'bar',
+					data: {
+						labels: descuadresPorMes.map((d) => d.month),
+						datasets: [
+							{
+								label: 'Descuadres',
+								data: descuadresPorMes.map((d) => d.count),
+								backgroundColor: 'rgba(239, 68, 68, 0.8)',
+								borderColor: 'rgba(220, 38, 38, 1)',
+								borderWidth: 2,
+								borderRadius: 8,
+								hoverBackgroundColor: 'rgba(220, 38, 38, 0.9)'
 							}
-						}
+						]
 					},
-					scales: {
-						y: {
-							beginAtZero: true,
-							ticks: {
-								stepSize: 1,
-								color: '#64748b',
-								font: {
-									size: 11
-								}
-							},
-							grid: {
-								color: 'rgba(148, 163, 184, 0.1)'
-							},
-							border: {
-								display: false
-							}
-						},
-						x: {
-							ticks: {
-								color: '#64748b',
-								font: {
-									size: 11
-								}
-							},
-							grid: {
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
 								display: false
 							},
-							border: {
-								display: false
-							}
-						}
-					}
-				}
-			});
-		}
-
-		// Gráfico de cajeros (torta)
-		const ctxCajeros = document.getElementById('chartCajeros') as HTMLCanvasElement;
-		if (ctxCajeros) {
-			chartCajeros = new Chart(ctxCajeros, {
-				type: 'doughnut',
-				data: {
-					labels: descuadresPorCajero.map((d) => d.cashier),
-					datasets: [
-						{
-							data: descuadresPorCajero.map((d) => d.count),
-							backgroundColor: [
-								'rgba(239, 68, 68, 0.8)',
-								'rgba(249, 115, 22, 0.8)',
-								'rgba(234, 179, 8, 0.8)',
-								'rgba(34, 197, 94, 0.8)',
-								'rgba(59, 130, 246, 0.8)',
-								'rgba(168, 85, 247, 0.8)',
-								'rgba(236, 72, 153, 0.8)',
-								'rgba(148, 163, 184, 0.8)',
-								'rgba(100, 116, 139, 0.8)',
-								'rgba(71, 85, 105, 0.8)'
-							],
-							borderColor: '#fff',
-							borderWidth: 3,
-							hoverBorderWidth: 4,
-							hoverOffset: 8
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					plugins: {
-						legend: {
-							position: 'right',
-							labels: {
-								color: '#475569',
-								font: {
-									size: 11,
-									family: "'Inter', 'system-ui', sans-serif"
-								},
+							tooltip: {
+								backgroundColor: 'rgba(15, 23, 42, 0.95)',
+								titleColor: '#fff',
+								bodyColor: '#fff',
 								padding: 12,
-								usePointStyle: true,
-								pointStyle: 'circle'
+								borderColor: 'rgba(148, 163, 184, 0.3)',
+								borderWidth: 1,
+								cornerRadius: 8,
+								titleFont: {
+									size: 13,
+									weight: 'bold'
+								},
+								bodyFont: {
+									size: 12
+								}
 							}
 						},
-						tooltip: {
-							backgroundColor: 'rgba(15, 23, 42, 0.95)',
-							titleColor: '#fff',
-							bodyColor: '#fff',
-							padding: 12,
-							borderColor: 'rgba(148, 163, 184, 0.3)',
-							borderWidth: 1,
-							cornerRadius: 8,
-							titleFont: {
-								size: 13,
-								weight: 'bold'
+						scales: {
+							y: {
+								beginAtZero: true,
+								ticks: {
+									stepSize: 1,
+									color: '#64748b',
+									font: {
+										size: 11
+									}
+								},
+								grid: {
+									color: 'rgba(148, 163, 184, 0.1)'
+								},
+								border: {
+									display: false
+								}
 							},
-							bodyFont: {
-								size: 12
-							},
-							callbacks: {
-								label: function (context) {
-									const label = context.label || '';
-									const value = context.parsed || 0;
-									const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-									const percentage = ((value / total) * 100).toFixed(1);
-									return `${label}: ${value} (${percentage}%)`;
+							x: {
+								ticks: {
+									color: '#64748b',
+									font: {
+										size: 11
+									}
+								},
+								grid: {
+									display: false
+								},
+								border: {
+									display: false
 								}
 							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
+
+			// Gráfico de cajeros (torta)
+			const ctxCajeros = document.getElementById('chartCajeros') as HTMLCanvasElement;
+			if (ctxCajeros) {
+				chartCajeros = new Chart(ctxCajeros, {
+					type: 'doughnut',
+					data: {
+						labels: descuadresPorCajero.map((d) => d.cashier),
+						datasets: [
+							{
+								data: descuadresPorCajero.map((d) => d.count),
+								backgroundColor: [
+									'rgba(239, 68, 68, 0.8)',
+									'rgba(249, 115, 22, 0.8)',
+									'rgba(234, 179, 8, 0.8)',
+									'rgba(34, 197, 94, 0.8)',
+									'rgba(59, 130, 246, 0.8)',
+									'rgba(168, 85, 247, 0.8)',
+									'rgba(236, 72, 153, 0.8)',
+									'rgba(148, 163, 184, 0.8)',
+									'rgba(20, 184, 166, 0.8)',
+									'rgba(99, 102, 241, 0.8)'
+								],
+								borderColor: '#fff',
+								borderWidth: 2,
+								hoverOffset: 4
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								position: 'right',
+								labels: {
+									color: '#475569',
+									font: {
+										size: 11,
+										family: "'Inter', 'system-ui', sans-serif"
+									},
+									padding: 12,
+									usePointStyle: true,
+									pointStyle: 'circle'
+								}
+							},
+							tooltip: {
+								backgroundColor: 'rgba(15, 23, 42, 0.95)',
+								titleColor: '#fff',
+								bodyColor: '#fff',
+								padding: 12,
+								borderColor: 'rgba(148, 163, 184, 0.3)',
+								borderWidth: 1,
+								cornerRadius: 8,
+								callbacks: {
+									label: function (context) {
+										const label = context.label || '';
+										const value = context.parsed || 0;
+										const total = context.dataset.data.reduce((a: any, b: any) => a + b, 0);
+										const percentage = ((value / total) * 100).toFixed(1);
+										return `${label}: ${value} (${percentage}%)`;
+									}
+								}
+							}
+						}
+					}
+				});
+			}
+		}, 0);
 	};
 
 	onMount(() => {
