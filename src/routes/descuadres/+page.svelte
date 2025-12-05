@@ -483,9 +483,13 @@
 
 <!-- PDF Alerts -->
 {#if pdfSuccess}
-	<AlertAny color="green" dismissable class="mb-4">
+	<AlertAny
+		color="green"
+		dismissable
+		class="mb-4 shadow-soft dark:shadow-none dark:bg-slate-800 dark:border dark:border-green-900/50"
+	>
 		<svelte:fragment slot="icon">
-			<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+			<svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
 				<path
 					fill-rule="evenodd"
 					d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -493,15 +497,19 @@
 				/>
 			</svg>
 		</svelte:fragment>
-		<span class="font-medium">¡Éxito!</span>
-		{pdfSuccess}
+		<span class="font-medium text-gray-900 dark:text-white">¡Éxito!</span>
+		<span class="text-gray-700 dark:text-gray-300">{pdfSuccess}</span>
 	</AlertAny>
 {/if}
 
 {#if pdfError}
-	<AlertAny color="red" dismissable class="mb-4">
+	<AlertAny
+		color="red"
+		dismissable
+		class="mb-4 shadow-soft dark:shadow-none dark:bg-slate-800 dark:border dark:border-red-900/50"
+	>
 		<svelte:fragment slot="icon">
-			<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+			<svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
 				<path
 					fill-rule="evenodd"
 					d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -509,57 +517,68 @@
 				/>
 			</svg>
 		</svelte:fragment>
-		<span class="font-medium">Error:</span>
-		{pdfError}
+		<span class="font-medium text-gray-900 dark:text-white">Error:</span>
+		<span class="text-gray-700 dark:text-gray-300">{pdfError}</span>
 	</AlertAny>
 {/if}
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Análisis de Descuadres</h1>
+		<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+			Análisis de Descuadres
+		</h1>
 		<div class="flex gap-2">
 			<!-- Export buttons could go here -->
 		</div>
 	</div>
 
 	<!-- Filters -->
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
-		<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h3>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
+	>
+		<h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Filtros
+		</h3>
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
 			<!-- Date Range -->
 			<div class="space-y-2">
-				<label for="filter-from" class="text-xs font-semibold text-gray-500 uppercase"
+				<label
+					for="filter-from"
+					class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
 					>Fecha Inicio</label
 				>
 				<input
 					id="filter-from"
 					type="date"
 					bind:value={filterFrom}
-					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium text-gray-700 dark:text-white icon-calendar"
 				/>
 			</div>
 
 			<div class="space-y-2">
-				<label for="filter-to" class="text-xs font-semibold text-gray-500 uppercase"
-					>Fecha Fin</label
+				<label
+					for="filter-to"
+					class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Fecha Fin</label
 				>
 				<input
 					id="filter-to"
 					type="date"
 					bind:value={filterTo}
-					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium text-gray-700 dark:text-white icon-calendar"
 				/>
 			</div>
 
 			<!-- Store Filter -->
 			<div class="space-y-2">
-				<label for="filter-store" class="block text-xs font-medium text-gray-500 mb-1">Tienda</label
+				<label
+					for="filter-store"
+					class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Tienda</label
 				>
 				<div class="relative">
 					<select
 						id="filter-store"
 						bind:value={filterStore}
-						class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none cursor-pointer font-medium text-gray-700"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none cursor-pointer font-medium text-gray-700 dark:text-white"
 					>
 						<option value="">Todas las tiendas</option>
 						{#each storeOptions as s}
@@ -567,7 +586,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 							><path
@@ -583,14 +602,15 @@
 
 			<!-- Cashier Filter -->
 			<div class="space-y-2">
-				<label for="filter-cashier" class="block text-xs font-medium text-gray-500 mb-1"
-					>Cajero</label
+				<label
+					for="filter-cashier"
+					class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Cajero</label
 				>
 				<div class="relative">
 					<select
 						id="filter-cashier"
 						bind:value={filterCashier}
-						class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none cursor-pointer font-medium text-gray-700"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none cursor-pointer font-medium text-gray-700 dark:text-white"
 					>
 						<option value="">Todos los cajeros</option>
 						{#each cashierOptions as c}
@@ -598,7 +618,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 							><path
@@ -614,16 +634,16 @@
 		</div>
 
 		<!-- Payment Method Toggles -->
-		<div class="mt-6 flex flex-wrap gap-4 pt-4 border-t border-gray-100">
+		<div class="mt-6 flex flex-wrap gap-4 pt-4 border-t border-gray-100 dark:border-slate-700">
 			<label class="inline-flex items-center gap-2 cursor-pointer group">
 				<div class="relative">
 					<input type="checkbox" bind:checked={filterMetodoEfectivo} class="peer sr-only" />
 					<div
-						class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-dark-orange-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dark-orange-500"
+						class="w-11 h-6 bg-gray-200 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-fresh-sky-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fresh-sky-500"
 					></div>
 				</div>
 				<span
-					class="text-sm font-medium text-gray-700 group-hover:text-dark-orange-600 transition-colors"
+					class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-fresh-sky-600 dark:group-hover:text-fresh-sky-400 transition-colors"
 					>Efectivo</span
 				>
 			</label>
@@ -632,11 +652,11 @@
 				<div class="relative">
 					<input type="checkbox" bind:checked={filterMetodoDatafono} class="peer sr-only" />
 					<div
-						class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-dark-orange-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dark-orange-500"
+						class="w-11 h-6 bg-gray-200 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-fresh-sky-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fresh-sky-500"
 					></div>
 				</div>
 				<span
-					class="text-sm font-medium text-gray-700 group-hover:text-dark-orange-600 transition-colors"
+					class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-fresh-sky-600 dark:group-hover:text-fresh-sky-400 transition-colors"
 					>Datáfono</span
 				>
 			</label>
@@ -646,13 +666,15 @@
 	{#if loading}
 		<div class="flex items-center justify-center py-12">
 			<div
-				class="w-10 h-10 border-4 border-dark-orange-200 border-t-dark-orange-500 rounded-full animate-spin"
+				class="w-10 h-10 border-4 border-fresh-sky-200 dark:border-fresh-sky-900 border-t-fresh-sky-500 dark:border-t-fresh-sky-400 rounded-full animate-spin"
 			></div>
 		</div>
 	{:else if filteredDescuadres.length === 0}
-		<div class="bg-gray-50 rounded-2xl border border-gray-100 p-8 text-center">
+		<div
+			class="bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-gray-100 dark:border-slate-700 p-8 text-center"
+		>
 			<svg
-				class="w-12 h-12 mx-auto text-gray-300 mb-4"
+				class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4"
 				fill="none"
 				stroke="currentColor"
 				viewBox="0 0 24 24"
@@ -663,19 +685,19 @@
 					d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
 				></path></svg
 			>
-			<p class="text-gray-500 font-medium">
+			<p class="text-gray-500 dark:text-gray-400 font-medium">
 				No se encontraron descuadres con los filtros seleccionados.
 			</p>
 		</div>
 	{:else}
 		<!-- Table -->
 		<div
-			class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden hidden md:block"
+			class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 overflow-hidden hidden md:block"
 		>
 			<div class="overflow-x-auto">
 				<table class="w-full text-sm text-left">
 					<thead
-						class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold"
+						class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold"
 					>
 						<tr>
 							<th class="px-6 py-4">Fecha</th>
@@ -686,29 +708,30 @@
 							<th class="px-6 py-4 text-center">Acciones</th>
 						</tr>
 					</thead>
-					<tbody class="divide-y divide-gray-50">
+					<tbody class="divide-y divide-gray-50 dark:divide-slate-700">
 						{#each paginatedDescuadres as d}
-							<tr class="hover:bg-dark-orange-50/30 transition-colors">
-								<td class="px-6 py-4 text-gray-600 font-medium whitespace-nowrap"
+							<tr class="hover:bg-fresh-sky-50/10 dark:hover:bg-fresh-sky-900/10 transition-colors">
+								<td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap"
 									>{new Date(d.date).toLocaleDateString()}</td
 								>
-								<td class="px-6 py-4 text-gray-600">{d.store}</td>
-								<td class="px-6 py-4 text-gray-600">{d.cashier}</td>
+								<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{d.store}</td>
+								<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{d.cashier}</td>
 								<td class="px-6 py-4">
-									<span
-										class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
-										class:bg-emerald-50={d.metodo === 'Efectivo'}
-										class:text-emerald-700={d.metodo === 'Efectivo'}
-										class:border-emerald-100={d.metodo === 'Efectivo'}
-										class:bg-blue-50={d.metodo === 'Datáfono'}
-										class:text-blue-700={d.metodo === 'Datáfono'}
-										class:border-blue-100={d.metodo === 'Datáfono'}
-									>
-										{d.metodo}
-									</span>
-								</td>
-								<td class="px-6 py-4 text-right font-bold text-red-600">
-									{d.valor.toLocaleString('es-CO', {
+								<span
+							class={
+								'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
+								(d.metodo === 'Efectivo'
+									? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/40'
+									: d.metodo === 'Datáfono'
+									? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
+									: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')
+							}
+						>
+							{d.metodo}
+						</span>
+						</td>
+						<td class="px-6 py-4 text-right font-bold text-red-600 dark:text-red-400">
+							{d.valor.toLocaleString('es-CO', {
 										style: 'currency',
 										currency: 'COP',
 										maximumFractionDigits: 0
@@ -716,7 +739,7 @@
 								</td>
 								<td class="px-6 py-4 text-center">
 									<button
-										class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-dark-orange-50 hover:text-dark-orange-600 transition-colors"
+										class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-50 dark:bg-slate-700 text-gray-400 dark:text-gray-500 hover:bg-fresh-sky-50 dark:hover:bg-fresh-sky-900/30 hover:text-fresh-sky-600 dark:hover:text-fresh-sky-400 transition-colors"
 										onclick={() => generatePdf(d)}
 										title="Generar notificación PDF"
 									>
@@ -740,30 +763,36 @@
 		<!-- Mobile Cards -->
 		<div class="grid grid-cols-1 gap-4 md:hidden">
 			{#each paginatedDescuadres as d}
-				<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 space-y-4">
+				<div
+					class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 space-y-4 transition-colors"
+				>
 					<div class="flex justify-between items-start">
 						<div>
-							<span class="text-xs font-bold text-gray-400 uppercase tracking-wider"
+							<span
+								class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider"
 								>{new Date(d.date).toLocaleDateString()}</span
 							>
-							<h3 class="text-base font-bold text-gray-900 mt-1">{d.store}</h3>
-							<p class="text-sm text-gray-500">{d.cashier}</p>
+							<h3 class="text-base font-bold text-gray-900 dark:text-white mt-1">{d.store}</h3>
+							<p class="text-sm text-gray-500 dark:text-gray-400">{d.cashier}</p>
 						</div>
 						<span
-							class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
-							class:bg-emerald-50={d.metodo === 'Efectivo'}
-							class:text-emerald-700={d.metodo === 'Efectivo'}
-							class:border-emerald-100={d.metodo === 'Efectivo'}
-							class:bg-blue-50={d.metodo === 'Datáfono'}
-							class:text-blue-700={d.metodo === 'Datáfono'}
-							class:border-blue-100={d.metodo === 'Datáfono'}
+							class={
+								'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
+								(d.metodo === 'Efectivo'
+									? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/40'
+									: d.metodo === 'Datáfono'
+									? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
+									: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')
+							}
 						>
 							{d.metodo}
 						</span>
 					</div>
 
-					<div class="flex items-center justify-between pt-4 border-t border-gray-50">
-						<div class="text-lg font-bold text-red-600">
+					<div
+						class="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-slate-700"
+					>
+						<div class="text-lg font-bold text-red-600 dark:text-red-400">
 							{d.valor.toLocaleString('es-CO', {
 								style: 'currency',
 								currency: 'COP',
@@ -771,7 +800,7 @@
 							})}
 						</div>
 						<button
-							class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-semibold shadow-soft hover:bg-black transition-colors"
+							class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-fresh-sky-600 hover:bg-fresh-sky-700 text-white text-xs font-semibold shadow-soft hover:shadow-soft-lg transition-all active:scale-95"
 							onclick={() => generatePdf(d)}
 						>
 							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -804,13 +833,12 @@
 	>
 		Recargar
 	</button>
+
 	<button
 		type="button"
 		onclick={generatePdf}
-		class="inline-flex items-center px-3 py-1.5 rounded-md border border-slate-300 text-slate-800 text-xs font-medium bg-white hover:bg-slate-50"
-		disabled={!filteredDescuadres.length}
+		class="inline-flex items-center px-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-700 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700"
 	>
 		Generar PDF
 	</button>
 </div>
-```

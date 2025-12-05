@@ -46,7 +46,7 @@
 
 {#if visible}
 	<div
-		class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-linear-to-br from-dark-orange-50 via-orange-50 to-dark-orange-100 overflow-hidden"
+		class="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-linear-to-br from-dark-orange-50 via-orange-50 to-dark-orange-100 overflow-hidden"
 		transition:fade={{ duration: 500 }}
 	>
 		<!-- Floating Particles -->

@@ -162,7 +162,7 @@
 			<!-- Right: User Info and Logout -->
 			<div class="flex items-center gap-2 lg:gap-4">
 				<div
-					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-gradient-to-r from-gray-50 to-gray-50/50 rounded-xl border border-gray-100"
+					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-linear-to-r from-gray-50 to-gray-50/50 rounded-xl border border-gray-100"
 				>
 					<div
 						class="flex items-center justify-center w-8 h-8 rounded-full bg-fresh-sky-500 text-white font-semibold text-sm shadow-soft"

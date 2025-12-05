@@ -434,7 +434,7 @@
 							</p>
 						</div>
 						<div
-							class="bg-fresh-sky-50 dark:bg-fresh-sky-900/30 rounded-xl p-2.5 ml-2 flex-shrink-0 text-fresh-sky-600 dark:text-fresh-sky-400"
+							class="bg-fresh-sky-50 dark:bg-fresh-sky-900/30 rounded-xl p-2.5 ml-2 shrink-0 text-fresh-sky-600 dark:text-fresh-sky-400"
 						>
 							<svg
 								class="w-5 h-5 md:w-6 md:h-6"
@@ -469,7 +469,7 @@
 							</p>
 						</div>
 						<div
-							class="bg-green-50 dark:bg-green-900/30 rounded-xl p-2.5 ml-2 flex-shrink-0 text-green-600 dark:text-green-400"
+							class="bg-green-50 dark:bg-green-900/30 rounded-xl p-2.5 ml-2 shrink-0 text-green-600 dark:text-green-400"
 						>
 							<svg
 								class="w-5 h-5 md:w-6 md:h-6"
@@ -504,7 +504,7 @@
 							</p>
 						</div>
 						<div
-							class="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-2.5 ml-2 flex-shrink-0 text-purple-600 dark:text-purple-400"
+							class="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-2.5 ml-2 shrink-0 text-purple-600 dark:text-purple-400"
 						>
 							<svg
 								class="w-5 h-5 md:w-6 md:h-6"
@@ -539,7 +539,7 @@
 							</p>
 						</div>
 						<div
-							class="bg-indigo-50 dark:bg-indigo-900/30 rounded-xl p-2.5 ml-2 flex-shrink-0 text-indigo-600 dark:text-indigo-400"
+							class="bg-indigo-50 dark:bg-indigo-900/30 rounded-xl p-2.5 ml-2 shrink-0 text-indigo-600 dark:text-indigo-400"
 						>
 							<svg
 								class="w-5 h-5 md:w-6 md:h-6"
@@ -574,7 +574,7 @@
 							</p>
 						</div>
 						<div
-							class="bg-pink-50 dark:bg-pink-900/30 rounded-xl p-2.5 ml-2 flex-shrink-0 text-pink-600 dark:text-pink-400"
+							class="bg-pink-50 dark:bg-pink-900/30 rounded-xl p-2.5 ml-2 shrink-0 text-pink-600 dark:text-pink-400"
 						>
 							<svg
 								class="w-5 h-5 md:w-6 md:h-6"

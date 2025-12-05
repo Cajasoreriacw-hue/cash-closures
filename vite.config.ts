@@ -15,8 +15,8 @@ export default defineConfig({
 				name: 'Monit - Control de Caja',
 				short_name: 'Monit',
 				description: 'Sistema ERP para gestión y control de cierres de caja',
-				theme_color: '#ff8800',
-				background_color: '#fff3e5',
+				theme_color: '#126887',
+				background_color: '#d2eff9',
 				display: 'standalone',
 				start_url: '/',
 				icons: [
