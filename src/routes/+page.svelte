@@ -223,11 +223,11 @@
 							{
 								label: 'Descuadres',
 								data: descuadresPorMes.map((d) => d.count),
-								backgroundColor: 'rgba(239, 68, 68, 0.8)',
-								borderColor: 'rgba(220, 38, 38, 1)',
+								backgroundColor: 'rgba(255, 136, 0, 0.8)',
+								borderColor: 'rgba(204, 109, 0, 1)',
 								borderWidth: 2,
-								borderRadius: 8,
-								hoverBackgroundColor: 'rgba(220, 38, 38, 0.9)'
+								borderRadius: 10,
+								hoverBackgroundColor: 'rgba(204, 109, 0, 0.9)'
 							}
 						]
 					},
@@ -302,20 +302,20 @@
 							{
 								data: descuadresPorCajero.map((d) => d.count),
 								backgroundColor: [
-									'rgba(239, 68, 68, 0.8)',
-									'rgba(249, 115, 22, 0.8)',
-									'rgba(234, 179, 8, 0.8)',
-									'rgba(34, 197, 94, 0.8)',
-									'rgba(59, 130, 246, 0.8)',
-									'rgba(168, 85, 247, 0.8)',
-									'rgba(236, 72, 153, 0.8)',
-									'rgba(148, 163, 184, 0.8)',
-									'rgba(20, 184, 166, 0.8)',
-									'rgba(99, 102, 241, 0.8)'
+									'rgba(255, 136, 0, 0.85)',
+									'rgba(255, 160, 51, 0.85)',
+									'rgba(255, 184, 102, 0.85)',
+									'rgba(204, 109, 0, 0.85)',
+									'rgba(153, 82, 0, 0.85)',
+									'rgba(255, 207, 153, 0.85)',
+									'rgba(255, 231, 204, 0.85)',
+									'rgba(255, 243, 229, 0.85)',
+									'rgba(102, 54, 0, 0.85)',
+									'rgba(51, 27, 0, 0.85)'
 								],
 								borderColor: '#fff',
-								borderWidth: 2,
-								hoverOffset: 4
+								borderWidth: 3,
+								hoverOffset: 8
 							}
 						]
 					},
@@ -378,24 +378,24 @@
 	});
 </script>
 
-<div class="space-y-4 md:space-y-6">
-	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-		<h1 class="text-xl md:text-2xl font-semibold">Dashboard</h1>
+<div class="space-y-6">
+	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Dashboard</h1>
 		<a
 			href="/registro"
-			class="w-full sm:w-auto px-4 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 active:bg-slate-950 transition-colors text-center"
+			class="w-full sm:w-auto px-6 py-3 bg-linear-to-r from-dark-orange-500 to-dark-orange-600 text-white text-sm font-semibold rounded-xl shadow-soft hover:shadow-soft-lg hover:from-dark-orange-600 hover:to-dark-orange-700 transition-all duration-200 text-center active:scale-95"
 		>
 			Registrar Cierre
 		</a>
 	</div>
 
 	<!-- Filtro de tienda -->
-	<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-3 md:p-4">
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-4 md:p-5">
 		<label class="flex flex-col gap-2 w-full md:max-w-xs">
-			<span class="text-sm font-semibold text-slate-700">Filtrar por tienda</span>
+			<span class="text-sm font-semibold text-gray-700">Filtrar por tienda</span>
 			<select
 				bind:value={selectedStore}
-				class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+				class="h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all duration-200"
 			>
 				<option value="">Todas las tiendas</option>
 				{#each stores as store}
@@ -406,165 +406,208 @@
 	</section>
 
 	{#if loading}
-		<p class="text-slate-500">Cargando datos...</p>
+		<div class="flex items-center justify-center py-12">
+			<div class="text-center">
+				<div
+					class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-dark-orange-200 border-t-dark-orange-500 mb-2"
+				></div>
+				<p class="text-sm text-gray-500">Cargando datos...</p>
+			</div>
+		</div>
 	{:else}
 		<!-- Tarjetas de métricas -->
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
 			<!-- Total Sobres Activos -->
 			<div
-				class="bg-linear-to-br from-yellow-900 to-yellow-950 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+				class="relative overflow-hidden bg-linear-to-br from-dark-orange-500/90 to-dark-orange-600/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0">
-						<p class="text-amber-50 text-[10px] md:text-xs font-medium truncate">Sobres Activos</p>
-						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalSobresActivos}</p>
-					</div>
-					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
-						<svg
-							class="w-4 h-4 md:w-5 md:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+				<!-- Background decoration -->
+				<div
+					class="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500"
+				></div>
+				<div class="relative">
+					<div class="flex items-center justify-between">
+						<div class="flex-1 min-w-0">
+							<p class="text-dark-orange-50 text-xs font-medium truncate mb-1">Sobres Activos</p>
+							<p class="text-2xl md:text-3xl font-bold">{totalSobresActivos}</p>
+						</div>
+						<div
+							class="bg-white/20 backdrop-blur-sm rounded-xl p-2.5 ml-2 flex-shrink-0 group-hover:bg-white/30 transition-colors duration-300"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-							/>
-						</svg>
+							<svg
+								class="w-5 h-5 md:w-6 md:h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Total Ventas -->
 			<div
-				class="bg-linear-to-br from-orange-500 to-orange-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+				class="relative overflow-hidden bg-linear-to-br from-dark-orange-600/90 to-dark-orange-700/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0">
-						<p class="text-amber-50 text-[10px] md:text-xs font-medium truncate">Total Ventas</p>
-						<p class="text-sm md:text-2xl font-bold mt-0.5 md:mt-1 truncate">
-							${totalVentas.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-						</p>
-					</div>
-					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
-						<svg
-							class="w-4 h-4 md:w-5 md:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+				<div
+					class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16 group-hover:scale-110 transition-transform duration-500"
+				></div>
+				<div class="relative">
+					<div class="flex items-center justify-between">
+						<div class="flex-1 min-w-0">
+							<p class="text-dark-orange-50 text-xs font-medium truncate mb-1">Total Ventas</p>
+							<p class="text-lg md:text-2xl font-bold truncate">
+								${totalVentas.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+							</p>
+						</div>
+						<div
+							class="bg-white/20 backdrop-blur-sm rounded-xl p-2.5 ml-2 flex-shrink-0 group-hover:bg-white/30 transition-colors duration-300"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
+							<svg
+								class="w-5 h-5 md:w-6 md:h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Cajeros Registrados -->
 			<div
-				class="bg-linear-to-br from-cyan-500 to-cyan-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+				class="relative overflow-hidden bg-linear-to-br from-dark-orange-400/90 to-dark-orange-500/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0">
-						<p class="text-cyan-50 text-[10px] md:text-xs font-medium truncate">Cajeros</p>
-						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalCajeros}</p>
-					</div>
-					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
-						<svg
-							class="w-4 h-4 md:w-5 md:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+				<div
+					class="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-500"
+				></div>
+				<div class="relative">
+					<div class="flex items-center justify-between">
+						<div class="flex-1 min-w-0">
+							<p class="text-dark-orange-50 text-xs font-medium truncate mb-1">Cajeros</p>
+							<p class="text-2xl md:text-3xl font-bold">{totalCajeros}</p>
+						</div>
+						<div
+							class="bg-white/20 backdrop-blur-sm rounded-xl p-2.5 ml-2 flex-shrink-0 group-hover:bg-white/30 transition-colors duration-300"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-							/>
-						</svg>
+							<svg
+								class="w-5 h-5 md:w-6 md:h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Tiendas -->
 			<div
-				class="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+				class="relative overflow-hidden bg-linear-to-br from-dark-orange-300/90 to-dark-orange-400/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-white hover:shadow-soft-xl transition-all duration-300 group"
 			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0">
-						<p class="text-purple-50 text-[10px] md:text-xs font-medium truncate">Tiendas</p>
-						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalTiendas}</p>
-					</div>
-					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
-						<svg
-							class="w-4 h-4 md:w-5 md:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+				<div
+					class="absolute bottom-0 right-0 w-28 h-28 bg-white/5 rounded-full -mr-14 -mb-14 group-hover:scale-110 transition-transform duration-500"
+				></div>
+				<div class="relative">
+					<div class="flex items-center justify-between">
+						<div class="flex-1 min-w-0">
+							<p class="text-dark-orange-50 text-xs font-medium truncate mb-1">Tiendas</p>
+							<p class="text-2xl md:text-3xl font-bold">{totalTiendas}</p>
+						</div>
+						<div
+							class="bg-white/20 backdrop-blur-sm rounded-xl p-2.5 ml-2 flex-shrink-0 group-hover:bg-white/30 transition-colors duration-300"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-							/>
-						</svg>
+							<svg
+								class="w-5 h-5 md:w-6 md:h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Total Cierres -->
 			<div
-				class="bg-linear-to-br from-lime-400 to-lime-500 rounded-lg md:rounded-xl shadow-lg p-3 md:p-4 text-white"
+				class="relative overflow-hidden bg-linear-to-br from-dark-orange-200/90 to-dark-orange-300/90 backdrop-blur-sm rounded-2xl shadow-soft-lg p-4 md:p-5 text-dark-orange-900 hover:shadow-soft-xl transition-all duration-300 group"
 			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0">
-						<p class="text-lime-50 text-[10px] md:text-xs font-medium truncate">Nº Cierres</p>
-						<p class="text-lg md:text-2xl font-bold mt-0.5 md:mt-1">{totalCierres}</p>
-					</div>
-					<div class="bg-white/20 rounded-full p-1.5 md:p-2 ml-1 md:ml-2 flex-shrink-0">
-						<svg
-							class="w-4 h-4 md:w-5 md:h-5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
+				<div
+					class="absolute top-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mt-12 group-hover:scale-110 transition-transform duration-500"
+				></div>
+				<div class="relative">
+					<div class="flex items-center justify-between">
+						<div class="flex-1 min-w-0">
+							<p class="text-dark-orange-800 text-xs font-semibold truncate mb-1">Nº Cierres</p>
+							<p class="text-2xl md:text-3xl font-bold text-dark-orange-900">{totalCierres}</p>
+						</div>
+						<div
+							class="bg-dark-orange-900/20 backdrop-blur-sm rounded-xl p-2.5 ml-2 flex-shrink-0 group-hover:bg-dark-orange-900/30 transition-colors duration-300"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-							/>
-						</svg>
+							<svg
+								class="w-5 h-5 md:w-6 md:h-6 text-dark-orange-900"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+								/>
+							</svg>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Gráficos -->
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-6">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
 			<!-- Gráfico de meses -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
-				<h2 class="text-base md:text-lg font-semibold text-slate-800 mb-3 md:mb-4">
-					Descuadres por Mes
-				</h2>
+			<div
+				class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 hover:shadow-soft-lg transition-all duration-300"
+			>
+				<h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4">Descuadres por Mes</h2>
 				<div class="h-64 md:h-80">
 					<canvas id="chartMeses"></canvas>
 				</div>
 			</div>
 
 			<!-- Gráfico de cajeros -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
-				<h2 class="text-base md:text-lg font-semibold text-slate-800 mb-3 md:mb-4">
-					Descuadres por Cajero
-				</h2>
+			<div
+				class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 hover:shadow-soft-lg transition-all duration-300"
+			>
+				<h2 class="text-lg md:text-xl font-bold text-gray-900 mb-4">Descuadres por Cajero</h2>
 				<div class="h-64 md:h-80">
 					<canvas id="chartCajeros"></canvas>
 				</div>

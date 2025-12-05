@@ -46,14 +46,14 @@
 
 {#if visible}
 	<div
-		class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 overflow-hidden"
+		class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-linear-to-br from-dark-orange-50 via-orange-50 to-dark-orange-100 overflow-hidden"
 		transition:fade={{ duration: 500 }}
 	>
 		<!-- Floating Particles -->
 		<div class="absolute inset-0 overflow-hidden">
 			{#each particles as particle}
 				<div
-					class="absolute rounded-full bg-gradient-to-br from-amber-400/20 to-orange-400/20 animate-float"
+					class="absolute rounded-full bg-linear-to-br from-dark-orange-300/20 to-dark-orange-400/20 animate-float"
 					style="
 						width: {particle.size}px;
 						height: {particle.size}px;
@@ -69,7 +69,7 @@
 		<!-- Subtle Background Glow -->
 		<div class="absolute inset-0 overflow-hidden pointer-events-none">
 			<div
-				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-amber-200/20 via-orange-200/10 to-transparent rounded-full blur-3xl animate-pulse-slow"
+				class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-dark-orange-200/20 via-dark-orange-300/10 to-transparent rounded-full blur-3xl animate-pulse-slow"
 			></div>
 		</div>
 
@@ -79,7 +79,7 @@
 			<div class="relative" in:scale={{ duration: 600, easing: quintOut, start: 0.8 }}>
 				<!-- Subtle Glow Behind Logo -->
 				<div
-					class="absolute inset-0 scale-110 bg-gradient-to-br from-amber-300/30 to-orange-300/30 rounded-full blur-2xl animate-pulse-slow"
+					class="absolute inset-0 scale-110 bg-linear-to-br from-dark-orange-300/30 to-dark-orange-400/30 rounded-full blur-2xl animate-pulse-slow"
 				></div>
 
 				<!-- Logo Image - No Background Box -->
@@ -94,7 +94,7 @@
 			<!-- App Name with Modern Typography -->
 			<div class="text-center space-y-2" in:fade={{ duration: 500, delay: 200 }}>
 				<h1
-					class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 bg-clip-text text-transparent tracking-tight"
+					class="text-5xl md:text-6xl font-bold bg-linear-to-r from-dark-orange-600 via-dark-orange-500 to-dark-orange-600 bg-clip-text text-transparent tracking-tight"
 					style="font-family: 'Poppins', sans-serif; font-weight: 700;"
 				>
 					Monit
@@ -108,12 +108,12 @@
 				<div class="relative h-1 bg-gray-200/50 rounded-full overflow-hidden backdrop-blur-sm">
 					<!-- Progress Fill -->
 					<div
-						class="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-300 ease-out"
+						class="absolute inset-y-0 left-0 bg-linear-to-r from-dark-orange-500 to-dark-orange-600 rounded-full transition-all duration-300 ease-out"
 						style="width: {progress}%"
 					>
 						<!-- Shimmer Effect -->
 						<div
-							class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer"
+							class="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent animate-shimmer"
 						></div>
 					</div>
 				</div>

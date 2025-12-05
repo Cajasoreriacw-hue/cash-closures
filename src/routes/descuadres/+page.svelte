@@ -227,17 +227,20 @@
 		}
 	};
 
-	const generatePdf = async () => {
+	const generatePdf = async (itemOrEvent?: Descuadre | MouseEvent) => {
 		try {
-			if (!filteredDescuadres.length) {
+			const item = itemOrEvent && 'id' in itemOrEvent ? (itemOrEvent as Descuadre) : null;
+			const itemsToPrint = item ? [item] : filteredDescuadres;
+
+			if (!itemsToPrint.length) {
 				console.warn('No hay descuadres para generar PDF');
 				return;
 			}
 
-			const cashierLabel = filterCashier || 'Todos';
+			const cashierLabel = item ? item.cashier : filterCashier || 'Todos';
 			const fromLabel = filterFrom || 'Sin definir';
 			const toLabel = filterTo || 'Sin definir';
-			const totalValor = filteredDescuadres.reduce((acc, d) => acc + d.valor, 0);
+			const totalValor = itemsToPrint.reduce((acc, d) => acc + d.valor, 0);
 
 			const doc = new jsPDF();
 			const pageWidth = doc.internal.pageSize.getWidth();
@@ -296,7 +299,7 @@
 			doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
 			doc.text(cashierLabel, margin + 5, y + 16);
 			doc.text(`${fromLabel} - ${toLabel}`, margin + 70, y + 16);
-			doc.text(filteredDescuadres.length.toString(), margin + 140, y + 16);
+			doc.text(itemsToPrint.length.toString(), margin + 140, y + 16);
 
 			y += 35;
 
@@ -327,7 +330,7 @@
 			doc.setFont('helvetica', 'normal');
 			doc.setFontSize(10);
 
-			filteredDescuadres.forEach((d, index) => {
+			itemsToPrint.forEach((d, index) => {
 				// Verificar salto de página
 				if (y > pageHeight - 50) {
 					doc.addPage();
@@ -511,172 +514,302 @@
 	</AlertAny>
 {/if}
 
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4 text-sm">
-	<h2 class="text-xs font-semibold text-slate-700 mb-3">Filtros</h2>
-	<div class="grid gap-3 md:grid-cols-6">
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Cajero</span>
-			<select
-				bind:value={filterCashier}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value="">Todos</option>
-				{#each cashierOptions as c}
-					<option value={c}>{c}</option>
-				{/each}
-			</select>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Tienda / sede</span>
-			<select
-				bind:value={filterStore}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value="">Todas</option>
-				{#each storeOptions as s}
-					<option value={s}>{s}</option>
-				{/each}
-			</select>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Método</span>
-			<div class="flex flex-col gap-1 text-xs">
-				<label class="inline-flex items-center gap-2">
-					<input
-						type="checkbox"
-						bind:checked={filterMetodoEfectivo}
-						class="h-3 w-3 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-					/>
-					<span>Efectivo</span>
-				</label>
-				<label class="inline-flex items-center gap-2">
-					<input
-						type="checkbox"
-						bind:checked={filterMetodoDatafono}
-						class="h-3 w-3 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-					/>
-					<span>Datáfono</span>
-				</label>
+<div class="space-y-6">
+	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Análisis de Descuadres</h1>
+		<div class="flex gap-2">
+			<!-- Export buttons could go here -->
+		</div>
+	</div>
+
+	<!-- Filters -->
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
+		<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h3>
+		<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+			<!-- Date Range -->
+			<div class="space-y-2">
+				<label for="filter-from" class="text-xs font-semibold text-gray-500 uppercase">Fecha Inicio</label>
+				<input
+					id="filter-from"
+					type="date"
+					bind:value={filterFrom}
+					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+				/>
 			</div>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Desde</span>
-			<input
-				type="date"
-				bind:value={filterFrom}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Hasta</span>
-			<input
-				type="date"
-				bind:value={filterTo}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
 
-	</div>
-</section>
+			<div class="space-y-2">
+				<label for="filter-to" class="text-xs font-semibold text-gray-500 uppercase"
+					>Fecha Fin</label
+				>
+				<input
+					id="filter-to"
+					type="date"
+					bind:value={filterTo}
+					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+				/>
+			</div>
 
-{#if loading}
-	<p class="text-sm text-slate-500">Cargando descuadres...</p>
-{:else if error}
-	<p class="text-sm text-red-600">{error}</p>
-{:else if !filteredDescuadres.length}
-	<p class="text-sm text-slate-500">No hay descuadres para los filtros seleccionados.</p>
-{:else}
-	<!-- Desktop Table View -->
-	<div class="hidden md:block overflow-x-auto">
-		<table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
-			<thead>
-				<tr class="bg-slate-100">
-					<th class="px-3 py-2 text-left">Fecha</th>
-					<th class="px-3 py-2 text-left">Cajero</th>
-					<th class="px-3 py-2 text-left">Tienda</th>
-					<th class="px-3 py-2 text-left">Método</th>
-					<th class="px-3 py-2 text-left">Valor</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each paginatedDescuadres as d}
-					<tr class="odd:bg-white even:bg-slate-50 hover:bg-blue-50 transition-colors">
-						<td class="px-3 py-2">{d.date}</td>
-						<td class="px-3 py-2">{d.cashier}</td>
-						<td class="px-3 py-2">{d.store}</td>
-						<td class="px-3 py-2">
-							<span
-								class:bg-emerald-100={d.metodo === 'Efectivo'}
-								class:text-emerald-800={d.metodo === 'Efectivo'}
-								class:bg-blue-100={d.metodo === 'Datáfono'}
-								class:text-blue-800={d.metodo === 'Datáfono'}
-								class="px-2 py-0.5 rounded-full text-xs font-medium"
+			<div class="space-y-2">
+				<label for="results-limit" class="block text-xs font-medium text-gray-500 mb-1"
+					>Resultados</label
+				>
+				<select
+					id="results-limit"
+					bind:value={itemsPerPage}
+					class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+				>
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+					<option value="0">Todos</option>
+				</select>
+			</div>
+
+			<!-- Store Filter -->
+			<div class="space-y-2">
+				<label for="filter-store" class="block text-xs font-medium text-gray-500 mb-1">Tienda</label
+				>
+				<div class="relative">
+					<select
+						id="filter-store"
+						bind:value={filterStore}
+						class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none cursor-pointer font-medium text-gray-700"
+					>
+						<option value="">Todas las tiendas</option>
+						{#each storeOptions as s}
+							<option value={s}>{s}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+							><path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path></svg
+						>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cashier Filter -->
+			<div class="space-y-2">
+				<label for="filter-cashier" class="block text-xs font-medium text-gray-500 mb-1"
+					>Cajero</label
+				>
+				<div class="relative">
+					<select
+						id="filter-cashier"
+						bind:value={filterCashier}
+						class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none cursor-pointer font-medium text-gray-700"
+					>
+						<option value="">Todos los cajeros</option>
+						{#each cashierOptions as c}
+							<option value={c}>{c}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+							><path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							></path></svg
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Payment Method Toggles -->
+		<div class="mt-6 flex flex-wrap gap-4 pt-4 border-t border-gray-100">
+			<label class="inline-flex items-center gap-2 cursor-pointer group">
+				<div class="relative">
+					<input type="checkbox" bind:checked={filterMetodoEfectivo} class="peer sr-only" />
+					<div
+						class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-dark-orange-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dark-orange-500"
+					></div>
+				</div>
+				<span
+					class="text-sm font-medium text-gray-700 group-hover:text-dark-orange-600 transition-colors"
+					>Efectivo</span
+				>
+			</label>
+
+			<label class="inline-flex items-center gap-2 cursor-pointer group">
+				<div class="relative">
+					<input type="checkbox" bind:checked={filterMetodoDatafono} class="peer sr-only" />
+					<div
+						class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-dark-orange-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-dark-orange-500"
+					></div>
+				</div>
+				<span
+					class="text-sm font-medium text-gray-700 group-hover:text-dark-orange-600 transition-colors"
+					>Datáfono</span
+				>
+			</label>
+		</div>
+	</section>
+
+	{#if loading}
+		<div class="flex items-center justify-center py-12">
+			<div
+				class="w-10 h-10 border-4 border-dark-orange-200 border-t-dark-orange-500 rounded-full animate-spin"
+			></div>
+		</div>
+	{:else if filteredDescuadres.length === 0}
+		<div class="bg-gray-50 rounded-2xl border border-gray-100 p-8 text-center">
+			<svg
+				class="w-12 h-12 mx-auto text-gray-300 mb-4"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				><path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+				></path></svg
+			>
+			<p class="text-gray-500 font-medium">
+				No se encontraron descuadres con los filtros seleccionados.
+			</p>
+		</div>
+	{:else}
+		<!-- Table -->
+		<div
+			class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden hidden md:block"
+		>
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm text-left">
+					<thead
+						class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold"
+					>
+						<tr>
+							<th class="px-6 py-4">Fecha</th>
+							<th class="px-6 py-4">Tienda</th>
+							<th class="px-6 py-4">Cajero</th>
+							<th class="px-6 py-4">Método</th>
+							<th class="px-6 py-4 text-right">Valor</th>
+							<th class="px-6 py-4 text-center">Acciones</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-50">
+						{#each paginatedDescuadres as d}
+							<tr class="hover:bg-dark-orange-50/30 transition-colors">
+								<td class="px-6 py-4 text-gray-600 font-medium whitespace-nowrap"
+									>{new Date(d.date).toLocaleDateString()}</td
+								>
+								<td class="px-6 py-4 text-gray-600">{d.store}</td>
+								<td class="px-6 py-4 text-gray-600">{d.cashier}</td>
+								<td class="px-6 py-4">
+									<span
+										class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+										class:bg-emerald-50={d.metodo === 'Efectivo'}
+										class:text-emerald-700={d.metodo === 'Efectivo'}
+										class:border-emerald-100={d.metodo === 'Efectivo'}
+										class:bg-blue-50={d.metodo === 'Datáfono'}
+										class:text-blue-700={d.metodo === 'Datáfono'}
+										class:border-blue-100={d.metodo === 'Datáfono'}
+									>
+										{d.metodo}
+									</span>
+								</td>
+								<td class="px-6 py-4 text-right font-bold text-red-600">
+									{d.valor.toLocaleString('es-CO', {
+										style: 'currency',
+										currency: 'COP',
+										maximumFractionDigits: 0
+									})}
+								</td>
+								<td class="px-6 py-4 text-center">
+									<button
+										class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-50 text-gray-400 hover:bg-dark-orange-50 hover:text-dark-orange-600 transition-colors"
+										onclick={() => generatePdf(d)}
+										title="Generar notificación PDF"
+									>
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+											><path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+											></path></svg
+										>
+									</button>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Mobile Cards -->
+		<div class="grid grid-cols-1 gap-4 md:hidden">
+			{#each paginatedDescuadres as d}
+				<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 space-y-4">
+					<div class="flex justify-between items-start">
+						<div>
+							<span class="text-xs font-bold text-gray-400 uppercase tracking-wider"
+								>{new Date(d.date).toLocaleDateString()}</span
 							>
-								{d.metodo}
-							</span>
-						</td>
-						<td class="px-3 py-2 font-semibold text-red-600">
-							${d.valor.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-
-	<!-- Mobile Card View -->
-	<div class="md:hidden space-y-3">
-		{#each paginatedDescuadres as d}
-			<div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-				<div class="p-4 space-y-3">
-					<!-- Header -->
-					<div class="flex items-start justify-between">
-						<div>
-							<p class="text-xs text-slate-500">Fecha</p>
-							<p class="text-sm font-semibold text-slate-900">{d.date}</p>
+							<h3 class="text-base font-bold text-gray-900 mt-1">{d.store}</h3>
+							<p class="text-sm text-gray-500">{d.cashier}</p>
 						</div>
-						<div class="text-right">
-							<p class="text-xs text-slate-500">Valor</p>
-							<p class="text-sm font-bold text-red-600">
-								${d.valor.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-							</p>
-						</div>
-					</div>
-
-					<!-- Details -->
-					<div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-						<div>
-							<p class="text-xs text-slate-500">Cajero</p>
-							<p class="text-sm font-medium text-slate-900">{d.cashier}</p>
-						</div>
-						<div>
-							<p class="text-xs text-slate-500">Tienda</p>
-							<p class="text-sm font-medium text-slate-900">{d.store}</p>
-						</div>
-					</div>
-
-					<!-- Method Badge -->
-					<div class="pt-2 border-t border-slate-100">
 						<span
-							class:bg-emerald-100={d.metodo === 'Efectivo'}
-							class:text-emerald-800={d.metodo === 'Efectivo'}
-							class:bg-blue-100={d.metodo === 'Datáfono'}
-							class:text-blue-800={d.metodo === 'Datáfono'}
-							class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium"
+							class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+							class:bg-emerald-50={d.metodo === 'Efectivo'}
+							class:text-emerald-700={d.metodo === 'Efectivo'}
+							class:border-emerald-100={d.metodo === 'Efectivo'}
+							class:bg-blue-50={d.metodo === 'Datáfono'}
+							class:text-blue-700={d.metodo === 'Datáfono'}
+							class:border-blue-100={d.metodo === 'Datáfono'}
 						>
 							{d.metodo}
 						</span>
 					</div>
+
+					<div class="flex items-center justify-between pt-4 border-t border-gray-50">
+						<div class="text-lg font-bold text-red-600">
+							{d.valor.toLocaleString('es-CO', {
+								style: 'currency',
+								currency: 'COP',
+								maximumFractionDigits: 0
+							})}
+						</div>
+						<button
+							class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-semibold shadow-soft hover:bg-black transition-colors"
+							onclick={() => generatePdf(d)}
+						>
+							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+								></path></svg
+							>
+							PDF
+						</button>
+					</div>
 				</div>
-			</div>
-		{/each}
-	</div>
+			{/each}
+		</div>
+	{/if}
 
 	<!-- Pagination -->
 	{#if totalPages > 1}
 		<Pagination bind:currentPage {totalPages} onPageChange={handlePageChange} />
 	{/if}
-{/if}
+</div>
 
 <div class="mt-3 flex gap-2">
 	<button
@@ -695,3 +828,4 @@
 		Generar PDF
 	</button>
 </div>
+```

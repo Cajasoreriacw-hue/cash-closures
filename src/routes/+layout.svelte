@@ -112,7 +112,7 @@
 	{#if data.session}
 		<!-- Desktop/Tablet Navigation -->
 		<nav
-			class="hidden md:flex items-center justify-between px-4 lg:px-6 py-3 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50"
+			class="hidden md:flex items-center justify-between px-4 lg:px-6 py-3 border-b border-gray-100 bg-white/95 backdrop-blur-lg shadow-soft sticky top-0 z-50"
 		>
 			<!-- Left: Logo and App Name -->
 			<div class="flex items-center gap-2 lg:gap-3">
@@ -122,7 +122,7 @@
 					class="flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-xl"
 				/>
 				<div>
-					<h1 class="text-base lg:text-lg font-bold text-gray-900 squada-one-regular">Monit</h1>
+					<h1 class="text-base lg:text-lg font-bold text-gray-900">Monit</h1>
 					<p class="text-[8px] lg:text-xs text-gray-500 hidden lg:block">Control de Caja</p>
 				</div>
 			</div>
@@ -132,9 +132,10 @@
 				{#each navItems as item}
 					<a
 						href={item.href}
-						class="px-2 lg:px-4 py-2 text-xs lg:text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-						class:bg-blue-100={$page.url.pathname === item.href}
-						class:text-blue-600={$page.url.pathname === item.href}
+						class="px-2 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-600 hover:text-dark-orange-600 hover:bg-dark-orange-50 rounded-xl transition-all duration-200"
+						class:bg-dark-orange-100={$page.url.pathname === item.href}
+						class:text-dark-orange-700={$page.url.pathname === item.href}
+						class:shadow-soft={$page.url.pathname === item.href}
 					>
 						{item.label}
 					</a>
@@ -144,10 +145,10 @@
 			<!-- Right: User Info and Logout -->
 			<div class="flex items-center gap-2 lg:gap-4">
 				<div
-					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-gradient-to-r from-slate-50 to-neutral-50 rounded-lg border border-neutral-200"
+					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-gradient-to-r from-gray-50 to-gray-50/50 rounded-xl border border-gray-100"
 				>
 					<div
-						class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 text-white font-semibold text-sm"
+						class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-dark-orange-400 to-dark-orange-500 text-white font-semibold text-sm shadow-soft"
 					>
 						{userDisplayName.charAt(0).toUpperCase()}
 					</div>
@@ -176,7 +177,7 @@
 
 		<!-- Mobile Top Bar -->
 		<nav
-			class="md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50"
+			class="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white/95 backdrop-blur-lg shadow-soft sticky top-0 z-50"
 		>
 			<!-- Logo -->
 			<div class="flex items-center gap-2">
@@ -186,21 +187,21 @@
 					class="flex items-center justify-center w-9 h-9 rounded-xl"
 				/>
 				<div>
-					<h1 class="text-base font-bold text-gray-900 squada-one-regular">Monit</h1>
+					<h1 class="text-base font-bold text-gray-900">Monit</h1>
 				</div>
 			</div>
 
 			<!-- User Avatar & Menu Button -->
 			<div class="flex items-center gap-3">
 				<div
-					class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 text-white font-semibold text-sm"
+					class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-dark-orange-400 to-dark-orange-500 text-white font-semibold text-sm shadow-soft"
 				>
 					{userDisplayName.charAt(0).toUpperCase()}
 				</div>
 				<button
 					type="button"
 					onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-					class="p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-all"
+					class="p-2 text-gray-600 hover:bg-dark-orange-50 hover:text-dark-orange-600 rounded-xl transition-all duration-200"
 					aria-label="Toggle menu"
 				>
 					{#if mobileMenuOpen}
@@ -257,9 +258,9 @@
 						{#each navItems as item}
 							<a
 								href={item.href}
-								class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all"
-								class:bg-blue-100={$page.url.pathname === item.href}
-								class:text-blue-600={$page.url.pathname === item.href}
+								class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-600 hover:bg-dark-orange-50 hover:text-dark-orange-600 rounded-xl transition-all duration-200"
+								class:bg-dark-orange-100={$page.url.pathname === item.href}
+								class:text-dark-orange-700={$page.url.pathname === item.href}
 							>
 								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path
@@ -296,23 +297,23 @@
 
 		<!-- Main Content -->
 		<main
-			class="px-3 md:px-6 py-4 md:py-6 pb-20 md:pb-6 bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen"
+			class="px-3 md:px-6 py-4 md:py-6 pb-20 md:pb-6 bg-gradient-to-br from-gray-50 to-dark-orange-50/30 min-h-screen"
 		>
 			{@render children()}
 		</main>
 
 		<!-- Mobile Bottom Navigation -->
 		<nav
-			class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50"
+			class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 shadow-soft-lg z-50"
 		>
 			<div class="flex items-center justify-around px-1 py-2">
 				{#each navItems as item}
 					<a
 						href={item.href}
-						class="flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition-all min-w-[50px]"
-						class:text-blue-600={$page.url.pathname === item.href}
-						class:bg-blue-50={$page.url.pathname === item.href}
-						class:text-slate-600={$page.url.pathname !== item.href}
+						class="flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-200 min-w-[50px]"
+						class:text-dark-orange-600={$page.url.pathname === item.href}
+						class:bg-dark-orange-50={$page.url.pathname === item.href}
+						class:text-gray-600={$page.url.pathname !== item.href}
 					>
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon} />

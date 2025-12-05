@@ -14,6 +14,7 @@
 		cleanStoreName,
 		type ExpenseCSVRow,
 		type ProcessedExpense,
+		type ExpenseRecord,
 		type ExpenseStats
 	} from '$lib/services/expenses';
 
@@ -32,7 +33,8 @@
 	let selectedFile: File | null = $state(null);
 
 	// Preview data
-	let previewData: ProcessedExpense[] = $state([]);
+	let previewData: ExpenseRecord[] = $state([]);
+	let expensesToUpload: ExpenseRecord[] = $state([]);
 	let showPreview = $state(false);
 
 	// Dashboard state
@@ -96,6 +98,9 @@
 	/**
 	 * Render charts
 	 */
+	/**
+	 * Render charts
+	 */
 	const renderCharts = () => {
 		if (!stats) return;
 
@@ -114,7 +119,7 @@
 
 		// Wait for next tick to ensure canvas is ready/cleared
 		setTimeout(() => {
-			// Category Chart (Donut)
+			// Category Chart (Doughnut)
 			const ctxCategory = document.getElementById('chartCategory') as HTMLCanvasElement;
 			if (ctxCategory && stats?.byCategory && stats.byCategory.length > 0) {
 				chartCategory = new Chart(ctxCategory, {
@@ -125,19 +130,21 @@
 							{
 								data: stats.byCategory.map((c) => c.total),
 								backgroundColor: [
-									'rgba(239, 68, 68, 0.8)',
-									'rgba(249, 115, 22, 0.8)',
-									'rgba(234, 179, 8, 0.8)',
-									'rgba(34, 197, 94, 0.8)',
-									'rgba(59, 130, 246, 0.8)',
-									'rgba(168, 85, 247, 0.8)',
-									'rgba(236, 72, 153, 0.8)',
-									'rgba(148, 163, 184, 0.8)'
+									'rgba(249, 115, 22, 0.7)',
+									'rgba(251, 146, 60, 0.7)',
+									'rgba(253, 186, 116, 0.7)',
+									'rgba(254, 215, 170, 0.7)',
+									'rgba(255, 237, 213, 0.7)'
 								],
-								borderColor: '#fff',
-								borderWidth: 3,
-								hoverBorderWidth: 4,
-								hoverOffset: 8
+								borderColor: [
+									'rgb(249, 115, 22)',
+									'rgb(251, 146, 60)',
+									'rgb(253, 186, 116)',
+									'rgb(254, 215, 170)',
+									'rgb(255, 237, 213)'
+								],
+								borderWidth: 1,
+								hoverOffset: 4
 							}
 						]
 					},
@@ -148,27 +155,26 @@
 							legend: {
 								position: 'right',
 								labels: {
-									color: '#475569',
-									font: { size: 11, family: "'Inter', 'system-ui', sans-serif" },
-									padding: 12,
+									font: { family: "'Poppins', sans-serif", size: 11 },
 									usePointStyle: true,
-									pointStyle: 'circle'
+									boxWidth: 6
 								}
 							},
 							tooltip: {
-								backgroundColor: 'rgba(15, 23, 42, 0.95)',
-								titleColor: '#fff',
-								bodyColor: '#fff',
-								padding: 12,
-								borderColor: 'rgba(148, 163, 184, 0.3)',
+								backgroundColor: 'rgba(255, 255, 255, 0.95)',
+								titleColor: '#111827',
+								bodyColor: '#374151',
+								borderColor: '#e5e7eb',
 								borderWidth: 1,
-								cornerRadius: 8,
+								padding: 10,
 								callbacks: {
 									label: function (context) {
-										const label = context.label || '';
 										const value = context.parsed || 0;
-										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-										return `${label}: $${formatted}`;
+										return new Intl.NumberFormat('es-CO', {
+											style: 'currency',
+											currency: 'COP',
+											maximumFractionDigits: 0
+										}).format(value);
 									}
 								}
 							}
@@ -188,11 +194,10 @@
 							{
 								label: 'Gastos',
 								data: stats.byStore.map((s) => s.total),
-								backgroundColor: 'rgba(59, 130, 246, 0.8)',
-								borderColor: 'rgba(37, 99, 235, 1)',
-								borderWidth: 2,
-								borderRadius: 8,
-								hoverBackgroundColor: 'rgba(37, 99, 235, 0.9)'
+								backgroundColor: 'rgba(249, 115, 22, 0.6)',
+								borderColor: 'rgb(249, 115, 22)',
+								borderWidth: 1,
+								borderRadius: 4
 							}
 						]
 					},
@@ -203,117 +208,41 @@
 						plugins: {
 							legend: { display: false },
 							tooltip: {
-								backgroundColor: 'rgba(15, 23, 42, 0.95)',
-								titleColor: '#fff',
-								bodyColor: '#fff',
-								padding: 12,
-								borderColor: 'rgba(148, 163, 184, 0.3)',
+								backgroundColor: 'rgba(255, 255, 255, 0.95)',
+								titleColor: '#111827',
+								bodyColor: '#374151',
+								borderColor: '#e5e7eb',
 								borderWidth: 1,
-								cornerRadius: 8,
+								padding: 10,
 								callbacks: {
 									label: function (context) {
 										const value = context.parsed.x || 0;
-										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-										return `Total: $${formatted}`;
+										return new Intl.NumberFormat('es-CO', {
+											style: 'currency',
+											currency: 'COP',
+											maximumFractionDigits: 0
+										}).format(value);
 									}
 								}
 							}
 						},
 						scales: {
 							x: {
-								beginAtZero: true,
-								ticks: {
-									color: '#64748b',
-									font: { size: 11 },
-									callback: function (value) {
-										return (
-											'$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 })
-										);
-									}
-								},
-								grid: { color: 'rgba(148, 163, 184, 0.1)' },
-								border: { display: false }
+								grid: { color: '#f3f4f6' },
+								ticks: { font: { family: "'Poppins', sans-serif" } }
 							},
 							y: {
-								ticks: { color: '#64748b', font: { size: 11 } },
 								grid: { display: false },
-								border: { display: false }
+								ticks: { font: { family: "'Poppins', sans-serif" } }
 							}
 						}
 					}
 				});
 			}
 
-			// Month Chart (Line)
-			const ctxMonth = document.getElementById('chartMonth') as HTMLCanvasElement;
-			if (ctxMonth && stats?.byMonth && stats.byMonth.length > 0) {
-				chartMonth = new Chart(ctxMonth, {
-					type: 'line',
-					data: {
-						labels: stats.byMonth.map((m) => m.month),
-						datasets: [
-							{
-								label: 'Gastos Mensuales',
-								data: stats.byMonth.map((m) => m.total),
-								backgroundColor: 'rgba(168, 85, 247, 0.1)',
-								borderColor: 'rgba(168, 85, 247, 1)',
-								borderWidth: 3,
-								fill: true,
-								tension: 0.4,
-								pointBackgroundColor: 'rgba(168, 85, 247, 1)',
-								pointBorderColor: '#fff',
-								pointBorderWidth: 2,
-								pointRadius: 5,
-								pointHoverRadius: 7
-							}
-						]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: { display: false },
-							tooltip: {
-								backgroundColor: 'rgba(15, 23, 42, 0.95)',
-								titleColor: '#fff',
-								bodyColor: '#fff',
-								padding: 12,
-								borderColor: 'rgba(148, 163, 184, 0.3)',
-								borderWidth: 1,
-								cornerRadius: 8,
-								callbacks: {
-									label: function (context) {
-										const value = context.parsed.y || 0;
-										const formatted = value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
-										return `Total: $${formatted}`;
-									}
-								}
-							}
-						},
-						scales: {
-							y: {
-								beginAtZero: true,
-								ticks: {
-									color: '#64748b',
-									font: { size: 11 },
-									callback: function (value) {
-										return (
-											'$' + Number(value).toLocaleString('es-CO', { maximumFractionDigits: 0 })
-										);
-									}
-								},
-								grid: { color: 'rgba(148, 163, 184, 0.1)' },
-								border: { display: false }
-							},
-							x: {
-								ticks: { color: '#64748b', font: { size: 11 } },
-								grid: { display: false },
-								border: { display: false }
-							}
-						}
-					}
-				});
-			}
+			// Month Chart (Line) - Not in new design but keeping logical support if needed, or remove?
+			// The new design only showed Rubros and Tiendas. I will include Month chart just in case or remove it.
+			// I'll keep it simple and match the new design which only had 2 charts.
 		}, 0);
 	};
 
@@ -327,6 +256,7 @@
 			uploadError = '';
 			uploadSuccess = '';
 			showPreview = false;
+			previewFile();
 		}
 	};
 
@@ -430,12 +360,13 @@
 				});
 			}
 
-			// Process first 10 rows for preview
-			const preview = expenseData.slice(0, 10).map((row) => parseExpenseRow(row, storesData));
+			// Process rows
+			const expenses = expenseData.map((row) => parseExpenseRow(row, storesData).expense);
+			expensesToUpload = expenses;
+			previewData = expenses.slice(0, 10);
 
-			previewData = preview;
 			showPreview = true;
-			uploadStatus = `Vista previa: ${expenseData.length} registros encontrados`;
+			uploadStatus = `Vista previa: ${expenses.length} registros encontrados`;
 			uploading = false;
 		} catch (err: any) {
 			Logger.error('Error previewing file');
@@ -527,6 +458,51 @@
 		}
 	};
 
+	const cancelPreview = () => {
+		selectedFile = null;
+		if (fileInput) fileInput.value = '';
+		showPreview = false;
+		previewData = [];
+		expensesToUpload = [];
+		uploadError = '';
+		uploadSuccess = '';
+		uploadStatus = '';
+	};
+
+	const confirmUpload = async () => {
+		if (expensesToUpload.length === 0) return;
+
+		uploading = true;
+		uploadError = '';
+		uploadSuccess = '';
+		uploadProgress = 0;
+		uploadStatus = 'Guardando en la base de datos...';
+
+		try {
+			// Batch insert
+			const result = await batchInsertExpenses(supabase, expensesToUpload, 100);
+
+			uploadProgress = 100;
+
+			if (result.errors > 0) {
+				uploadError = `Se procesaron ${result.success} registros con ${result.errors} errores`;
+			} else {
+				uploadSuccess = `¡Éxito! Se importaron ${result.success} registros`;
+			}
+
+			// Reload dashboard
+			await loadDashboard();
+
+			// Reset form
+			cancelPreview();
+		} catch (err: any) {
+			Logger.error('Error uploading file');
+			uploadError = 'Error al procesar el archivo';
+		} finally {
+			uploading = false;
+		}
+	};
+
 	onMount(() => {
 		Chart.register(...registerables);
 		loadDashboard();
@@ -549,284 +525,282 @@
 	});
 </script>
 
-<div class="space-y-4 md:space-y-6">
-	<!-- Header -->
-	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-		<h1 class="text-xl md:text-2xl font-semibold">Análisis de Gastos</h1>
+<div class="space-y-6">
+	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Gestión de Gastos</h1>
+		<div class="flex gap-2">
+			<!-- Buttons can go here if needed -->
+		</div>
 	</div>
 
 	<!-- Upload Section -->
-	<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
-		<h2 class="text-lg font-semibold text-slate-800 mb-4">Importar Gastos desde CSV o Excel</h2>
+	<section
+		class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6 md:p-8 transition-all hover:shadow-soft-lg"
+	>
+		<div class="max-w-xl mx-auto text-center">
+			<div
+				class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-dark-orange-50 text-dark-orange-600"
+			>
+				<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+					/>
+				</svg>
+			</div>
+			<h2 class="text-lg font-bold text-gray-900 mb-2">Cargar archivo de gastos</h2>
+			<p class="text-sm text-gray-500 mb-6">
+				Sube tu archivo Excel o CSV para procesar los gastos.
+			</p>
 
-		<div class="space-y-4">
-			<!-- File Input -->
-			<div>
-				<label for="csv-upload" class="block text-sm font-medium text-slate-700 mb-2">
-					Seleccionar archivo CSV o Excel
-				</label>
+			<div class="relative group">
 				<input
-					id="csv-upload"
-					type="file"
-					accept=".csv,.xlsx,.xls"
 					bind:this={fileInput}
+					type="file"
+					accept=".xlsx, .xls, .csv"
 					onchange={handleFileSelect}
 					disabled={uploading}
-					class="block w-full text-sm text-slate-500
-						file:mr-4 file:py-2 file:px-4
-						file:rounded-lg file:border-0
+					class="block w-full text-sm text-gray-500
+						file:mr-4 file:py-2.5 file:px-6
+						file:rounded-xl file:border-0
 						file:text-sm file:font-semibold
-						file:bg-slate-900 file:text-white
-						hover:file:bg-slate-800
-						disabled:opacity-50 disabled:cursor-not-allowed"
+						file:bg-dark-orange-50 file:text-dark-orange-700
+						hover:file:bg-dark-orange-100
+						cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed
+						bg-gray-50 rounded-xl border border-gray-200 p-2 transition-colors group-hover:bg-gray-100"
 				/>
-				<p class="mt-1 text-xs text-slate-500">
-					El archivo debe contener las columnas: Fecha Gasto, Negocio, Nombre Comercial, Tipo de
-					gasto, Total, Impuestos. Formatos soportados: CSV, Excel (.xlsx, .xls)
-				</p>
 			</div>
 
-			<!-- Action Buttons -->
-			{#if selectedFile}
-				<div class="flex flex-col sm:flex-row gap-3">
-					<button
-						onclick={previewCSV}
-						disabled={uploading}
-						class="px-4 py-2.5 bg-slate-600 text-white text-sm font-medium rounded-lg hover:bg-slate-700 active:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-					>
-						Vista Previa
-					</button>
-					<button
-						onclick={uploadCSV}
-						disabled={uploading}
-						class="px-4 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 active:bg-slate-950 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-					>
-						{uploading ? 'Procesando...' : 'Importar Gastos'}
-					</button>
+			{#if uploading}
+				<div
+					class="mt-4 flex items-center justify-center gap-2 text-sm text-dark-orange-600 font-medium animate-pulse"
+				>
+					<div
+						class="w-4 h-4 border-2 border-dark-orange-600/30 border-t-dark-orange-600 rounded-full animate-spin"
+					></div>
+					Procesando archivo...
 				</div>
 			{/if}
-
-			<!-- Upload Status -->
-			{#if uploadStatus}
-				<div class="text-sm text-slate-600">
-					{uploadStatus}
-					{#if uploading && uploadProgress > 0}
-						<div class="mt-2 w-full bg-slate-200 rounded-full h-2">
-							<div
-								class="bg-slate-900 h-2 rounded-full transition-all duration-300"
-								style="width: {uploadProgress}%"
-							></div>
-						</div>
-					{/if}
-				</div>
-			{/if}
-
-			<!-- Alerts -->
 			{#if uploadError}
-				<Alert color="red" dismissable>
-					<span class="font-medium">Error:</span>
+				<div
+					class="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-xl border border-red-100 flex items-center gap-2"
+				>
+					<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+						><path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						></path></svg
+					>
 					{uploadError}
-				</Alert>
-			{/if}
-
-			{#if uploadSuccess}
-				<Alert color="green" dismissable>
-					<span class="font-medium">Éxito:</span>
-					{uploadSuccess}
-				</Alert>
-			{/if}
-
-			<!-- Preview Table -->
-			{#if showPreview && previewData.length > 0}
-				<div class="mt-4">
-					<h3 class="text-md font-semibold text-slate-800 mb-2">
-						Vista Previa (primeros 10 registros)
-					</h3>
-					<div class="overflow-x-auto">
-						<table class="min-w-full divide-y divide-slate-200">
-							<thead class="bg-slate-50">
-								<tr>
-									<th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase"
-										>Fecha</th
-									>
-									<th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase"
-										>Negocio</th
-									>
-									<th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase"
-										>Proveedor</th
-									>
-									<th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase"
-										>Tipo</th
-									>
-									<th class="px-3 py-2 text-right text-xs font-medium text-slate-500 uppercase"
-										>Total</th
-									>
-									<th class="px-3 py-2 text-left text-xs font-medium text-slate-500 uppercase"
-										>Match</th
-									>
-								</tr>
-							</thead>
-							<tbody class="bg-white divide-y divide-slate-200">
-								{#each previewData as item}
-									<tr class:bg-yellow-50={item.expense.needs_review}>
-										<td class="px-3 py-2 text-sm text-slate-900">{item.expense.date}</td>
-										<td class="px-3 py-2 text-sm text-slate-900">{item.expense.store_name_raw}</td>
-										<td class="px-3 py-2 text-sm text-slate-900">{item.expense.provider}</td>
-										<td class="px-3 py-2 text-sm text-slate-900">{item.expense.expense_type}</td>
-										<td class="px-3 py-2 text-sm text-slate-900 text-right">
-											${item.expense.total.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-										</td>
-										<td class="px-3 py-2 text-sm">
-											{#if item.matchedStore}
-												<span
-													class="text-green-600"
-													title="Confianza: {(item.matchedStore.confidence * 100).toFixed(0)}%"
-												>
-													✓ {item.matchedStore.name}
-												</span>
-											{:else}
-												<span class="text-red-600">✗ Sin match</span>
-											{/if}
-										</td>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>
-					<p class="mt-2 text-xs text-slate-500">
-						Los registros con fondo amarillo necesitan revisión manual (sin match o baja confianza)
-					</p>
 				</div>
 			{/if}
 		</div>
 	</section>
 
-	<!-- Filters -->
-	<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-3 md:p-4">
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-			<!-- Date Range -->
-			<label class="flex flex-col gap-2">
-				<span class="text-sm font-semibold text-slate-700">Fecha Inicio</span>
-				<input
-					type="date"
-					bind:value={startDate}
-					class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
-			</label>
+	<!-- Preview Table -->
+	{#if showPreview && previewData.length > 0}
+		<section class="space-y-6">
+			<div class="flex items-center justify-between">
+				<h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+					<span class="w-2 h-2 rounded-full bg-dark-orange-500"></span>
+					Vista Previa
+					<span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium"
+						>{previewData.length} registros</span
+					>
+				</h3>
+				<div class="flex gap-3">
+					<button
+						onclick={cancelPreview}
+						class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+					>
+						Cancelar
+					</button>
+					<button
+						onclick={confirmUpload}
+						class="px-5 py-2 rounded-xl bg-linear-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold shadow-soft hover:shadow-soft-lg hover:from-black hover:to-gray-900 transition-all active:scale-95"
+					>
+						Confirmar Carga
+					</button>
+				</div>
+			</div>
 
-			<label class="flex flex-col gap-2">
-				<span class="text-sm font-semibold text-slate-700">Fecha Fin</span>
-				<input
-					type="date"
-					bind:value={endDate}
-					class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
-			</label>
+			<div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm text-left">
+						<thead
+							class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold"
+						>
+							<tr>
+								{#each Object.keys(previewData[0]) as header}
+									<th class="px-6 py-4">{header}</th>
+								{/each}
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-gray-50">
+							{#each previewData.slice(0, 5) as row}
+								<tr class="hover:bg-dark-orange-50/30 transition-colors">
+									{#each Object.values(row) as val}
+										<td class="px-6 py-4 text-gray-600 font-medium whitespace-nowrap">
+											{val}
+										</td>
+									{/each}
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+				{#if previewData.length > 5}
+					<div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
+						<span class="text-xs font-medium text-gray-500 italic"
+							>... y {previewData.length - 5} más</span
+						>
+					</div>
+				{/if}
+			</div>
+		</section>
+	{/if}
 
-			<!-- Store Filter -->
-			<label class="flex flex-col gap-2">
-				<span class="text-sm font-semibold text-slate-700">Sede/Negocio</span>
-				<select
-					bind:value={selectedStore}
-					class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-				>
-					<option value="">Todas las sedes</option>
-					{#each stores as store}
-						<option value={store.name}>{store.name}</option>
-					{/each}
-				</select>
-			</label>
+	<!-- DASHBOARD -->
+	{#if !uploading && previewData.length === 0}
+		<div class="space-y-6 animate-fade-in">
+			<!-- Filters -->
+			<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
+				<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h3>
+				<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+					<div class="space-y-2">
+						<label for="filter-year" class="text-xs font-semibold text-gray-500 uppercase"
+							>Sede</label
+						>
+						<select
+							id="filter-year"
+							bind:value={startDate}
+							class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all cursor-pointer font-medium text-gray-700"
+						>
+							<option value="">Todas las sedes</option>
+							{#each stores as store}
+								<option value={store.name}>{store.name}</option>
+							{/each}
+						</select>
+					</div>
 
-			<!-- Category Filter -->
-			<label class="flex flex-col gap-2">
-				<span class="text-sm font-semibold text-slate-700">Categoría</span>
-				<select
-					bind:value={selectedCategory}
-					class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-				>
-					<option value="">Todas las categorías</option>
-					{#each categories as category}
-						<option value={category}>{category}</option>
-					{/each}
-				</select>
-			</label>
-		</div>
-	</section>
+					<!-- Category Filter -->
+					<label class="flex flex-col gap-2">
+						<span class="text-sm font-semibold text-slate-700">Categoría</span>
+						<select
+							bind:value={selectedCategory}
+							class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+						>
+							<option value="">Todas las categorías</option>
+							{#each categories as category}
+								<option value={category}>{category}</option>
+							{/each}
+						</select>
+					</label>
+				</div>
+			</section>
 
-	<!-- Dashboard -->
-	{#if loading}
-		<p class="text-slate-500">Cargando datos...</p>
-	{:else if stats}
-		<!-- Summary Cards -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white">
-				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-red-50 text-sm font-medium">Total Gastos</p>
-						<p class="text-3xl font-bold mt-1">
-							${stats.totalAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+			<!-- Dashboard -->
+			{#if loading}
+				<div class="flex items-center justify-center py-12">
+					<div
+						class="w-10 h-10 border-4 border-dark-orange-200 border-t-dark-orange-500 rounded-full animate-spin"
+					></div>
+				</div>
+			{:else if stats}
+				<!-- KPI Cards -->
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+					<!-- Total Gastos Card -->
+					<div
+						class="bg-linear-to-br from-white to-dark-orange-50/50 rounded-2xl shadow-soft border border-gray-100 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden group"
+					>
+						<div
+							class="absolute top-0 right-0 w-24 h-24 bg-dark-orange-100/50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"
+						></div>
+						<h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 relative z-10">
+							Total Gastos
+						</h4>
+						<p class="text-2xl md:text-3xl font-extrabold text-gray-900 relative z-10">
+							{new Intl.NumberFormat('es-CO', {
+								style: 'currency',
+								currency: 'COP',
+								maximumFractionDigits: 0
+							}).format(stats.totalAmount)}
+						</p>
+						<p class="text-xs text-dark-orange-600 mt-1 font-medium relative z-10">
+							{stats.totalExpenses} registros
 						</p>
 					</div>
-					<div class="bg-white/20 rounded-full p-3 ml-2">
-						<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
+
+					<!-- Rubro Mayor Card (Simplified as logic for top rubro is inside complex stats) -->
+					<div
+						class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden"
+					>
+						<h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+							Rubro Principal
+						</h4>
+						<p class="text-lg font-bold text-gray-900 truncate">
+							{stats.byCategory && stats.byCategory.length > 0
+								? stats.byCategory[0].category
+								: 'N/A'}
+						</p>
+						<div class="w-full bg-gray-100 rounded-full h-1.5 mt-3">
+							<div
+								class="bg-dark-orange-500 h-1.5 rounded-full"
+								style="width: {stats.byCategory && stats.byCategory.length > 0
+									? Math.min((stats.byCategory[0].total / stats.totalAmount) * 100, 100)
+									: 0}%"
+							></div>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div
-				class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6 text-white"
-			>
-				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-orange-50 text-sm font-medium">Número de Gastos</p>
-						<p class="text-3xl font-bold mt-1">{stats.totalExpenses}</p>
+				<!-- Charts -->
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<!-- Rubros Chart -->
+					<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6">
+						<h4 class="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2">
+							<span class="w-1.5 h-4 bg-dark-orange-500 rounded-full"></span>
+							Gastos por Rubro/Categoría
+						</h4>
+						<div class="h-64 flex items-center justify-center chart-container relative">
+							<canvas id="chartCategory"></canvas>
+							{#if !stats.byCategory || stats.byCategory.length === 0}
+								<div
+									class="absolute inset-0 flex items-center justify-center text-xs text-gray-400"
+								>
+									Sin datos
+								</div>
+							{/if}
+						</div>
 					</div>
-					<div class="bg-white/20 rounded-full p-3 ml-2">
-						<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-							/>
-						</svg>
+
+					<!-- Tiendas Chart -->
+					<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6">
+						<h4 class="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2">
+							<span class="w-1.5 h-4 bg-gray-800 rounded-full"></span>
+							Gastos por Tienda
+						</h4>
+						<div class="h-64 flex items-center justify-center chart-container relative">
+							<canvas id="chartStore"></canvas>
+							{#if !stats.byStore || stats.byStore.length === 0}
+								<div
+									class="absolute inset-0 flex items-center justify-center text-xs text-gray-400"
+								>
+									Sin datos
+								</div>
+							{/if}
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<!-- Charts -->
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-			<!-- Category Chart -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-				<h2 class="text-lg font-semibold text-slate-800 mb-4">Gastos por Categoría</h2>
-				<div class="h-80">
-					<canvas id="chartCategory"></canvas>
-				</div>
-			</div>
-
-			<!-- Store Chart -->
-			<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-				<h2 class="text-lg font-semibold text-slate-800 mb-4">Gastos por Sede</h2>
-				<div class="h-80">
-					<canvas id="chartStore"></canvas>
-				</div>
-			</div>
-		</div>
-
-		<!-- Month Comparison Chart -->
-		<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-			<h2 class="text-lg font-semibold text-slate-800 mb-4">Comparativo de Periodos (Mensual)</h2>
-			<div class="h-80">
-				<canvas id="chartMonth"></canvas>
-			</div>
+			{/if}
 		</div>
 	{/if}
 </div>
+
+<style>
+	/* No custom CSS needed, using Tailwind */
+</style>

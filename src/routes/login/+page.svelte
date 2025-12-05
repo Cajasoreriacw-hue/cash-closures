@@ -44,23 +44,23 @@
 </div>
 
 <div
-	class="min-h-screen flex items-center justify-center bg-linear-to-br from-stone-50 to-neutral-50 px-4 py-6"
+	class="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-dark-orange-50/30 px-4 py-6"
 >
-	<div class="max-w-md w-full">
+	<div class="max-w-md w-full animate-fade-in">
 		<!-- Logo and Title -->
-		<div class="text-center mb-6 md:mb-8">
+		<div class="text-center mb-8">
 			<div
-				class="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl shadow-lg"
+				class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-soft-lg mb-4 p-4"
 			>
-				<img src="/icon-512.svg" alt="Logo" class="" />
+				<img src="/icon-512.svg" alt="Logo" class="w-full h-full object-contain" />
 			</div>
-			<h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1 squada-one-regular">Monit</h1>
-			<p class="text-sm md:text-base text-gray-600">Sistema de Control de Caja</p>
+			<h1 class="text-3xl font-bold text-gray-900 mb-1 squada-one-regular tracking-wide">Monit</h1>
+			<p class="text-sm text-gray-500 font-medium">Sistema de Control de Caja</p>
 		</div>
 
 		<!-- Login Card -->
-		<div class="bg-white rounded-2xl shadow-xl p-6 md:p-6 border border-gray-100">
-			<h2 class="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Iniciar Sesión</h2>
+		<div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-soft-xl border border-white/50 p-8">
+			<h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Bienvenido de nuevo</h2>
 
 			<form
 				onsubmit={(e) => {
@@ -70,8 +70,8 @@
 			>
 				<div class="space-y-5">
 					<!-- Email Input -->
-					<div>
-						<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+					<div class="space-y-2">
+						<label for="email" class="block text-sm font-semibold text-gray-700">
 							Correo Electrónico
 						</label>
 						<input
@@ -79,14 +79,14 @@
 							type="email"
 							bind:value={email}
 							required
-							class="w-full px-4 py-3 md:py-3.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none text-base"
+							class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-white/50 focus:bg-white focus:ring-4 focus:ring-dark-orange-500/10 focus:border-dark-orange-500 transition-all outline-none text-sm placeholder-gray-400 font-medium"
 							placeholder="tu@email.com"
 						/>
 					</div>
 
 					<!-- Password Input -->
-					<div>
-						<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+					<div class="space-y-2">
+						<label for="password" class="block text-sm font-semibold text-gray-700">
 							Contraseña
 						</label>
 						<input
@@ -94,7 +94,7 @@
 							type="password"
 							bind:value={password}
 							required
-							class="w-full px-4 py-3 md:py-3.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all outline-none text-base"
+							class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-white/50 focus:bg-white focus:ring-4 focus:ring-dark-orange-500/10 focus:border-dark-orange-500 transition-all outline-none text-sm placeholder-gray-400 font-medium"
 							placeholder="••••••••"
 						/>
 					</div>
@@ -103,7 +103,7 @@
 					<button
 						type="submit"
 						disabled={loading}
-						class="w-full bg-linear-to-r from-orange-300 to-amber-400 text-white font-semibold py-3.5 md:py-4 px-4 rounded-lg hover:from-amber-500 hover:to-amber-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:scale-[0.98] text-base"
+						class="w-full h-12 bg-linear-to-r from-gray-900 to-gray-800 hover:from-black hover:to-gray-900 text-white text-sm font-bold rounded-xl shadow-lg hover:shadow-xl focus:ring-4 focus:ring-gray-900/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] mt-2"
 					>
 						{loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
 					</button>

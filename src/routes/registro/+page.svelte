@@ -238,452 +238,547 @@
 	{/if}
 </div>
 
-<h1 class="text-2xl font-semibold mb-4">Registro de cierre de caja</h1>
+<div class="space-y-6">
+	<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Registro de cierre de caja</h1>
 
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<h2 class="text-sm font-semibold text-slate-700 mb-3">Datos generales</h2>
-	<div class="grid gap-3 md:grid-cols-4 text-sm">
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Fecha</span>
-			<input
-				type="date"
-				bind:value={date}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Cajero responsable</span>
-			<select
-				bind:value={cashier}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-				disabled={loadingOptions || !!optionsError}
-			>
-				<option value="" disabled selected>
-					{#if loadingOptions}
-						Cargando datos...
-					{:else if optionsError}
-						Error al cargar
-					{:else}
-						Selecciona un cajero
-					{/if}
-				</option>
-				{#each cashiers as c}
-					<option value={c}>{c}</option>
-				{/each}
-			</select>
-			{#if loadingOptions}
-				<span class="text-[11px] text-blue-600 mt-0.5">Conectando a Supabase...</span>
-			{/if}
-			{#if optionsError}
-				<div class="p-2 mt-1 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
-					<strong>Error:</strong>
-					{optionsError}
-					<br />
-					<span class="opacity-75">Verifica tu archivo .env y la consola del navegador.</span>
-				</div>
-			{/if}
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Tienda / sede</span>
-			<select
-				bind:value={store}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-				disabled={loadingOptions || !!optionsError}
-			>
-				<option value="" disabled selected
-					>{loadingOptions ? 'Cargando...' : 'Selecciona una tienda'}</option
-				>
-				{#each stores as s}
-					<option value={s.name}>{s.name}</option>
-				{/each}
-			</select>
-		</label>
-		<label class="flex flex-col gap-1 md:col-span-1 md:col-start-1 md:col-end-5">
-			<span class="text-slate-600">Nota / Observaciones</span>
-			<input
-				type="text"
-				bind:value={note}
-				placeholder="Opcional"
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-	</div>
-</section>
-
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<h2 class="text-sm font-semibold text-slate-700 mb-3">Medios electrónicos</h2>
-	<div class="flex flex-col gap-3">
-		<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-			<h3 class="text-xs font-semibold text-slate-700 mb-2">Datáfono</h3>
-			<div class="grid gap-3 md:grid-cols-2 text-sm">
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Datáfono sistema / POS</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={dataphone.system}
-						oninput={(e) => (dataphone.system = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Datáfono real</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={dataphone.real}
-						oninput={(e) => (dataphone.real = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-			</div>
-		</div>
-
-		<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-			<h3 class="text-xs font-semibold text-slate-700 mb-2">Rappi</h3>
-			<div class="grid gap-3 md:grid-cols-2 text-sm">
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Rappi sistema / POS</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={rappi.system}
-						oninput={(e) => (rappi.system = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Rappi real</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={rappi.real}
-						oninput={(e) => (rappi.real = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-			</div>
-		</div>
-
-		<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-			<h3 class="text-xs font-semibold text-slate-700 mb-2">Justo</h3>
-			<div class="grid gap-3 md:grid-cols-2 text-sm">
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Justo sistema / POS</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={justo.system}
-						oninput={(e) => (justo.system = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-				<label class="flex flex-col gap-1">
-					<span class="text-slate-600">Justo real</span>
-					<input
-						type="number"
-						inputmode="decimal"
-						bind:value={justo.real}
-						oninput={(e) => (justo.real = parseNumber((e.target as HTMLInputElement).value))}
-						class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-					/>
-				</label>
-			</div>
-		</div>
-	</div>
-
-	<div class="mt-4">
-		<button
-			type="button"
-			class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-			onclick={() => (showOtherMethods = !showOtherMethods)}
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="16"
-				height="16"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="transition-transform duration-200"
-				class:rotate-180={showOtherMethods}
-			>
-				<polyline points="6 9 12 15 18 9"></polyline>
-			</svg>
-			Otros medios de pago (AppartaPay, Transferencias)
-		</button>
-
-		{#if showOtherMethods}
-			<div class="flex flex-col gap-3 mt-3 animate-in slide-in-from-top-2 duration-200">
-				<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-					<h3 class="text-xs font-semibold text-slate-700 mb-2">AppartaPay</h3>
-					<div class="grid gap-3 md:grid-cols-2 text-sm">
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">AppartaPay sistema / POS</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={appartaPay.system}
-								oninput={(e) =>
-									(appartaPay.system = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
+		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Datos generales</h2>
+		<div class="grid gap-5 md:grid-cols-4 text-sm">
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Fecha</span>
+				<input
+					type="date"
+					bind:value={date}
+					class="h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-900"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Cajero responsable</span>
+				<div class="relative">
+					<select
+						bind:value={cashier}
+						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						disabled={loadingOptions || !!optionsError}
+					>
+						<option value="" disabled selected>
+							{#if loadingOptions}
+								Cargando datos...
+							{:else if optionsError}
+								Error al cargar
+							{:else}
+								Selecciona un cajero
+							{/if}
+						</option>
+						{#each cashiers as c}
+							<option value={c}>{c}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
 							/>
-						</label>
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">AppartaPay real</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={appartaPay.real}
-								oninput={(e) =>
-									(appartaPay.real = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-							/>
-						</label>
+						</svg>
 					</div>
 				</div>
-
-				<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-					<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia NEQUI</h3>
-					<div class="grid gap-3 md:grid-cols-2 text-sm">
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">Nequi sistema / POS</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={nequi.system}
-								oninput={(e) => (nequi.system = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-							/>
-						</label>
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">Nequi real</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={nequi.real}
-								oninput={(e) => (nequi.real = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-							/>
-						</label>
+				{#if loadingOptions}
+					<span class="text-[11px] text-dark-orange-600 mt-0.5">Conectando a Supabase...</span>
+				{/if}
+				{#if optionsError}
+					<div class="p-2 mt-1 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
+						<strong>Error:</strong>
+						{optionsError}
 					</div>
-				</div>
-
-				<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-					<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia Bancolombia</h3>
-					<div class="grid gap-3 md:grid-cols-2 text-sm">
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">Bancolombia sistema / POS</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={bancolombia.system}
-								oninput={(e) =>
-									(bancolombia.system = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-							/>
-						</label>
-						<label class="flex flex-col gap-1">
-							<span class="text-slate-600">Bancolombia real</span>
-							<input
-								type="number"
-								inputmode="decimal"
-								bind:value={bancolombia.real}
-								oninput={(e) =>
-									(bancolombia.real = parseNumber((e.target as HTMLInputElement).value))}
-								class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-							/>
-						</label>
-					</div>
-				</div>
-			</div>
-		{/if}
-	</div>
-</section>
-
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<h2 class="text-sm font-semibold text-slate-700 mb-3">Efectivo</h2>
-	<div class="grid gap-3 md:grid-cols-3 text-sm">
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Base inicial</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoBase}
-				oninput={(e) => (efectivoBase = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Ventas en efectivo</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoVentas}
-				oninput={(e) => (efectivoVentas = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Gastos en efectivo</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoGastos}
-				oninput={(e) => (efectivoGastos = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Ingresos (entradas de caja)</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoIngresos}
-				oninput={(e) => (efectivoIngresos = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Egresos (salidas de caja)</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoEgresos}
-				oninput={(e) => (efectivoEgresos = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Efectivo real (conteo físico)</span>
-			<input
-				type="number"
-				inputmode="decimal"
-				bind:value={efectivoReal}
-				oninput={(e) => (efectivoReal = parseNumber((e.target as HTMLInputElement).value))}
-				class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-	</div>
-
-	<div class="mt-3 text-xs text-slate-700 space-y-1">
-		<p>
-			<span class="font-semibold">Efectivo POS (base + ventas - gastos + ingresos - egresos):</span>
-			<span class="ml-1">${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</span>
-		</p>
-		<p>
-			<span class="font-semibold">Diferencia efectivo (real - pos):</span>
-			<span
-				class="ml-1 font-semibold"
-				class:diferencia-pos={efectivoDiff >= 0}
-				class:diferencia-neg={efectivoDiff < 0}
-			>
-				${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-			</span>
-		</p>
-	</div>
-</section>
-
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<h2 class="text-sm font-semibold text-slate-700 mb-3">Sobre Automático</h2>
-	<div class="p-3 bg-slate-50 border border-slate-100 rounded-lg">
-		<div class="flex items-center justify-between text-sm">
-			<span class="text-slate-600">Estado:</span>
-			<span
-				class="font-medium"
-				class:text-emerald-600={envelopeAmount > 0}
-				class:text-slate-500={envelopeAmount <= 0}
-			>
-				{envelopeStatus}
-			</span>
-		</div>
-		<div class="flex items-center justify-between text-sm mt-2">
-			<span class="text-slate-600"
-				>Valor a guardar (Real - Base Fija {fixedBase > 0
-					? `$${fixedBase.toLocaleString('es-CO')}`
-					: ''}):</span
-			>
-			<span class="font-bold text-lg">
-				${envelopeAmount > 0
-					? envelopeAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })
-					: '0'}
-			</span>
-		</div>
-		{#if envelopeAmount <= 0}
-			<p class="text-[10px] text-slate-500 mt-2 italic">
-				El efectivo real no supera la base, se registrará como "SIN SOBRE".
-			</p>
-		{/if}
-	</div>
-</section>
-
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
-	<h2 class="text-sm font-semibold text-slate-700 mb-3">Resumen de diferencias</h2>
-	<table class="w-full text-xs border border-slate-200 rounded-lg overflow-hidden">
-		<thead>
-			<tr>
-				<th>Medio</th>
-				<th>Sistema / POS</th>
-				<th>Real</th>
-				<th>Diferencia (real - sistema)</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each [{ label: 'Datáfono', ch: dataphone }, { label: 'Rappi', ch: rappi }, { label: 'Justo', ch: justo }, { label: 'AppartaPay', ch: appartaPay }, { label: 'Nequi', ch: nequi }, { label: 'Bancolombia', ch: bancolombia }] as row}
-				{#key row.label}
-					<tr>
-						<td>{row.label}</td>
-						<td>${row.ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td>
-						<td>${row.ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td>
-						<td
-							class:diferencia-pos={row.ch.real - row.ch.system >= 0}
-							class:diferencia-neg={row.ch.real - row.ch.system < 0}
+				{/if}
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Tienda / sede</span>
+				<div class="relative">
+					<select
+						bind:value={store}
+						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						disabled={loadingOptions || !!optionsError}
+					>
+						<option value="" disabled selected
+							>{loadingOptions ? 'Cargando...' : 'Selecciona una tienda'}</option
 						>
-							${(row.ch.real - row.ch.system).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+						{#each stores as s}
+							<option value={s.name}>{s.name}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</div>
+				</div>
+			</label>
+			<label class="flex flex-col gap-2 md:col-span-1 md:col-start-1 md:col-end-5">
+				<span class="text-sm font-medium text-gray-700">Nota / Observaciones</span>
+				<input
+					type="text"
+					bind:value={note}
+					placeholder="Opcional"
+					class="h-11 rounded-xl border border-gray-200 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+				/>
+			</label>
+		</div>
+	</section>
+
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
+		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+			Medios electrónicos
+		</h2>
+		<div class="flex flex-col gap-4">
+			<div
+				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+			>
+				<h3 class="text-sm font-semibold text-gray-800 mb-3">Datáfono</h3>
+				<div class="grid gap-4 md:grid-cols-2 text-sm">
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={dataphone.system}
+							oninput={(e) =>
+								(dataphone.system = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Real (Cierre lote)</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={dataphone.real}
+							oninput={(e) => (dataphone.real = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+				</div>
+			</div>
+
+			<div
+				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+			>
+				<h3 class="text-sm font-semibold text-gray-800 mb-3">Rappi</h3>
+				<div class="grid gap-4 md:grid-cols-2 text-sm">
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={rappi.system}
+							oninput={(e) => (rappi.system = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Real</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={rappi.real}
+							oninput={(e) => (rappi.real = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+				</div>
+			</div>
+
+			<div
+				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+			>
+				<h3 class="text-sm font-semibold text-gray-800 mb-3">Justo</h3>
+				<div class="grid gap-4 md:grid-cols-2 text-sm">
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={justo.system}
+							oninput={(e) => (justo.system = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+					<label class="flex flex-col gap-2">
+						<span class="text-xs text-gray-500 font-medium uppercase">Real</span>
+						<input
+							type="number"
+							inputmode="decimal"
+							bind:value={justo.real}
+							oninput={(e) => (justo.real = parseNumber((e.target as HTMLInputElement).value))}
+							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+						/>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-4">
+			<button
+				type="button"
+				class="flex items-center gap-2 text-sm font-semibold text-dark-orange-600 hover:text-dark-orange-700 transition-colors p-2 hover:bg-dark-orange-50/50 rounded-lg"
+				onclick={() => (showOtherMethods = !showOtherMethods)}
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="transition-transform duration-200"
+					class:rotate-180={showOtherMethods}
+				>
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+				Otros medios de pago (AppartaPay, Transferencias)
+			</button>
+
+			{#if showOtherMethods}
+				<div class="flex flex-col gap-3 mt-3 animate-in slide-in-from-top-2 duration-200">
+					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
+						<h3 class="text-xs font-semibold text-slate-700 mb-2">AppartaPay</h3>
+						<div class="grid gap-3 md:grid-cols-2 text-sm">
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">AppartaPay sistema / POS</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={appartaPay.system}
+									oninput={(e) =>
+										(appartaPay.system = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">AppartaPay real</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={appartaPay.real}
+									oninput={(e) =>
+										(appartaPay.real = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+						</div>
+					</div>
+
+					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
+						<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia NEQUI</h3>
+						<div class="grid gap-3 md:grid-cols-2 text-sm">
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">Nequi sistema / POS</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={nequi.system}
+									oninput={(e) =>
+										(nequi.system = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">Nequi real</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={nequi.real}
+									oninput={(e) => (nequi.real = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+						</div>
+					</div>
+
+					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
+						<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia Bancolombia</h3>
+						<div class="grid gap-3 md:grid-cols-2 text-sm">
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">Bancolombia sistema / POS</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={bancolombia.system}
+									oninput={(e) =>
+										(bancolombia.system = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+							<label class="flex flex-col gap-1">
+								<span class="text-slate-600">Bancolombia real</span>
+								<input
+									type="number"
+									inputmode="decimal"
+									bind:value={bancolombia.real}
+									oninput={(e) =>
+										(bancolombia.real = parseNumber((e.target as HTMLInputElement).value))}
+									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+								/>
+							</label>
+						</div>
+					</div>
+				</div>
+			{/if}
+		</div>
+	</section>
+
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
+		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Efectivo</h2>
+		<div class="grid gap-5 md:grid-cols-3 text-sm">
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Base inicial</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoBase}
+					oninput={(e) => (efectivoBase = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Ventas en efectivo</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoVentas}
+					oninput={(e) => (efectivoVentas = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Gastos en efectivo</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoGastos}
+					oninput={(e) => (efectivoGastos = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Ingresos (entradas)</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoIngresos}
+					oninput={(e) => (efectivoIngresos = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Egresos (salidas)</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoEgresos}
+					oninput={(e) => (efectivoEgresos = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-xs text-gray-500 font-medium uppercase">Efectivo real (conteo)</span>
+				<input
+					type="number"
+					inputmode="decimal"
+					bind:value={efectivoReal}
+					oninput={(e) => (efectivoReal = parseNumber((e.target as HTMLInputElement).value))}
+					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+				/>
+			</label>
+		</div>
+
+		<div
+			class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6"
+		>
+			<div>
+				<span class="text-xs text-gray-500 font-medium uppercase block mb-1">Efectivo POS</span>
+				<span class="text-xl font-bold text-gray-800"
+					>${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</span
+				>
+				<p class="text-[10px] text-gray-400 mt-0.5">
+					(base + ventas - gastos + ingresos - egresos)
+				</p>
+			</div>
+			<div class="md:text-right">
+				<span class="text-xs text-gray-500 font-medium uppercase block mb-1">Diferencia</span>
+				<span
+					class="text-xl font-bold"
+					class:text-emerald-600={efectivoDiff >= 0}
+					class:text-red-600={efectivoDiff < 0}
+				>
+					${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+				</span>
+				<p class="text-[10px] text-gray-400 mt-0.5">(real - pos)</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 mb-6">
+		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Sobre Automático</h2>
+		<div
+			class="p-5 bg-linear-to-br from-gray-50 to-white border border-gray-100 rounded-xl shadow-sm"
+		>
+			<div class="flex items-center justify-between">
+				<div>
+					<p class="text-xs text-gray-500 font-medium uppercase mb-1">Estado del sobre</p>
+					<span
+						class="px-3 py-1 rounded-full text-xs font-bold"
+						class:bg-emerald-100={envelopeAmount > 0}
+						class:text-emerald-800={envelopeAmount > 0}
+						class:bg-gray-100={envelopeAmount <= 0}
+						class:text-gray-600={envelopeAmount <= 0}
+					>
+						{envelopeStatus}
+					</span>
+				</div>
+				<div class="text-right">
+					<p class="text-xs text-gray-500 font-medium uppercase mb-1">Valor a guardar</p>
+					<span class="text-2xl font-bold text-gray-900">
+						${envelopeAmount > 0
+							? envelopeAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })
+							: '0'}
+					</span>
+				</div>
+			</div>
+			{#if fixedBase > 0}
+				<div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+					Base fija de la tienda: <span class="font-medium text-gray-700"
+						>${fixedBase.toLocaleString('es-CO')}</span
+					>
+				</div>
+			{/if}
+			{#if envelopeAmount <= 0}
+				<p class="text-xs text-orange-600 mt-2 flex items-center gap-1">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+						><path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						></path></svg
+					>
+					El efectivo real no supera la base, se registrará como "SIN SOBRE".
+				</p>
+			{/if}
+		</div>
+	</section>
+
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 mb-6">
+		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+			Resumen de diferencias
+		</h2>
+		<div class="overflow-hidden rounded-xl border border-gray-100">
+			<table class="w-full text-xs md:text-sm">
+				<thead class="bg-gray-50 border-b border-gray-100">
+					<tr>
+						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+							>Medio</th
+						>
+						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+							>Sistema / POS</th
+						>
+						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+							>Real</th
+						>
+						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+							>Diferencia</th
+						>
+					</tr>
+				</thead>
+				<tbody>
+					{#each [{ label: 'Datáfono', ch: dataphone }, { label: 'Rappi', ch: rappi }, { label: 'Justo', ch: justo }, { label: 'AppartaPay', ch: appartaPay }, { label: 'Nequi', ch: nequi }, { label: 'Bancolombia', ch: bancolombia }] as row}
+						{#key row.label}
+							<tr
+								class="divide-x divide-gray-50/50 hover:bg-dark-orange-50/10 transition-colors border-b border-gray-50 last:border-0"
+							>
+								<td class="px-4 py-3 font-medium text-gray-700">{row.label}</td>
+								<td class="px-4 py-3 text-gray-600"
+									>${row.ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
+								>
+								<td class="px-4 py-3 text-gray-600"
+									>${row.ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
+								>
+								<td
+									class="px-4 py-3 font-bold"
+									class:text-emerald-600={row.ch.real - row.ch.system >= 0}
+									class:text-red-500={row.ch.real - row.ch.system < 0}
+								>
+									${(row.ch.real - row.ch.system).toLocaleString('es-CO', {
+										maximumFractionDigits: 0
+									})}
+								</td>
+							</tr>
+						{/key}
+					{/each}
+					<tr>
+						<td class="px-4 py-3 font-medium text-gray-700">Efectivo</td>
+						<td class="px-4 py-3 text-gray-600"
+							>${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
+						>
+						<td class="px-4 py-3 text-gray-600"
+							>${efectivoReal.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
+						>
+						<td
+							class="px-4 py-3 font-bold"
+							class:text-emerald-600={efectivoDiff >= 0}
+							class:text-red-500={efectivoDiff < 0}
+						>
+							${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
 						</td>
 					</tr>
-				{/key}
-			{/each}
-			<tr>
-				<td>Efectivo</td>
-				<td>${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td>
-				<td>${efectivoReal.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td>
-				<td class:diferencia-pos={efectivoDiff >= 0} class:diferencia-neg={efectivoDiff < 0}>
-					${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<div class="mt-4 p-3 bg-slate-50 border border-slate-100 rounded-lg">
-		<div class="flex items-center justify-between text-sm">
-			<span class="text-slate-600 font-medium">Porcentaje de efectivo (sobre venta total):</span>
-			<span class="font-bold text-slate-800">
-				{efectivoPorcentaje.toFixed(2)}%
-			</span>
+				</tbody>
+			</table>
 		</div>
-		<p class="text-[10px] text-slate-500 mt-1">
-			Venta Total: {totalVentas.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
-		</p>
-	</div>
-</section>
 
-<div class="mt-4 flex items-center gap-3">
-	<button
-		type="button"
-		onclick={handleSubmit}
-		disabled={saving}
-		class="inline-flex items-center px-4 py-2 rounded-md bg-slate-900 text-white text-sm font-medium disabled:opacity-60 disabled:cursor-default hover:bg-slate-800"
-	>
-		{#if saving}
-			Guardando...
-		{:else}
-			Guardar cierre
-		{/if}
-	</button>
+		<div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+			<div class="flex items-center justify-between text-sm">
+				<span class="text-gray-600 font-medium">Porcentaje de efectivo (sobre venta total):</span>
+				<span class="font-bold text-gray-900 text-lg">
+					{efectivoPorcentaje.toFixed(2)}%
+				</span>
+			</div>
+			<p class="text-xs text-gray-500 mt-1">
+				Venta Total: {totalVentas.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+			</p>
+		</div>
+	</section>
+
+	<div class="mt-6 flex items-center gap-4">
+		<button
+			type="button"
+			onclick={handleSubmit}
+			disabled={saving}
+			class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-linear-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:from-black hover:to-gray-900 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 w-full md:w-auto"
+		>
+			{#if saving}
+				<div
+					class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"
+				></div>
+				Guardando...
+			{:else}
+				Guardar cierre de caja
+			{/if}
+		</button>
+	</div>
 
 	{#if saveOk}
 		<span class="text-xs font-medium text-emerald-700">Cierre guardado correctamente</span>
@@ -694,13 +789,5 @@
 </div>
 
 <style>
-	.diferencia-pos {
-		color: #047857; /* verde */
-		font-weight: 600;
-	}
-
-	.diferencia-neg {
-		color: #b91c1c; /* rojo */
-		font-weight: 600;
-	}
+	/* Removed style block as we are using Tailwind utilities now */
 </style>

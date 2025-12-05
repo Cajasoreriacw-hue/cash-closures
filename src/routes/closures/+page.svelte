@@ -371,53 +371,83 @@
 	onMount(loadClosures);
 </script>
 
-<h1 class="text-xl font-semibold mb-4">Cierres de caja registrados</h1>
+<div class="space-y-6">
+	<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Cierres de caja registrados</h1>
 
-<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4 text-sm">
-	<h2 class="text-xs font-semibold text-slate-700 mb-3">Filtros</h2>
-	<div class="grid gap-3 md:grid-cols-4">
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Cajero</span>
-			<select
-				bind:value={filterCashier}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value="">Todos</option>
-				{#each cashierOptions as c}
-					<option value={c}>{c}</option>
-				{/each}
-			</select>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Tienda / sede</span>
-			<select
-				bind:value={filterStore}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-slate-400"
-			>
-				<option value="">Todas</option>
-				{#each storeOptions as s}
-					<option value={s.name}>{s.name}</option>
-				{/each}
-			</select>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Desde</span>
-			<input
-				type="date"
-				bind:value={filterFrom}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-		<label class="flex flex-col gap-1">
-			<span class="text-slate-600">Hasta</span>
-			<input
-				type="date"
-				bind:value={filterTo}
-				class="h-8 rounded-md border border-slate-200 px-2 text-xs focus:outline-none focus:ring-1 focus:ring-slate-400"
-			/>
-		</label>
-	</div>
-</section>
+	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-4 md:p-5">
+		<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h2>
+		<div class="grid gap-4 md:grid-cols-4">
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Cajero</span>
+				<div class="relative">
+					<select
+						bind:value={filterCashier}
+						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+					>
+						<option value="">Todos</option>
+						{#each cashierOptions as c}
+							<option value={c}>{c}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</div>
+				</div>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Tienda / sede</span>
+				<div class="relative">
+					<select
+						bind:value={filterStore}
+						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+					>
+						<option value="">Todas</option>
+						{#each storeOptions as s}
+							<option value={s.name}>{s.name}</option>
+						{/each}
+					</select>
+					<div
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+					>
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"
+							/>
+						</svg>
+					</div>
+				</div>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Desde</span>
+				<input
+					type="date"
+					bind:value={filterFrom}
+					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+				/>
+			</label>
+			<label class="flex flex-col gap-2">
+				<span class="text-sm font-medium text-gray-700">Hasta</span>
+				<input
+					type="date"
+					bind:value={filterTo}
+					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+				/>
+			</label>
+		</div>
+	</section>
+</div>
 
 {#if loading}
 	<p class="text-sm text-slate-500">Cargando cierres...</p>
@@ -427,24 +457,30 @@
 	<p class="text-sm text-slate-500">No hay cierres para los filtros seleccionados.</p>
 {:else}
 	<!-- Desktop Table View -->
-	<div class="hidden md:block overflow-x-auto">
-		<table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+	<div class="hidden md:block overflow-hidden rounded-2xl border border-gray-100 shadow-soft">
+		<table class="w-full text-sm">
 			<thead>
-				<tr class="bg-slate-100">
-					<th class="px-3 py-2 text-left">Fecha</th>
-					<th class="px-3 py-2 text-left">Cajero</th>
-					<th class="px-3 py-2 text-left">Tienda</th>
-					<th class="px-3 py-2 text-left">Venta Total</th>
-					<th class="px-3 py-2 text-center">Acciones</th>
+				<tr class="bg-gray-50 border-b border-gray-100">
+					<th class="px-6 py-4 text-left font-semibold text-gray-700">Fecha</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700">Cajero</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700">Tienda</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700">Venta Total</th>
+					<th class="px-6 py-4 text-center font-semibold text-gray-700">Acciones</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="divide-y divide-gray-100 bg-white">
 				{#each paginatedClosures as c}
-					<tr class="odd:bg-white even:bg-slate-50 hover:bg-blue-50 transition-colors">
-						<td class="px-3 py-2">{c.date}</td>
-						<td class="px-3 py-2">{c.cashier}</td>
-						<td class="px-3 py-2">{c.store}</td>
-						<td class="px-3 py-2 font-semibold text-blue-700">
+					<tr class="hover:bg-dark-orange-50/30 transition-colors duration-150">
+						<td class="px-6 py-4 text-gray-600">{c.date}</td>
+						<td class="px-6 py-4 text-gray-600">{c.cashier}</td>
+						<td class="px-6 py-4">
+							<span
+								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+							>
+								{c.store}
+							</span>
+						</td>
+						<td class="px-6 py-4 font-bold text-dark-orange-600">
 							${(
 								c.efectivo.ventas +
 								c.channels.dataphone.real +
@@ -455,11 +491,11 @@
 								c.channels.bancolombia.real
 							).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
 						</td>
-						<td class="px-3 py-2 text-center">
+						<td class="px-6 py-4 text-center">
 							<button
 								type="button"
 								onclick={() => viewClosure(c)}
-								class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+								class="px-4 py-2 text-xs font-medium text-dark-orange-700 bg-dark-orange-100 hover:bg-dark-orange-200 rounded-lg transition-colors"
 							>
 								Ver cierre
 							</button>
@@ -471,19 +507,19 @@
 	</div>
 
 	<!-- Mobile Card View -->
-	<div class="md:hidden space-y-3">
+	<div class="md:hidden space-y-4">
 		{#each paginatedClosures as c}
-			<div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-				<div class="p-4 space-y-3">
+			<div class="bg-white rounded-2xl border border-gray-100 shadow-soft overflow-hidden">
+				<div class="p-5 space-y-4">
 					<!-- Header -->
 					<div class="flex items-start justify-between">
 						<div>
-							<p class="text-xs text-slate-500">Fecha</p>
-							<p class="text-sm font-semibold text-slate-900">{c.date}</p>
+							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Fecha</p>
+							<p class="text-base font-bold text-gray-900">{c.date}</p>
 						</div>
 						<div class="text-right">
-							<p class="text-xs text-slate-500">Venta Total</p>
-							<p class="text-sm font-bold text-blue-600">
+							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Venta Total</p>
+							<p class="text-base font-bold text-dark-orange-600">
 								${(
 									c.efectivo.ventas +
 									c.channels.dataphone.real +
@@ -498,14 +534,18 @@
 					</div>
 
 					<!-- Details -->
-					<div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+					<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
 						<div>
-							<p class="text-xs text-slate-500">Cajero</p>
-							<p class="text-sm font-medium text-slate-900">{c.cashier}</p>
+							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Cajero</p>
+							<p class="text-sm font-medium text-gray-900">{c.cashier}</p>
 						</div>
 						<div>
-							<p class="text-xs text-slate-500">Tienda</p>
-							<p class="text-sm font-medium text-slate-900">{c.store}</p>
+							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tienda</p>
+							<span
+								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mt-1"
+							>
+								{c.store}
+							</span>
 						</div>
 					</div>
 
@@ -513,7 +553,7 @@
 					<button
 						type="button"
 						onclick={() => viewClosure(c)}
-						class="w-full px-4 py-2.5 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors"
+						class="w-full px-4 py-3 text-sm font-semibold bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-colors"
 					>
 						Ver detalles del cierre
 					</button>
@@ -531,15 +571,15 @@
 <button
 	type="button"
 	onclick={loadClosures}
-	class="mt-3 inline-flex items-center px-3 py-1.5 rounded-md bg-slate-900 text-white text-xs font-medium hover:bg-slate-800"
+	class="mt-6 inline-flex items-center px-4 py-2 rounded-xl bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 shadow-soft hover:shadow-soft-lg transition-all"
 >
-	Recargar
+	↻ Recargar datos
 </button>
 
 <!-- Modal -->
 {#if showModal && selectedClosure}
 	<div
-		class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+		class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
 		onclick={closeModal}
 		onkeydown={(e) => e.key === 'Escape' && closeModal()}
 		role="button"
@@ -547,7 +587,7 @@
 		aria-label="Close modal"
 	>
 		<div
-			class="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto m-4"
+			class="bg-white rounded-2xl shadow-soft-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
 			onclick={(e) => e.stopPropagation()}
 			onkeydown={(e) => e.stopPropagation()}
 			role="dialog"
@@ -556,7 +596,7 @@
 			tabindex="-1"
 		>
 			<div
-				class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-10"
+				class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10"
 			>
 				<h2 class="text-lg font-semibold">
 					{editMode ? 'Editar Cierre' : 'Detalle del Cierre'}
@@ -566,7 +606,7 @@
 						<button
 							type="button"
 							onclick={enableEditMode}
-							class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+							class="px-4 py-2 text-sm bg-linear-to-r from-dark-orange-500 to-dark-orange-600 text-white font-medium rounded-xl hover:shadow-soft-lg active:scale-95 transition-all"
 						>
 							✏️ Editar
 						</button>
@@ -575,7 +615,7 @@
 							type="button"
 							onclick={handleSave}
 							disabled={saving}
-							class="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+							class="px-4 py-2 text-sm bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 shadow-soft hover:shadow-soft-lg transition-all disabled:opacity-50"
 						>
 							{saving ? 'Guardando...' : '💾 Guardar'}
 						</button>
@@ -583,7 +623,7 @@
 							type="button"
 							onclick={() => (editMode = false)}
 							disabled={saving}
-							class="px-3 py-1.5 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
+							class="px-4 py-2 text-sm bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all disabled:opacity-50"
 						>
 							❌ Cancelar
 						</button>
