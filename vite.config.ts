@@ -12,11 +12,11 @@ export default defineConfig({
 			filename: 'service-worker.ts',
 			selfDestroying: process.env.SELF_DESTROYING_SW === 'true',
 			manifest: {
-				name: 'MonitCw',
+				name: 'Monit - Control de Caja',
 				short_name: 'Monit',
 				description: 'Sistema ERP para gestión y control de cierres de caja',
-				theme_color: '#f4bd08',
-				background_color: '#EAEAEA',
+				theme_color: '#f97316',
+				background_color: '#FFF7ED',
 				display: 'standalone',
 				start_url: '/',
 				icons: [
