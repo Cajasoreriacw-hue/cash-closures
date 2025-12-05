@@ -190,9 +190,12 @@
 <div class="fixed top-5 right-5 z-50 flex flex-col gap-3">
 	<!-- Alerts -->
 	{#if validationError}
-		<Toast color="yellow">
+		<Toast
+			color="yellow"
+			class="shadow-soft dark:shadow-none dark:bg-slate-800 dark:border dark:border-yellow-900/50"
+		>
 			{#snippet icon()}
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+				<svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
 					<path
 						fill-rule="evenodd"
 						d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -200,15 +203,18 @@
 					/>
 				</svg>
 			{/snippet}
-			<span class="font-medium">Atención:</span>
-			{validationError}
+			<span class="font-medium text-gray-900 dark:text-white">Atención:</span>
+			<span class="text-gray-700 dark:text-gray-300">{validationError}</span>
 		</Toast>
 	{/if}
 
 	{#if saveError}
-		<Toast color="red">
+		<Toast
+			color="red"
+			class="shadow-soft dark:shadow-none dark:bg-slate-800 dark:border dark:border-red-900/50"
+		>
 			{#snippet icon()}
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+				<svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
 					<path
 						fill-rule="evenodd"
 						d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -216,15 +222,18 @@
 					/>
 				</svg>
 			{/snippet}
-			<span class="font-medium">Error:</span>
-			{saveError}
+			<span class="font-medium text-gray-900 dark:text-white">Error:</span>
+			<span class="text-gray-700 dark:text-gray-300">{saveError}</span>
 		</Toast>
 	{/if}
 
 	{#if successMessage}
-		<Toast color="green">
+		<Toast
+			color="green"
+			class="shadow-soft dark:shadow-none dark:bg-slate-800 dark:border dark:border-green-900/50"
+		>
 			{#snippet icon()}
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+				<svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
 					<path
 						fill-rule="evenodd"
 						d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -232,32 +241,38 @@
 					/>
 				</svg>
 			{/snippet}
-			<span class="font-medium">¡Éxito!</span>
-			{successMessage}
+			<span class="font-medium text-gray-900 dark:text-white">¡Éxito!</span>
+			<span class="text-gray-700 dark:text-gray-300">{successMessage}</span>
 		</Toast>
 	{/if}
 </div>
 
 <div class="space-y-6">
-	<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Registro de cierre de caja</h1>
+	<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+		Registro de cierre de caja
+	</h1>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
-		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Datos generales</h2>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
+	>
+		<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Datos generales
+		</h2>
 		<div class="grid gap-5 md:grid-cols-4 text-sm">
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Fecha</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</span>
 				<input
 					type="date"
 					bind:value={date}
-					class="h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-900"
+					class="h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium text-gray-900 dark:text-white"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Cajero responsable</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Cajero responsable</span>
 				<div class="relative">
 					<select
 						bind:value={cashier}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 						disabled={loadingOptions || !!optionsError}
 					>
 						<option value="" disabled selected>
@@ -274,7 +289,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -287,21 +302,25 @@
 					</div>
 				</div>
 				{#if loadingOptions}
-					<span class="text-[11px] text-dark-orange-600 mt-0.5">Conectando a Supabase...</span>
+					<span class="text-[11px] text-fresh-sky-600 dark:text-fresh-sky-400 mt-0.5"
+						>Conectando a Supabase...</span
+					>
 				{/if}
 				{#if optionsError}
-					<div class="p-2 mt-1 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
+					<div
+						class="p-2 mt-1 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-red-700 dark:text-red-400 text-xs"
+					>
 						<strong>Error:</strong>
 						{optionsError}
 					</div>
 				{/if}
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Tienda / sede</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tienda / sede</span>
 				<div class="relative">
 					<select
 						bind:value={store}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 						disabled={loadingOptions || !!optionsError}
 					>
 						<option value="" disabled selected
@@ -312,7 +331,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -326,102 +345,114 @@
 				</div>
 			</label>
 			<label class="flex flex-col gap-2 md:col-span-1 md:col-start-1 md:col-end-5">
-				<span class="text-sm font-medium text-gray-700">Nota / Observaciones</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300"
+					>Nota / Observaciones</span
+				>
 				<input
 					type="text"
 					bind:value={note}
 					placeholder="Opcional"
-					class="h-11 rounded-xl border border-gray-200 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+					class="h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all"
 				/>
 			</label>
 		</div>
 	</section>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
-		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
+	>
+		<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
 			Medios electrónicos
 		</h2>
 		<div class="flex flex-col gap-4">
 			<div
-				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+				class="channel-row border border-gray-100 dark:border-slate-700 rounded-xl p-4 bg-gray-50/50 dark:bg-slate-700/30 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
 			>
-				<h3 class="text-sm font-semibold text-gray-800 mb-3">Datáfono</h3>
+				<h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Datáfono</h3>
 				<div class="grid gap-4 md:grid-cols-2 text-sm">
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+							>Sistema / POS</span
+						>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={dataphone.system}
 							oninput={(e) =>
 								(dataphone.system = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Real (Cierre lote)</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+							>Real (Cierre lote)</span
+						>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={dataphone.real}
 							oninput={(e) => (dataphone.real = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 				</div>
 			</div>
 
 			<div
-				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+				class="channel-row border border-gray-100 dark:border-slate-700 rounded-xl p-4 bg-gray-50/50 dark:bg-slate-700/30 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
 			>
-				<h3 class="text-sm font-semibold text-gray-800 mb-3">Rappi</h3>
+				<h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Rappi</h3>
 				<div class="grid gap-4 md:grid-cols-2 text-sm">
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+							>Sistema / POS</span
+						>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={rappi.system}
 							oninput={(e) => (rappi.system = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Real</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase">Real</span>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={rappi.real}
 							oninput={(e) => (rappi.real = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 				</div>
 			</div>
 
 			<div
-				class="channel-row border border-gray-100 rounded-xl p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+				class="channel-row border border-gray-100 dark:border-slate-700 rounded-xl p-4 bg-gray-50/50 dark:bg-slate-700/30 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
 			>
-				<h3 class="text-sm font-semibold text-gray-800 mb-3">Justo</h3>
+				<h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Justo</h3>
 				<div class="grid gap-4 md:grid-cols-2 text-sm">
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Sistema / POS</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+							>Sistema / POS</span
+						>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={justo.system}
 							oninput={(e) => (justo.system = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 					<label class="flex flex-col gap-2">
-						<span class="text-xs text-gray-500 font-medium uppercase">Real</span>
+						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase">Real</span>
 						<input
 							type="number"
 							inputmode="decimal"
 							bind:value={justo.real}
 							oninput={(e) => (justo.real = parseNumber((e.target as HTMLInputElement).value))}
-							class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+							class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 						/>
 					</label>
 				</div>
@@ -431,7 +462,7 @@
 		<div class="mt-4">
 			<button
 				type="button"
-				class="flex items-center gap-2 text-sm font-semibold text-dark-orange-600 hover:text-dark-orange-700 transition-colors p-2 hover:bg-dark-orange-50/50 rounded-lg"
+				class="flex items-center gap-2 text-sm font-semibold text-fresh-sky-600 hover:text-fresh-sky-700 dark:text-fresh-sky-400 dark:hover:text-fresh-sky-300 transition-colors p-2 hover:bg-fresh-sky-50/50 dark:hover:bg-fresh-sky-900/20 rounded-lg"
 				onclick={() => (showOtherMethods = !showOtherMethods)}
 			>
 				<svg
@@ -454,84 +485,96 @@
 
 			{#if showOtherMethods}
 				<div class="flex flex-col gap-3 mt-3 animate-in slide-in-from-top-2 duration-200">
-					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-						<h3 class="text-xs font-semibold text-slate-700 mb-2">AppartaPay</h3>
+					<div
+						class="channel-row border border-slate-100 dark:border-slate-700 rounded-lg p-3 bg-slate-50 dark:bg-slate-700/30"
+					>
+						<h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+							AppartaPay
+						</h3>
 						<div class="grid gap-3 md:grid-cols-2 text-sm">
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">AppartaPay sistema / POS</span>
+								<span class="text-slate-600 dark:text-slate-400">AppartaPay sistema / POS</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={appartaPay.system}
 									oninput={(e) =>
 										(appartaPay.system = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">AppartaPay real</span>
+								<span class="text-slate-600 dark:text-slate-400">AppartaPay real</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={appartaPay.real}
 									oninput={(e) =>
 										(appartaPay.real = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 						</div>
 					</div>
 
-					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-						<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia NEQUI</h3>
+					<div
+						class="channel-row border border-slate-100 dark:border-slate-700 rounded-lg p-3 bg-slate-50 dark:bg-slate-700/30"
+					>
+						<h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+							Transferencia NEQUI
+						</h3>
 						<div class="grid gap-3 md:grid-cols-2 text-sm">
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">Nequi sistema / POS</span>
+								<span class="text-slate-600 dark:text-slate-400">Nequi sistema / POS</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={nequi.system}
 									oninput={(e) =>
 										(nequi.system = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">Nequi real</span>
+								<span class="text-slate-600 dark:text-slate-400">Nequi real</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={nequi.real}
 									oninput={(e) => (nequi.real = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 						</div>
 					</div>
 
-					<div class="channel-row border border-slate-100 rounded-lg p-3 bg-slate-50">
-						<h3 class="text-xs font-semibold text-slate-700 mb-2">Transferencia Bancolombia</h3>
+					<div
+						class="channel-row border border-slate-100 dark:border-slate-700 rounded-lg p-3 bg-slate-50 dark:bg-slate-700/30"
+					>
+						<h3 class="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+							Transferencia Bancolombia
+						</h3>
 						<div class="grid gap-3 md:grid-cols-2 text-sm">
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">Bancolombia sistema / POS</span>
+								<span class="text-slate-600 dark:text-slate-400">Bancolombia sistema / POS</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={bancolombia.system}
 									oninput={(e) =>
 										(bancolombia.system = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 							<label class="flex flex-col gap-1">
-								<span class="text-slate-600">Bancolombia real</span>
+								<span class="text-slate-600 dark:text-slate-400">Bancolombia real</span>
 								<input
 									type="number"
 									inputmode="decimal"
 									bind:value={bancolombia.real}
 									oninput={(e) =>
 										(bancolombia.real = parseNumber((e.target as HTMLInputElement).value))}
-									class="h-9 rounded-md border border-slate-200 px-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
+									class="h-9 rounded-md border border-slate-200 dark:border-slate-600 px-2 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-slate-400 dark:focus:ring-slate-500"
 								/>
 							</label>
 						</div>
@@ -541,118 +584,147 @@
 		</div>
 	</section>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
-		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Efectivo</h2>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
+	>
+		<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Efectivo
+		</h2>
 		<div class="grid gap-5 md:grid-cols-3 text-sm">
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Base inicial</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Base inicial</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoBase}
 					oninput={(e) => (efectivoBase = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Ventas en efectivo</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Ventas en efectivo</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoVentas}
 					oninput={(e) => (efectivoVentas = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Gastos en efectivo</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Gastos en efectivo</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoGastos}
 					oninput={(e) => (efectivoGastos = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Ingresos (entradas)</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Ingresos (entradas)</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoIngresos}
 					oninput={(e) => (efectivoIngresos = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Egresos (salidas)</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Egresos (salidas)</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoEgresos}
 					oninput={(e) => (efectivoEgresos = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-xs text-gray-500 font-medium uppercase">Efectivo real (conteo)</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase"
+					>Efectivo real (conteo)</span
+				>
 				<input
 					type="number"
 					inputmode="decimal"
 					bind:value={efectivoReal}
 					oninput={(e) => (efectivoReal = parseNumber((e.target as HTMLInputElement).value))}
-					class="h-10 rounded-lg border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium"
+					class="h-10 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 				/>
 			</label>
 		</div>
 
 		<div
-			class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6"
+			class="mt-4 p-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6"
 		>
 			<div>
-				<span class="text-xs text-gray-500 font-medium uppercase block mb-1">Efectivo POS</span>
-				<span class="text-xl font-bold text-gray-800"
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase block mb-1"
+					>Efectivo POS</span
+				>
+				<span class="text-xl font-bold text-gray-800 dark:text-white"
 					>${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</span
 				>
-				<p class="text-[10px] text-gray-400 mt-0.5">
+				<p class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">
 					(base + ventas - gastos + ingresos - egresos)
 				</p>
 			</div>
 			<div class="md:text-right">
-				<span class="text-xs text-gray-500 font-medium uppercase block mb-1">Diferencia</span>
+				<span class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase block mb-1"
+					>Diferencia</span
+				>
 				<span
 					class="text-xl font-bold"
 					class:text-emerald-600={efectivoDiff >= 0}
+					class:dark:text-emerald-400={efectivoDiff >= 0}
 					class:text-red-600={efectivoDiff < 0}
+					class:dark:text-red-400={efectivoDiff < 0}
 				>
 					${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
 				</span>
-				<p class="text-[10px] text-gray-400 mt-0.5">(real - pos)</p>
+				<p class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">(real - pos)</p>
 			</div>
 		</div>
 	</section>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 mb-6">
-		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Sobre Automático</h2>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 mb-6 transition-colors"
+	>
+		<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Sobre Automático
+		</h2>
 		<div
-			class="p-5 bg-linear-to-br from-gray-50 to-white border border-gray-100 rounded-xl shadow-sm"
+			class="p-5 bg-linear-to-br from-gray-50 to-white dark:from-slate-700 dark:to-slate-800 border border-gray-100 dark:border-slate-600 rounded-xl shadow-sm"
 		>
 			<div class="flex items-center justify-between">
 				<div>
-					<p class="text-xs text-gray-500 font-medium uppercase mb-1">Estado del sobre</p>
+					<p class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase mb-1">
+						Estado del sobre
+					</p>
 					<span
-						class="px-3 py-1 rounded-full text-xs font-bold"
-						class:bg-emerald-100={envelopeAmount > 0}
-						class:text-emerald-800={envelopeAmount > 0}
-						class:bg-gray-100={envelopeAmount <= 0}
-						class:text-gray-600={envelopeAmount <= 0}
+						class="px-3 py-1 rounded-full text-xs font-bold transition-colors
+                        {envelopeAmount > 0
+							? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+							: 'bg-gray-100 text-gray-600 dark:bg-slate-600 dark:text-gray-300'}"
 					>
 						{envelopeStatus}
 					</span>
 				</div>
 				<div class="text-right">
-					<p class="text-xs text-gray-500 font-medium uppercase mb-1">Valor a guardar</p>
-					<span class="text-2xl font-bold text-gray-900">
+					<p class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase mb-1">
+						Valor a guardar
+					</p>
+					<span class="text-2xl font-bold text-gray-900 dark:text-white">
 						${envelopeAmount > 0
 							? envelopeAmount.toLocaleString('es-CO', { maximumFractionDigits: 0 })
 							: '0'}
@@ -660,14 +732,16 @@
 				</div>
 			</div>
 			{#if fixedBase > 0}
-				<div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
-					Base fija de la tienda: <span class="font-medium text-gray-700"
+				<div
+					class="mt-3 pt-3 border-t border-gray-100 dark:border-slate-600 text-xs text-gray-500 dark:text-gray-400"
+				>
+					Base fija de la tienda: <span class="font-medium text-gray-700 dark:text-gray-300"
 						>${fixedBase.toLocaleString('es-CO')}</span
 					>
 				</div>
 			{/if}
 			{#if envelopeAmount <= 0}
-				<p class="text-xs text-orange-600 mt-2 flex items-center gap-1">
+				<p class="text-xs text-orange-600 dark:text-orange-400 mt-2 flex items-center gap-1">
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 						><path
 							stroke-linecap="round"
@@ -682,45 +756,53 @@
 		</div>
 	</section>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6 mb-6">
-		<h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 mb-6 transition-colors"
+	>
+		<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
 			Resumen de diferencias
 		</h2>
-		<div class="overflow-hidden rounded-xl border border-gray-100">
+		<div class="overflow-hidden rounded-xl border border-gray-100 dark:border-slate-700">
 			<table class="w-full text-xs md:text-sm">
-				<thead class="bg-gray-50 border-b border-gray-100">
+				<thead
+					class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700"
+				>
 					<tr>
-						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+						<th
+							class="px-4 py-3 text-left font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
 							>Medio</th
 						>
-						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+						<th
+							class="px-4 py-3 text-left font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
 							>Sistema / POS</th
 						>
-						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+						<th
+							class="px-4 py-3 text-left font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
 							>Real</th
 						>
-						<th class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider"
+						<th
+							class="px-4 py-3 text-left font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
 							>Diferencia</th
 						>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="divide-y divide-gray-50/50 dark:divide-slate-700">
 					{#each [{ label: 'Datáfono', ch: dataphone }, { label: 'Rappi', ch: rappi }, { label: 'Justo', ch: justo }, { label: 'AppartaPay', ch: appartaPay }, { label: 'Nequi', ch: nequi }, { label: 'Bancolombia', ch: bancolombia }] as row}
 						{#key row.label}
-							<tr
-								class="divide-x divide-gray-50/50 hover:bg-dark-orange-50/10 transition-colors border-b border-gray-50 last:border-0"
-							>
-								<td class="px-4 py-3 font-medium text-gray-700">{row.label}</td>
-								<td class="px-4 py-3 text-gray-600"
+							<tr class="hover:bg-fresh-sky-50/10 dark:hover:bg-fresh-sky-900/10 transition-colors">
+								<td class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">{row.label}</td>
+								<td class="px-4 py-3 text-gray-600 dark:text-gray-400"
 									>${row.ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
 								>
-								<td class="px-4 py-3 text-gray-600"
+								<td class="px-4 py-3 text-gray-600 dark:text-gray-400"
 									>${row.ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
 								>
 								<td
 									class="px-4 py-3 font-bold"
 									class:text-emerald-600={row.ch.real - row.ch.system >= 0}
+									class:dark:text-emerald-400={row.ch.real - row.ch.system >= 0}
 									class:text-red-500={row.ch.real - row.ch.system < 0}
+									class:dark:text-red-400={row.ch.real - row.ch.system < 0}
 								>
 									${(row.ch.real - row.ch.system).toLocaleString('es-CO', {
 										maximumFractionDigits: 0
@@ -729,18 +811,20 @@
 							</tr>
 						{/key}
 					{/each}
-					<tr>
-						<td class="px-4 py-3 font-medium text-gray-700">Efectivo</td>
-						<td class="px-4 py-3 text-gray-600"
+					<tr class="bg-gray-50/30 dark:bg-slate-700/20">
+						<td class="px-4 py-3 font-medium text-gray-700 dark:text-gray-200">Efectivo</td>
+						<td class="px-4 py-3 text-gray-600 dark:text-gray-400"
 							>${efectivoPos.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
 						>
-						<td class="px-4 py-3 text-gray-600"
+						<td class="px-4 py-3 text-gray-600 dark:text-gray-400"
 							>${efectivoReal.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</td
 						>
 						<td
 							class="px-4 py-3 font-bold"
 							class:text-emerald-600={efectivoDiff >= 0}
+							class:dark:text-emerald-400={efectivoDiff >= 0}
 							class:text-red-500={efectivoDiff < 0}
+							class:dark:text-red-400={efectivoDiff < 0}
 						>
 							${efectivoDiff.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
 						</td>
@@ -749,14 +833,18 @@
 			</table>
 		</div>
 
-		<div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+		<div
+			class="mt-6 p-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-700 transition-colors"
+		>
 			<div class="flex items-center justify-between text-sm">
-				<span class="text-gray-600 font-medium">Porcentaje de efectivo (sobre venta total):</span>
-				<span class="font-bold text-gray-900 text-lg">
+				<span class="text-gray-600 dark:text-gray-400 font-medium"
+					>Porcentaje de efectivo (sobre venta total):</span
+				>
+				<span class="font-bold text-gray-900 dark:text-white text-lg">
 					{efectivoPorcentaje.toFixed(2)}%
 				</span>
 			</div>
-			<p class="text-xs text-gray-500 mt-1">
+			<p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
 				Venta Total: {totalVentas.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
 			</p>
 		</div>
@@ -767,7 +855,7 @@
 			type="button"
 			onclick={handleSubmit}
 			disabled={saving}
-			class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-linear-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:from-black hover:to-gray-900 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 w-full md:w-auto"
+			class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-fresh-sky-600 hover:bg-fresh-sky-700 text-white text-sm font-semibold shadow-lg hover:shadow-xl active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 w-full md:w-auto"
 		>
 			{#if saving}
 				<div
@@ -781,10 +869,12 @@
 	</div>
 
 	{#if saveOk}
-		<span class="text-xs font-medium text-emerald-700">Cierre guardado correctamente</span>
+		<span class="text-xs font-medium text-emerald-700 dark:text-emerald-400"
+			>Cierre guardado correctamente</span
+		>
 	{/if}
 	{#if saveError}
-		<span class="text-xs font-medium text-red-600">{saveError}</span>
+		<span class="text-xs font-medium text-red-600 dark:text-red-400">{saveError}</span>
 	{/if}
 </div>
 

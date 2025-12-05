@@ -67,21 +67,15 @@
 	<div class="flex items-center gap-1">
 		{#each pageNumbers() as page}
 			{#if page === '...'}
-				<span class="px-2 text-slate-400">...</span>
+				<span class="px-2 text-slate-400 dark:text-slate-500">...</span>
 			{:else}
 				<button
 					type="button"
 					onclick={() => goToPage(page as number)}
-					class="min-w-10 px-3 py-2 text-sm font-medium rounded-lg transition-colors"
-					class:bg-dark-orange-600={currentPage === page}
-					class:text-white={currentPage === page}
-					class:text-slate-700={currentPage !== page}
-					class:bg-white={currentPage !== page}
-					class:border={currentPage !== page}
-					class:border-slate-300={currentPage !== page}
-					class:hover:bg-dark-orange-50={currentPage !== page}
-					class:hover:text-dark-orange-700={currentPage !== page}
-					class:hover:border-dark-orange-200={currentPage !== page}
+					class="min-w-10 px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                    {currentPage === page
+						? 'bg-fresh-sky-600 text-white'
+						: 'bg-white text-slate-700 border border-slate-300 hover:bg-fresh-sky-50 hover:text-fresh-sky-700 hover:border-fresh-sky-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-fresh-sky-900/20 dark:hover:text-fresh-sky-400 dark:hover:border-fresh-sky-800'}"
 				>
 					{page}
 				</button>
@@ -94,7 +88,7 @@
 		type="button"
 		onclick={() => goToPage(currentPage + 1)}
 		disabled={currentPage === totalPages}
-		class="px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-dark-orange-700 hover:border-dark-orange-200"
+		class="px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-fresh-sky-700 dark:hover:text-fresh-sky-400 hover:border-fresh-sky-200 dark:hover:border-fresh-sky-800"
 	>
 		Siguiente →
 	</button>

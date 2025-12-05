@@ -130,18 +130,18 @@
 							{
 								data: stats.byCategory.map((c) => c.total),
 								backgroundColor: [
-									'rgba(249, 115, 22, 0.7)',
-									'rgba(251, 146, 60, 0.7)',
-									'rgba(253, 186, 116, 0.7)',
-									'rgba(254, 215, 170, 0.7)',
-									'rgba(255, 237, 213, 0.7)'
+									'rgba(31, 173, 224, 0.7)',
+									'rgba(75, 189, 231, 0.7)',
+									'rgba(120, 206, 237, 0.7)',
+									'rgba(165, 222, 243, 0.7)',
+									'rgba(210, 239, 249, 0.7)'
 								],
 								borderColor: [
-									'rgb(249, 115, 22)',
-									'rgb(251, 146, 60)',
-									'rgb(253, 186, 116)',
-									'rgb(254, 215, 170)',
-									'rgb(255, 237, 213)'
+									'rgb(31, 173, 224)',
+									'rgb(75, 189, 231)',
+									'rgb(120, 206, 237)',
+									'rgb(165, 222, 243)',
+									'rgb(210, 239, 249)'
 								],
 								borderWidth: 1,
 								hoverOffset: 4
@@ -157,14 +157,17 @@
 								labels: {
 									font: { family: "'Poppins', sans-serif", size: 11 },
 									usePointStyle: true,
-									boxWidth: 6
+									boxWidth: 6,
+									color: window.matchMedia('(prefers-color-scheme: dark)').matches
+										? '#e2e8f0'
+										: '#64748b' // Adaptive text color for legend
 								}
 							},
 							tooltip: {
-								backgroundColor: 'rgba(255, 255, 255, 0.95)',
-								titleColor: '#111827',
-								bodyColor: '#374151',
-								borderColor: '#e5e7eb',
+								backgroundColor: 'rgba(15, 23, 42, 0.9)', // Darker tooltip background
+								titleColor: '#e2e8f0',
+								bodyColor: '#e2e8f0',
+								borderColor: '#334155',
 								borderWidth: 1,
 								padding: 10,
 								callbacks: {
@@ -194,8 +197,8 @@
 							{
 								label: 'Gastos',
 								data: stats.byStore.map((s) => s.total),
-								backgroundColor: 'rgba(249, 115, 22, 0.6)',
-								borderColor: 'rgb(249, 115, 22)',
+								backgroundColor: 'rgba(31, 173, 224, 0.6)',
+								borderColor: 'rgb(31, 173, 224)',
 								borderWidth: 1,
 								borderRadius: 4
 							}
@@ -208,10 +211,10 @@
 						plugins: {
 							legend: { display: false },
 							tooltip: {
-								backgroundColor: 'rgba(255, 255, 255, 0.95)',
-								titleColor: '#111827',
-								bodyColor: '#374151',
-								borderColor: '#e5e7eb',
+								backgroundColor: 'rgba(15, 23, 42, 0.9)',
+								titleColor: '#e2e8f0',
+								bodyColor: '#e2e8f0',
+								borderColor: '#334155',
 								borderWidth: 1,
 								padding: 10,
 								callbacks: {
@@ -228,12 +231,22 @@
 						},
 						scales: {
 							x: {
-								grid: { color: '#f3f4f6' },
-								ticks: { font: { family: "'Poppins', sans-serif" } }
+								grid: { color: 'rgba(148, 163, 184, 0.1)' },
+								ticks: {
+									font: { family: "'Poppins', sans-serif" },
+									color: window.matchMedia('(prefers-color-scheme: dark)').matches
+										? '#94a3b8'
+										: '#64748b'
+								}
 							},
 							y: {
 								grid: { display: false },
-								ticks: { font: { family: "'Poppins', sans-serif" } }
+								ticks: {
+									font: { family: "'Poppins', sans-serif" },
+									color: window.matchMedia('(prefers-color-scheme: dark)').matches
+										? '#94a3b8'
+										: '#64748b'
+								}
 							}
 						}
 					}
@@ -245,7 +258,6 @@
 			// I'll keep it simple and match the new design which only had 2 charts.
 		}, 0);
 	};
-
 	/**
 	 * Handle file selection
 	 */
@@ -527,7 +539,7 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-		<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Gestión de Gastos</h1>
+		<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Gestión de Gastos</h1>
 		<div class="flex gap-2">
 			<!-- Buttons can go here if needed -->
 		</div>
@@ -535,11 +547,11 @@
 
 	<!-- Upload Section -->
 	<section
-		class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6 md:p-8 transition-all hover:shadow-soft-lg"
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-6 md:p-8 transition-colors"
 	>
 		<div class="max-w-xl mx-auto text-center">
 			<div
-				class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-dark-orange-50 text-dark-orange-600"
+				class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-fresh-sky-50 dark:bg-fresh-sky-900/30 text-fresh-sky-600 dark:text-fresh-sky-400"
 			>
 				<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
@@ -550,8 +562,8 @@
 					/>
 				</svg>
 			</div>
-			<h2 class="text-lg font-bold text-gray-900 mb-2">Cargar archivo de gastos</h2>
-			<p class="text-sm text-gray-500 mb-6">
+			<h2 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Cargar archivo de gastos</h2>
+			<p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
 				Sube tu archivo Excel o CSV para procesar los gastos.
 			</p>
 
@@ -562,30 +574,31 @@
 					accept=".xlsx, .xls, .csv"
 					onchange={handleFileSelect}
 					disabled={uploading}
-					class="block w-full text-sm text-gray-500
+					class="block w-full text-sm text-gray-500 dark:text-gray-400
 						file:mr-4 file:py-2.5 file:px-6
 						file:rounded-xl file:border-0
 						file:text-sm file:font-semibold
-						file:bg-dark-orange-50 file:text-dark-orange-700
-						hover:file:bg-dark-orange-100
+						file:bg-fresh-sky-50 file:text-fresh-sky-700
+						dark:file:bg-fresh-sky-900/30 dark:file:text-fresh-sky-400
+						hover:file:bg-fresh-sky-100 dark:hover:file:bg-fresh-sky-900/50
 						cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed
-						bg-gray-50 rounded-xl border border-gray-200 p-2 transition-colors group-hover:bg-gray-100"
+						bg-gray-50 dark:bg-slate-700 rounded-xl border border-gray-200 dark:border-slate-600 p-2 transition-colors"
 				/>
 			</div>
 
 			{#if uploading}
 				<div
-					class="mt-4 flex items-center justify-center gap-2 text-sm text-dark-orange-600 font-medium animate-pulse"
+					class="mt-4 flex items-center justify-center gap-2 text-sm text-fresh-sky-600 dark:text-fresh-sky-400 font-medium animate-pulse"
 				>
 					<div
-						class="w-4 h-4 border-2 border-dark-orange-600/30 border-t-dark-orange-600 rounded-full animate-spin"
+						class="w-4 h-4 border-2 border-fresh-sky-600/30 dark:border-fresh-sky-400/30 border-t-fresh-sky-600 dark:border-t-fresh-sky-400 rounded-full animate-spin"
 					></div>
 					Procesando archivo...
 				</div>
 			{/if}
 			{#if uploadError}
 				<div
-					class="mt-4 p-3 bg-red-50 text-red-700 text-sm rounded-xl border border-red-100 flex items-center gap-2"
+					class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm rounded-xl border border-red-100 dark:border-red-900/30 flex items-center gap-2"
 				>
 					<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 						><path
@@ -605,34 +618,37 @@
 	{#if showPreview && previewData.length > 0}
 		<section class="space-y-6">
 			<div class="flex items-center justify-between">
-				<h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-					<span class="w-2 h-2 rounded-full bg-dark-orange-500"></span>
+				<h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+					<span class="w-2 h-2 rounded-full bg-fresh-sky-500"></span>
 					Vista Previa
-					<span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium"
+					<span
+						class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-400 text-xs font-medium"
 						>{previewData.length} registros</span
 					>
 				</h3>
 				<div class="flex gap-3">
 					<button
 						onclick={cancelPreview}
-						class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+						class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
 					>
 						Cancelar
 					</button>
 					<button
 						onclick={confirmUpload}
-						class="px-5 py-2 rounded-xl bg-linear-to-r from-gray-900 to-gray-800 text-white text-sm font-semibold shadow-soft hover:shadow-soft-lg hover:from-black hover:to-gray-900 transition-all active:scale-95"
+						class="px-5 py-2 rounded-xl bg-gray-900 dark:bg-slate-700 text-white text-sm font-semibold shadow-soft hover:shadow-soft-lg hover:bg-gray-800 dark:hover:bg-slate-600 transition-all active:scale-95"
 					>
 						Confirmar Carga
 					</button>
 				</div>
 			</div>
 
-			<div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
+			<div
+				class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 overflow-hidden"
+			>
 				<div class="overflow-x-auto">
 					<table class="w-full text-sm text-left">
 						<thead
-							class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold"
+							class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold"
 						>
 							<tr>
 								{#each Object.keys(previewData[0]) as header}
@@ -640,11 +656,15 @@
 								{/each}
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-50">
+						<tbody class="divide-y divide-gray-5 dark:divide-gray-700">
 							{#each previewData.slice(0, 5) as row}
-								<tr class="hover:bg-dark-orange-50/30 transition-colors">
+								<tr
+									class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors"
+								>
 									{#each Object.values(row) as val}
-										<td class="px-6 py-4 text-gray-600 font-medium whitespace-nowrap">
+										<td
+											class="px-6 py-4 text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap"
+										>
 											{val}
 										</td>
 									{/each}
@@ -654,8 +674,10 @@
 					</table>
 				</div>
 				{#if previewData.length > 5}
-					<div class="bg-gray-50 px-6 py-3 border-t border-gray-100 text-center">
-						<span class="text-xs font-medium text-gray-500 italic"
+					<div
+						class="bg-gray-50 dark:bg-slate-700/50 px-6 py-3 border-t border-gray-100 dark:border-slate-700 text-center"
+					>
+						<span class="text-xs font-medium text-gray-500 dark:text-gray-400 italic"
 							>... y {previewData.length - 5} más</span
 						>
 					</div>
@@ -668,17 +690,24 @@
 	{#if !uploading && previewData.length === 0}
 		<div class="space-y-6 animate-fade-in">
 			<!-- Filters -->
-			<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 md:p-6">
-				<h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h3>
+			<section
+				class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
+			>
+				<h3
+					class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4"
+				>
+					Filtros
+				</h3>
 				<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
 					<div class="space-y-2">
-						<label for="filter-year" class="text-xs font-semibold text-gray-500 uppercase"
-							>Sede</label
+						<label
+							for="filter-year"
+							class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Sede</label
 						>
 						<select
 							id="filter-year"
 							bind:value={startDate}
-							class="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all cursor-pointer font-medium text-gray-700"
+							class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-white"
 						>
 							<option value="">Todas las sedes</option>
 							{#each stores as store}
@@ -689,10 +718,10 @@
 
 					<!-- Category Filter -->
 					<label class="flex flex-col gap-2">
-						<span class="text-sm font-semibold text-slate-700">Categoría</span>
+						<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Categoría</span>
 						<select
 							bind:value={selectedCategory}
-							class="h-10 md:h-9 rounded-lg border border-slate-200 px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+							class="h-10 md:h-9 rounded-lg border border-slate-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500"
 						>
 							<option value="">Todas las categorías</option>
 							{#each categories as category}
@@ -707,7 +736,7 @@
 			{#if loading}
 				<div class="flex items-center justify-center py-12">
 					<div
-						class="w-10 h-10 border-4 border-dark-orange-200 border-t-dark-orange-500 rounded-full animate-spin"
+						class="w-10 h-10 border-4 border-fresh-sky-200 border-t-fresh-sky-600 rounded-full animate-spin"
 					></div>
 				</div>
 			{:else if stats}
@@ -715,41 +744,49 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 					<!-- Total Gastos Card -->
 					<div
-						class="bg-linear-to-br from-white to-dark-orange-50/50 rounded-2xl shadow-soft border border-gray-100 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden group"
+						class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden group"
 					>
 						<div
-							class="absolute top-0 right-0 w-24 h-24 bg-dark-orange-100/50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"
+							class="absolute top-0 right-0 w-24 h-24 bg-fresh-sky-50 dark:bg-fresh-sky-900/20 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"
 						></div>
-						<h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 relative z-10">
+						<h4
+							class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 relative z-10"
+						>
 							Total Gastos
 						</h4>
-						<p class="text-2xl md:text-3xl font-extrabold text-gray-900 relative z-10">
+						<p
+							class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white relative z-10"
+						>
 							{new Intl.NumberFormat('es-CO', {
 								style: 'currency',
 								currency: 'COP',
 								maximumFractionDigits: 0
 							}).format(stats.totalAmount)}
 						</p>
-						<p class="text-xs text-dark-orange-600 mt-1 font-medium relative z-10">
+						<p
+							class="text-xs text-fresh-sky-600 dark:text-fresh-sky-400 mt-1 font-medium relative z-10"
+						>
 							{stats.totalExpenses} registros
 						</p>
 					</div>
 
-					<!-- Rubro Mayor Card (Simplified as logic for top rubro is inside complex stats) -->
+					<!-- Rubro Mayor Card -->
 					<div
-						class="bg-white rounded-2xl shadow-soft border border-gray-100 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden"
+						class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-5 hover:shadow-soft-lg transition-all relative overflow-hidden"
 					>
-						<h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+						<h4
+							class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2"
+						>
 							Rubro Principal
 						</h4>
-						<p class="text-lg font-bold text-gray-900 truncate">
+						<p class="text-lg font-bold text-gray-900 dark:text-white truncate">
 							{stats.byCategory && stats.byCategory.length > 0
 								? stats.byCategory[0].category
 								: 'N/A'}
 						</p>
-						<div class="w-full bg-gray-100 rounded-full h-1.5 mt-3">
+						<div class="w-full bg-gray-100 dark:bg-slate-700 rounded-full h-1.5 mt-3">
 							<div
-								class="bg-dark-orange-500 h-1.5 rounded-full"
+								class="bg-fresh-sky-500 h-1.5 rounded-full"
 								style="width: {stats.byCategory && stats.byCategory.length > 0
 									? Math.min((stats.byCategory[0].total / stats.totalAmount) * 100, 100)
 									: 0}%"
@@ -761,9 +798,13 @@
 				<!-- Charts -->
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 					<!-- Rubros Chart -->
-					<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6">
-						<h4 class="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2">
-							<span class="w-1.5 h-4 bg-dark-orange-500 rounded-full"></span>
+					<div
+						class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-6"
+					>
+						<h4
+							class="text-sm font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2"
+						>
+							<span class="w-1.5 h-4 bg-fresh-sky-500 rounded-full"></span>
 							Gastos por Rubro/Categoría
 						</h4>
 						<div class="h-64 flex items-center justify-center chart-container relative">
@@ -779,9 +820,13 @@
 					</div>
 
 					<!-- Tiendas Chart -->
-					<div class="bg-white rounded-2xl shadow-soft border border-gray-100 p-6">
-						<h4 class="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2">
-							<span class="w-1.5 h-4 bg-gray-800 rounded-full"></span>
+					<div
+						class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-6"
+					>
+						<h4
+							class="text-sm font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2"
+						>
+							<span class="w-1.5 h-4 bg-gray-800 dark:bg-gray-400 rounded-full"></span>
 							Gastos por Tienda
 						</h4>
 						<div class="h-64 flex items-center justify-center chart-container relative">

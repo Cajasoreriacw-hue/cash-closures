@@ -158,7 +158,7 @@
 </script>
 
 <div class="space-y-6">
-	<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Sobres generados</h1>
+	<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Sobres generados</h1>
 
 	{#if pageState.updateError}
 		<AlertAny color="red" dismissable class="mb-4">
@@ -176,15 +176,19 @@
 		</AlertAny>
 	{/if}
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-4 md:p-5">
-		<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h2>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-4 md:p-5 transition-colors"
+	>
+		<h2 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Filtros
+		</h2>
 		<div class="grid gap-4 md:grid-cols-4">
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Cajero</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Cajero</span>
 				<div class="relative">
 					<select
 						bind:value={filterCashier}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 					>
 						<option value="">Todos</option>
 						{#each cashierOptions as c}
@@ -192,7 +196,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -206,11 +210,11 @@
 				</div>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Tienda / sede</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tienda / sede</span>
 				<div class="relative">
 					<select
 						bind:value={filterStore}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 					>
 						<option value="">Todas</option>
 						{#each storeOptions as s}
@@ -218,7 +222,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -232,19 +236,19 @@
 				</div>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Desde</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Desde</span>
 				<input
 					type="date"
 					bind:value={filterFrom}
-					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Hasta</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Hasta</span>
 				<input
 					type="date"
 					bind:value={filterTo}
-					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all"
 				/>
 			</label>
 		</div>
@@ -258,30 +262,45 @@
 		<p class="text-sm text-slate-500">No hay sobres para los filtros seleccionados.</p>
 	{:else}
 		<!-- Desktop Table View -->
-		<div class="hidden md:block overflow-hidden rounded-2xl border border-gray-100 shadow-soft">
+		<div
+			class="hidden md:block overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft dark:shadow-none bg-white dark:bg-slate-800"
+		>
 			<table class="w-full text-sm">
 				<thead>
-					<tr class="bg-gray-50 border-b border-gray-100">
-						<th class="px-6 py-4 text-left font-semibold text-gray-700">Fecha</th>
-						<th class="px-6 py-4 text-left font-semibold text-gray-700">Cajero</th>
-						<th class="px-6 py-4 text-left font-semibold text-gray-700">Tienda</th>
-						<th class="px-6 py-4 text-left font-semibold text-gray-700">Valor sobre</th>
-						<th class="px-6 py-4 text-left font-semibold text-gray-700">Estado</th>
+					<tr
+						class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700"
+					>
+						<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300">Fecha</th
+						>
+						<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300"
+							>Cajero</th
+						>
+						<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300"
+							>Tienda</th
+						>
+						<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300"
+							>Valor sobre</th
+						>
+						<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-300"
+							>Estado</th
+						>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100 bg-white">
+				<tbody class="divide-y divide-gray-100 dark:divide-slate-700">
 					{#each paginatedSobres as s}
-						<tr class="hover:bg-dark-orange-50/30 transition-colors duration-150">
-							<td class="px-6 py-4 text-gray-600">{s.date}</td>
-							<td class="px-6 py-4 text-gray-600">{s.cashier}</td>
+						<tr
+							class="hover:bg-fresh-sky-50/10 dark:hover:bg-fresh-sky-900/10 transition-colors duration-150"
+						>
+							<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{s.date}</td>
+							<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{s.cashier}</td>
 							<td class="px-6 py-4">
 								<span
-									class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+									class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200"
 								>
 									{s.store}
 								</span>
 							</td>
-							<td class="px-6 py-4 font-bold text-dark-orange-600">
+							<td class="px-6 py-4 font-bold text-fresh-sky-600 dark:text-fresh-sky-400">
 								{s.sinSobre
 									? '—'
 									: `$${s.valorSobre?.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`}
@@ -291,7 +310,7 @@
 									<select
 										value={s.status}
 										onchange={(e) => updateStatus(s.id, (e.target as HTMLSelectElement).value)}
-										class="h-9 rounded-lg border border-gray-200 px-3 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all cursor-pointer hover:border-dark-orange-300"
+										class="h-9 rounded-lg border border-gray-200 dark:border-slate-600 px-3 text-xs bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all cursor-pointer hover:border-fresh-sky-300 dark:hover:border-fresh-sky-500"
 									>
 										{#each statusOptions as opt}
 											<option value={opt}>{opt}</option>
@@ -308,17 +327,27 @@
 		<!-- Mobile Card View -->
 		<div class="md:hidden space-y-4">
 			{#each paginatedSobres as s}
-				<div class="bg-white rounded-2xl border border-gray-100 shadow-soft overflow-hidden">
+				<div
+					class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft dark:shadow-none overflow-hidden transition-colors"
+				>
 					<div class="p-5 space-y-4">
 						<!-- Header -->
 						<div class="flex items-start justify-between">
 							<div>
-								<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Fecha</p>
-								<p class="text-base font-bold text-gray-900">{s.date}</p>
+								<p
+									class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+								>
+									Fecha
+								</p>
+								<p class="text-base font-bold text-gray-900 dark:text-white">{s.date}</p>
 							</div>
 							<div class="text-right">
-								<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Valor</p>
-								<p class="text-base font-bold text-dark-orange-600">
+								<p
+									class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+								>
+									Valor
+								</p>
+								<p class="text-base font-bold text-fresh-sky-600 dark:text-fresh-sky-400">
 									{s.sinSobre
 										? 'Sin sobre'
 										: `$${s.valorSobre?.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`}
@@ -327,15 +356,23 @@
 						</div>
 
 						<!-- Details -->
-						<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+						<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-slate-700">
 							<div>
-								<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Cajero</p>
-								<p class="text-sm font-medium text-gray-900">{s.cashier}</p>
+								<p
+									class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+								>
+									Cajero
+								</p>
+								<p class="text-sm font-medium text-gray-900 dark:text-white">{s.cashier}</p>
 							</div>
 							<div>
-								<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tienda</p>
+								<p
+									class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+								>
+									Tienda
+								</p>
 								<span
-									class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mt-1"
+									class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200 mt-1"
 								>
 									{s.store}
 								</span>
@@ -343,15 +380,16 @@
 						</div>
 
 						<!-- Status Selector -->
-						<div class="pt-4 border-t border-gray-100">
+						<div class="pt-4 border-t border-gray-100 dark:border-slate-700">
 							<label class="flex flex-col gap-2">
-								<span class="text-xs font-medium text-gray-700 uppercase tracking-wide"
+								<span
+									class="text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wide"
 									>Estado del sobre</span
 								>
 								<select
 									value={s.status}
 									onchange={(e) => updateStatus(s.id, (e.target as HTMLSelectElement).value)}
-									class="h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all font-medium text-gray-700"
+									class="h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium"
 								>
 									{#each statusOptions as opt}
 										<option value={opt}>{opt}</option>
@@ -373,7 +411,7 @@
 	<button
 		type="button"
 		onclick={loadSobres}
-		class="mt-6 w-full md:w-auto px-6 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 shadow-soft hover:shadow-soft-lg transition-all active:scale-95"
+		class="mt-6 w-full md:w-auto px-6 py-3 rounded-xl bg-fresh-sky-600 hover:bg-fresh-sky-700 text-white text-sm font-semibold shadow-soft hover:shadow-soft-lg transition-all active:scale-95"
 	>
 		↻ Recargar datos
 	</button>

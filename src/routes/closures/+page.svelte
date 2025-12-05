@@ -140,32 +140,17 @@
 			// Transform data
 			closures = (data || []).map((c: any) => {
 				const channels = c.cash_closure_channels || [];
-				const dataphone = channels.find((ch: any) => ch.channel_name === 'dataphone') || {
-					system_amount: 0,
-					real_amount: 0
+				const getChannel = (name: string) => {
+					const ch = channels.find((ch: any) => ch.channel_name === name);
+					return ch ? { system: ch.system_amount, real: ch.real_amount } : { system: 0, real: 0 };
 				};
-				const rappi = channels.find((ch: any) => ch.channel_name === 'rappi') || {
-					system_amount: 0,
-					real_amount: 0
-				};
-				const justo = channels.find((ch: any) => ch.channel_name === 'justo') || {
-					system_amount: 0,
-					real_amount: 0
-				};
-				const appartaPay = channels.find((ch: any) => ch.channel_name === 'apparta_pay') || {
-					system_amount: 0,
-					real_amount: 0
-				};
-				const nequi = channels.find((ch: any) => ch.channel_name === 'transferencia_nequi') || {
-					system_amount: 0,
-					real_amount: 0
-				};
-				const bancolombia = channels.find(
-					(ch: any) => ch.channel_name === 'transferencia_bancolombia'
-				) || {
-					system_amount: 0,
-					real_amount: 0
-				};
+
+				const dataphone = getChannel('dataphone');
+				const rappi = getChannel('rappi');
+				const justo = getChannel('justo');
+				const appartaPay = getChannel('apparta_pay');
+				const nequi = getChannel('transferencia_nequi');
+				const bancolombia = getChannel('transferencia_bancolombia');
 
 				return {
 					id: c.id,
@@ -174,24 +159,12 @@
 					cashier: c.cashiers?.name || '',
 					store: c.stores?.name || '',
 					channels: {
-						dataphone: {
-							name: 'Datáfono',
-							system: dataphone.system_amount,
-							real: dataphone.real_amount
-						},
-						rappi: { name: 'Rappi', system: rappi.system_amount, real: rappi.real_amount },
-						justo: { name: 'Justo', system: justo.system_amount, real: justo.real_amount },
-						appartaPay: {
-							name: 'AppartaPay',
-							system: appartaPay.system_amount,
-							real: appartaPay.real_amount
-						},
-						nequi: { name: 'Nequi', system: nequi.system_amount, real: nequi.real_amount },
-						bancolombia: {
-							name: 'Bancolombia',
-							system: bancolombia.system_amount,
-							real: bancolombia.real_amount
-						}
+						dataphone: { name: 'Datáfono', ...dataphone },
+						rappi: { name: 'Rappi', ...rappi },
+						justo: { name: 'Justo', ...justo },
+						appartaPay: { name: 'AppartaPay', ...appartaPay },
+						nequi: { name: 'Nequi', ...nequi },
+						bancolombia: { name: 'Bancolombia', ...bancolombia }
 					},
 					efectivo: {
 						base: c.ef_base,
@@ -214,7 +187,6 @@
 			loading = false;
 		}
 	};
-
 	const inDateRange = (dateStr: string) => {
 		if (!filterFrom && !filterTo) return true;
 		const d = new Date(dateStr).toISOString().slice(0, 10);
@@ -372,17 +344,23 @@
 </script>
 
 <div class="space-y-6">
-	<h1 class="text-2xl md:text-3xl font-bold text-gray-900">Cierres de caja registrados</h1>
+	<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+		Cierres de caja registrados
+	</h1>
 
-	<section class="bg-white rounded-2xl shadow-soft border border-gray-100 p-4 md:p-5">
-		<h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Filtros</h2>
+	<section
+		class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 p-4 md:p-5 transition-colors"
+	>
+		<h2 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+			Filtros
+		</h2>
 		<div class="grid gap-4 md:grid-cols-4">
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Cajero</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Cajero</span>
 				<div class="relative">
 					<select
 						bind:value={filterCashier}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 					>
 						<option value="">Todos</option>
 						{#each cashierOptions as c}
@@ -390,7 +368,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -404,11 +382,11 @@
 				</div>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Tienda / sede</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tienda / sede</span>
 				<div class="relative">
 					<select
 						bind:value={filterStore}
-						class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all appearance-none"
+						class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all appearance-none"
 					>
 						<option value="">Todas</option>
 						{#each storeOptions as s}
@@ -416,7 +394,7 @@
 						{/each}
 					</select>
 					<div
-						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500"
+						class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
 					>
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -430,19 +408,19 @@
 				</div>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Desde</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Desde</span>
 				<input
 					type="date"
 					bind:value={filterFrom}
-					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all"
 				/>
 			</label>
 			<label class="flex flex-col gap-2">
-				<span class="text-sm font-medium text-gray-700">Hasta</span>
+				<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Hasta</span>
 				<input
 					type="date"
 					bind:value={filterTo}
-					class="w-full h-11 rounded-xl border border-gray-200 px-4 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-dark-orange-500/20 focus:border-dark-orange-500 transition-all"
+					class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 px-4 text-sm bg-white dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all"
 				/>
 			</label>
 		</div>
@@ -450,37 +428,47 @@
 </div>
 
 {#if loading}
-	<p class="text-sm text-slate-500">Cargando cierres...</p>
+	<p class="text-sm text-slate-500 dark:text-slate-400">Cargando cierres...</p>
 {:else if error}
-	<p class="text-sm text-red-600">{error}</p>
+	<p class="text-sm text-red-600 dark:text-red-400">{error}</p>
 {:else if !filteredClosures.length}
-	<p class="text-sm text-slate-500">No hay cierres para los filtros seleccionados.</p>
+	<p class="text-sm text-slate-500 dark:text-slate-400">
+		No hay cierres para los filtros seleccionados.
+	</p>
 {:else}
 	<!-- Desktop Table View -->
-	<div class="hidden md:block overflow-hidden rounded-2xl border border-gray-100 shadow-soft">
+	<div
+		class="hidden md:block overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft dark:shadow-none bg-white dark:bg-slate-800"
+	>
 		<table class="w-full text-sm">
 			<thead>
-				<tr class="bg-gray-50 border-b border-gray-100">
-					<th class="px-6 py-4 text-left font-semibold text-gray-700">Fecha</th>
-					<th class="px-6 py-4 text-left font-semibold text-gray-700">Cajero</th>
-					<th class="px-6 py-4 text-left font-semibold text-gray-700">Tienda</th>
-					<th class="px-6 py-4 text-left font-semibold text-gray-700">Venta Total</th>
-					<th class="px-6 py-4 text-center font-semibold text-gray-700">Acciones</th>
+				<tr class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-100 dark:border-slate-700">
+					<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-200">Fecha</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-200">Cajero</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-200">Tienda</th>
+					<th class="px-6 py-4 text-left font-semibold text-gray-700 dark:text-gray-200"
+						>Venta Total</th
+					>
+					<th class="px-6 py-4 text-center font-semibold text-gray-700 dark:text-gray-200"
+						>Acciones</th
+					>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100 bg-white">
+			<tbody class="divide-y divide-gray-100 dark:divide-slate-700 bg-white dark:bg-slate-800">
 				{#each paginatedClosures as c}
-					<tr class="hover:bg-dark-orange-50/30 transition-colors duration-150">
-						<td class="px-6 py-4 text-gray-600">{c.date}</td>
-						<td class="px-6 py-4 text-gray-600">{c.cashier}</td>
+					<tr
+						class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors duration-150"
+					>
+						<td class="px-6 py-4 text-gray-600 dark:text-gray-300">{c.date}</td>
+						<td class="px-6 py-4 text-gray-600 dark:text-gray-300">{c.cashier}</td>
 						<td class="px-6 py-4">
 							<span
-								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200"
 							>
 								{c.store}
 							</span>
 						</td>
-						<td class="px-6 py-4 font-bold text-dark-orange-600">
+						<td class="px-6 py-4 font-bold text-fresh-sky-600 dark:text-fresh-sky-400">
 							${(
 								c.efectivo.ventas +
 								c.channels.dataphone.real +
@@ -495,7 +483,7 @@
 							<button
 								type="button"
 								onclick={() => viewClosure(c)}
-								class="px-4 py-2 text-xs font-medium text-dark-orange-700 bg-dark-orange-100 hover:bg-dark-orange-200 rounded-lg transition-colors"
+								class="px-4 py-2 text-xs font-medium text-fresh-sky-700 dark:text-fresh-sky-300 bg-fresh-sky-100 dark:bg-fresh-sky-900/30 hover:bg-fresh-sky-200 dark:hover:bg-fresh-sky-900/50 rounded-lg transition-colors"
 							>
 								Ver cierre
 							</button>
@@ -509,17 +497,27 @@
 	<!-- Mobile Card View -->
 	<div class="md:hidden space-y-4">
 		{#each paginatedClosures as c}
-			<div class="bg-white rounded-2xl border border-gray-100 shadow-soft overflow-hidden">
+			<div
+				class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-soft dark:shadow-none overflow-hidden"
+			>
 				<div class="p-5 space-y-4">
 					<!-- Header -->
 					<div class="flex items-start justify-between">
 						<div>
-							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Fecha</p>
-							<p class="text-base font-bold text-gray-900">{c.date}</p>
+							<p
+								class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+							>
+								Fecha
+							</p>
+							<p class="text-base font-bold text-gray-900 dark:text-white">{c.date}</p>
 						</div>
 						<div class="text-right">
-							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Venta Total</p>
-							<p class="text-base font-bold text-dark-orange-600">
+							<p
+								class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+							>
+								Venta Total
+							</p>
+							<p class="text-base font-bold text-fresh-sky-600 dark:text-fresh-sky-400">
 								${(
 									c.efectivo.ventas +
 									c.channels.dataphone.real +
@@ -534,15 +532,23 @@
 					</div>
 
 					<!-- Details -->
-					<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+					<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100 dark:border-slate-700">
 						<div>
-							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Cajero</p>
-							<p class="text-sm font-medium text-gray-900">{c.cashier}</p>
+							<p
+								class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+							>
+								Cajero
+							</p>
+							<p class="text-sm font-medium text-gray-900 dark:text-white">{c.cashier}</p>
 						</div>
 						<div>
-							<p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tienda</p>
+							<p
+								class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+							>
+								Tienda
+							</p>
 							<span
-								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 mt-1"
+								class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200 mt-1"
 							>
 								{c.store}
 							</span>
@@ -553,7 +559,7 @@
 					<button
 						type="button"
 						onclick={() => viewClosure(c)}
-						class="w-full px-4 py-3 text-sm font-semibold bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-colors"
+						class="w-full px-4 py-3 text-sm font-semibold bg-gray-50 dark:bg-slate-700/50 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 active:bg-gray-200 transition-colors"
 					>
 						Ver detalles del cierre
 					</button>
@@ -571,7 +577,7 @@
 <button
 	type="button"
 	onclick={loadClosures}
-	class="mt-6 inline-flex items-center px-4 py-2 rounded-xl bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 shadow-soft hover:shadow-soft-lg transition-all"
+	class="mt-6 inline-flex items-center px-4 py-2 rounded-xl bg-gray-900 dark:bg-slate-700 text-white text-sm font-medium hover:bg-gray-800 dark:hover:bg-slate-600 shadow-soft hover:shadow-soft-lg transition-all"
 >
 	↻ Recargar datos
 </button>
@@ -587,7 +593,7 @@
 		aria-label="Close modal"
 	>
 		<div
-			class="bg-white rounded-2xl shadow-soft-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+			class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
 			onclick={(e) => e.stopPropagation()}
 			onkeydown={(e) => e.stopPropagation()}
 			role="dialog"
@@ -596,9 +602,9 @@
 			tabindex="-1"
 		>
 			<div
-				class="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10"
+				class="sticky top-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-b border-gray-100 dark:border-slate-700 px-6 py-4 flex justify-between items-center z-10"
 			>
-				<h2 class="text-lg font-semibold">
+				<h2 class="text-lg font-semibold text-gray-900 dark:text-white">
 					{editMode ? 'Editar Cierre' : 'Detalle del Cierre'}
 				</h2>
 				<div class="flex items-center gap-2">
@@ -606,7 +612,7 @@
 						<button
 							type="button"
 							onclick={enableEditMode}
-							class="px-4 py-2 text-sm bg-linear-to-r from-dark-orange-500 to-dark-orange-600 text-white font-medium rounded-xl hover:shadow-soft-lg active:scale-95 transition-all"
+							class="px-4 py-2 text-sm bg-fresh-sky-600 text-white font-medium rounded-xl hover:bg-fresh-sky-700 shadow-soft hover:shadow-soft-lg active:scale-95 transition-all"
 						>
 							✏️ Editar
 						</button>
@@ -623,7 +629,7 @@
 							type="button"
 							onclick={() => (editMode = false)}
 							disabled={saving}
-							class="px-4 py-2 text-sm bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all disabled:opacity-50"
+							class="px-4 py-2 text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-slate-600 transition-all disabled:opacity-50"
 						>
 							❌ Cancelar
 						</button>
@@ -631,7 +637,8 @@
 					<button
 						type="button"
 						onclick={closeModal}
-						class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button
+						class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-2xl transition-colors"
+						>&times;</button
 					>
 				</div>
 			</div>
@@ -639,7 +646,7 @@
 			<div class="p-6 space-y-4">
 				<!-- Success/Error Alerts -->
 				{#if saveSuccess}
-					<AlertAny color="green" dismissable>
+					<AlertAny color="green" dismissable class="mb-4">
 						<svelte:fragment slot="icon">
 							<svg
 								class="w-5 h-5"
@@ -660,7 +667,7 @@
 				{/if}
 
 				{#if saveError}
-					<AlertAny color="red" dismissable>
+					<AlertAny color="red" dismissable class="mb-4">
 						<svelte:fragment slot="icon">
 							<svg
 								class="w-5 h-5"
@@ -682,83 +689,96 @@
 
 				<!-- Datos Generales -->
 				<section>
-					<h3 class="text-sm font-semibold text-slate-700 mb-2">Datos Generales</h3>
+					<h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+						Datos Generales
+					</h3>
 					<div class="grid grid-cols-2 gap-3 text-sm">
 						<div>
-							<span class="text-slate-600">Fecha:</span>
+							<span class="text-slate-600 dark:text-slate-400">Fecha:</span>
 							{#if editMode}
 								<input
 									type="date"
 									bind:value={selectedClosure.date}
-									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+									class="ml-2 px-2 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium">{selectedClosure.date}</span>
+								<span class="font-medium text-gray-900 dark:text-white">{selectedClosure.date}</span
+								>
 							{/if}
 						</div>
 						<div>
-							<span class="text-slate-600">Cajero:</span>
+							<span class="text-slate-600 dark:text-slate-400">Cajero:</span>
 							{#if editMode}
 								<select
 									bind:value={selectedClosure.cashier}
-									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+									class="ml-2 px-2 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								>
 									{#each cashierOptions as cashier}
 										<option value={cashier}>{cashier}</option>
 									{/each}
 								</select>
 							{:else}
-								<span class="font-medium">{selectedClosure.cashier}</span>
+								<span class="font-medium text-gray-900 dark:text-white"
+									>{selectedClosure.cashier}</span
+								>
 							{/if}
 						</div>
 						<div>
-							<span class="text-slate-600">Tienda:</span>
+							<span class="text-slate-600 dark:text-slate-400">Tienda:</span>
 							{#if editMode}
 								<select
 									bind:value={selectedClosure.store}
-									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm"
+									class="ml-2 px-2 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								>
 									{#each storeOptions as store}
 										<option value={store.name}>{store.name}</option>
 									{/each}
 								</select>
 							{:else}
-								<span class="font-medium">{selectedClosure.store}</span>
+								<span class="font-medium text-gray-900 dark:text-white"
+									>{selectedClosure.store}</span
+								>
 							{/if}
 						</div>
 						<div>
-							<span class="text-slate-600">Nota:</span>
+							<span class="text-slate-600 dark:text-slate-400">Nota:</span>
 							{#if editMode}
 								<input
 									type="text"
 									bind:value={selectedClosure.note}
-									class="ml-2 px-2 py-1 border border-slate-300 rounded text-sm w-full"
+									class="ml-2 px-2 py-1 border border-slate-300 dark:border-slate-600 rounded text-sm w-full bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium">{selectedClosure.note || 'N/A'}</span>
+								<span class="font-medium text-gray-900 dark:text-white"
+									>{selectedClosure.note || 'N/A'}</span
+								>
 							{/if}
 						</div>
 					</div>
 				</section>
 
 				<!-- Venta Total -->
-				<!-- Venta Total -->
 				<section>
-					<h3 class="text-sm font-semibold text-slate-700 mb-2">Venta Total</h3>
-					<div class="p-3 bg-blue-50 border border-blue-200 rounded">
+					<h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Venta Total</h3>
+					<div
+						class="p-3 bg-fresh-sky-50 dark:bg-fresh-sky-900/20 border border-fresh-sky-200 dark:border-fresh-sky-800 rounded-xl"
+					>
 						<div class="flex justify-between items-center text-sm">
 							<div>
-								<span class="text-slate-600">Total De Venta Del Día:</span>
-								<span class="ml-2 text-xl font-bold text-blue-700">
+								<span class="text-slate-600 dark:text-slate-400">Total De Venta Del Día:</span>
+								<span class="ml-2 text-xl font-bold text-fresh-sky-700 dark:text-fresh-sky-400">
 									{selectedClosureTotalSales.toLocaleString('es-CO', {
 										style: 'currency',
-										currency: 'COP'
+										currency: 'COP',
+										maximumFractionDigits: 0
 									})}
 								</span>
 							</div>
 							<div class="text-right">
-								<span class="text-slate-600 block text-xs">Porcentaje Efectivo</span>
-								<span class="text-lg font-bold text-slate-700">
+								<span class="text-slate-600 dark:text-slate-400 block text-xs"
+									>Porcentaje Efectivo</span
+								>
+								<span class="text-lg font-bold text-slate-700 dark:text-slate-200">
 									{selectedClosureCashPercentage.toFixed(2)}%
 								</span>
 							</div>
@@ -768,198 +788,161 @@
 
 				<!-- Medios Electrónicos -->
 				<section>
-					<h3 class="text-sm font-semibold text-slate-700 mb-2">Medios Electrónicos</h3>
-					<table class="w-full text-xs border border-slate-200 rounded">
-						<thead>
-							<tr class="bg-slate-50">
-								<th class="px-2 py-1">Medio</th>
-								<th class="px-2 py-1">Sistema</th>
-								<th class="px-2 py-1">Real</th>
-								<th class="px-2 py-1">Diferencia</th>
-							</tr>
-						</thead>
-						<tbody>
-							{#each [selectedClosure.channels.dataphone, selectedClosure.channels.rappi, selectedClosure.channels.justo, selectedClosure.channels.appartaPay, selectedClosure.channels.nequi, selectedClosure.channels.bancolombia] as ch}
-								<tr>
-									<td class="px-2 py-1">{ch.name}</td>
-									<td class="px-2 py-1">
-										{#if editMode}
-											<input
-												type="number"
-												bind:value={ch.system}
-												class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
-											/>
-										{:else}
-											${ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-										{/if}
-									</td>
-									<td class="px-2 py-1">
-										{#if editMode}
-											<input
-												type="number"
-												bind:value={ch.real}
-												class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
-											/>
-										{:else}
-											${ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-										{/if}
-									</td>
-									<td
-										class="px-2 py-1 font-semibold"
-										class:text-emerald-700={ch.real - ch.system >= 0}
-										class:text-red-700={ch.real - ch.system < 0}
+					<h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+						Medios Electrónicos
+					</h3>
+					<div class="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+						<table class="w-full text-xs">
+							<thead>
+								<tr class="bg-slate-50 dark:bg-slate-700/50">
+									<th class="px-3 py-2 text-left text-slate-600 dark:text-slate-300 font-semibold"
+										>Medio</th
 									>
-										${(ch.real - ch.system).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
-									</td>
+									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+										>Sistema</th
+									>
+									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+										>Real</th
+									>
+									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+										>Diferencia</th
+									>
 								</tr>
-							{/each}
-						</tbody>
-					</table>
+							</thead>
+							<tbody
+								class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-800"
+							>
+								{#each [selectedClosure.channels.dataphone, selectedClosure.channels.rappi, selectedClosure.channels.justo, selectedClosure.channels.appartaPay, selectedClosure.channels.nequi, selectedClosure.channels.bancolombia] as ch}
+									<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+										<td class="px-3 py-2 font-medium text-slate-700 dark:text-slate-200"
+											>{ch.name}</td
+										>
+										<td class="px-3 py-2 text-right">
+											{#if editMode}
+												<input
+													type="number"
+													bind:value={ch.system}
+													class="w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
+												/>
+											{:else}
+												${ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+											{/if}
+										</td>
+										<td class="px-3 py-2 text-right">
+											{#if editMode}
+												<input
+													type="number"
+													bind:value={ch.real}
+													class="w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
+												/>
+											{:else}
+												${ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+											{/if}
+										</td>
+										<td
+											class="px-3 py-2 text-right font-medium"
+											class:text-red-500={ch.real - ch.system !== 0}
+											class:text-green-500={ch.real - ch.system === 0}
+										>
+											${(ch.real - ch.system).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+										</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
 				</section>
 
 				<!-- Efectivo -->
 				<section>
-					<h3 class="text-sm font-semibold text-slate-700 mb-2">Efectivo</h3>
-					<div class="grid grid-cols-2 gap-2 text-xs">
+					<h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Efectivo</h3>
+					<div
+						class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-100 dark:border-slate-700"
+					>
+						<!-- Base -->
 						<div>
-							<span class="text-slate-600">Base:</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Base:</p>
 							{#if editMode}
 								<input
 									type="number"
 									bind:value={selectedClosure.efectivo.base}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
+									class="w-full px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.base.toLocaleString('es-CO', {
+								<p class="font-semibold text-slate-800 dark:text-white">
+									${selectedClosure.efectivo.base.toLocaleString('es-CO', {
 										maximumFractionDigits: 0
-									})}</span
-								>
+									})}
+								</p>
 							{/if}
 						</div>
+						<!-- Ventas -->
 						<div>
-							<span class="text-slate-600">Ventas:</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Ventas (Efec):</p>
 							{#if editMode}
 								<input
 									type="number"
 									bind:value={selectedClosure.efectivo.ventas}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
+									class="w-full px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.ventas.toLocaleString('es-CO', {
+								<p class="font-semibold text-slate-800 dark:text-white">
+									${selectedClosure.efectivo.ventas.toLocaleString('es-CO', {
 										maximumFractionDigits: 0
-									})}</span
-								>
+									})}
+								</p>
 							{/if}
 						</div>
+						<!-- Gastos -->
 						<div>
-							<span class="text-slate-600">Gastos:</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Gastos:</p>
 							{#if editMode}
 								<input
 									type="number"
 									bind:value={selectedClosure.efectivo.gastos}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
+									class="w-full px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.gastos.toLocaleString('es-CO', {
+								<p class="font-semibold text-red-600 dark:text-red-400">
+									${selectedClosure.efectivo.gastos.toLocaleString('es-CO', {
 										maximumFractionDigits: 0
-									})}</span
-								>
+									})}
+								</p>
 							{/if}
 						</div>
+						<!-- Real -->
 						<div>
-							<span class="text-slate-600">Ingresos:</span>
-							{#if editMode}
-								<input
-									type="number"
-									bind:value={selectedClosure.efectivo.ingresos}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
-								/>
-							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.ingresos.toLocaleString('es-CO', {
-										maximumFractionDigits: 0
-									})}</span
-								>
-							{/if}
-						</div>
-						<div>
-							<span class="text-slate-600">Egresos:</span>
-							{#if editMode}
-								<input
-									type="number"
-									bind:value={selectedClosure.efectivo.egresos}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
-								/>
-							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.egresos.toLocaleString('es-CO', {
-										maximumFractionDigits: 0
-									})}</span
-								>
-							{/if}
-						</div>
-						<div>
-							<span class="text-slate-600">Real:</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Total Real:</p>
 							{#if editMode}
 								<input
 									type="number"
 									bind:value={selectedClosure.efectivo.real}
-									class="w-full px-1 py-0.5 border border-slate-300 rounded text-xs"
+									class="w-full px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
 								/>
 							{:else}
-								<span class="font-medium"
-									>${selectedClosure.efectivo.real.toLocaleString('es-CO', {
+								<p class="font-bold text-lg text-slate-900 dark:text-white">
+									${selectedClosure.efectivo.real.toLocaleString('es-CO', {
 										maximumFractionDigits: 0
-									})}</span
-								>
+									})}
+								</p>
 							{/if}
 						</div>
-						<div class="col-span-2 pt-2 border-t">
-							<span class="text-slate-600">POS (Calculado):</span>
-							<span class="font-semibold"
-								>${(
-									selectedClosure.efectivo.base +
-									selectedClosure.efectivo.ventas +
-									selectedClosure.efectivo.ingresos -
-									selectedClosure.efectivo.gastos -
-									selectedClosure.efectivo.egresos
-								).toLocaleString('es-CO', {
-									maximumFractionDigits: 0
-								})}</span
-							>
-						</div>
+						<!-- Diferencia -->
 						<div class="col-span-2">
-							<span class="text-slate-600">Diferencia:</span>
-							<span
-								class="font-semibold"
-								class:text-emerald-700={selectedClosure.efectivo.real -
-									(selectedClosure.efectivo.base +
-										selectedClosure.efectivo.ventas +
-										selectedClosure.efectivo.ingresos -
-										selectedClosure.efectivo.gastos -
-										selectedClosure.efectivo.egresos) >=
-									0}
-								class:text-red-700={selectedClosure.efectivo.real -
-									(selectedClosure.efectivo.base +
-										selectedClosure.efectivo.ventas +
-										selectedClosure.efectivo.ingresos -
-										selectedClosure.efectivo.gastos -
-										selectedClosure.efectivo.egresos) <
-									0}
-								>${(
-									selectedClosure.efectivo.real -
-									(selectedClosure.efectivo.base +
-										selectedClosure.efectivo.ventas +
-										selectedClosure.efectivo.ingresos -
-										selectedClosure.efectivo.gastos -
-										selectedClosure.efectivo.egresos)
-								).toLocaleString('es-CO', {
-									maximumFractionDigits: 0
-								})}</span
+							<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+								Diferencia Total:
+							</p>
+							<p
+								class="font-bold text-lg"
+								class:text-green-600={selectedClosure.efectivo.diferencia === 0}
+								class:dark:text-green-400={selectedClosure.efectivo.diferencia === 0}
+								class:text-red-600={selectedClosure.efectivo.diferencia !== 0}
+								class:dark:text-red-400={selectedClosure.efectivo.diferencia !== 0}
 							>
+								${selectedClosure.efectivo.diferencia.toLocaleString('es-CO', {
+									maximumFractionDigits: 0
+								})}
+							</p>
 						</div>
 					</div>
 				</section>
