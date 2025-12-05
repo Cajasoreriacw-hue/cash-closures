@@ -58,11 +58,13 @@ Match en BD: "GRAN ESTACIÓN" ✓ (100% confianza)
 Tu archivo Excel debe tener estas columnas (pueden estar en cualquier orden):
 - **Fecha Gasto**: Formato DD/MM/YYYY o YYYY-MM-DD
 - **Negocio**: Nombre completo con prefijos (se limpiarán automáticamente)
-- **Proveedor**: Nombre del proveedor
+- **Nombre Comercial**: Nombre del proveedor
 - **Tipo de gasto**: Categoría del gasto
 - **Total**: Monto total
 - **Impuestos**: Monto de impuestos
-- **Número de Factura** (opcional): Para evitar duplicados
+- **N° Factura** (opcional): Para evitar duplicados
+
+Otras columnas como "Fecha Creación", "Nº Recibido", etc., serán ignoradas pero no causarán error.
 
 ### 2. Importar el Archivo
 

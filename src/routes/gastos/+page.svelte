@@ -566,8 +566,8 @@
 						disabled:opacity-50 disabled:cursor-not-allowed"
 				/>
 				<p class="mt-1 text-xs text-slate-500">
-					El archivo debe contener las columnas: Fecha Gasto, Negocio, Proveedor, Tipo de gasto,
-					Total, Impuestos. Formatos soportados: CSV, Excel (.xlsx, .xls)
+					El archivo debe contener las columnas: Fecha Gasto, Negocio, Nombre Comercial, Tipo de
+					gasto, Total, Impuestos. Formatos soportados: CSV, Excel (.xlsx, .xls)
 				</p>
 			</div>
 

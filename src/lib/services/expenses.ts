@@ -18,13 +18,26 @@ export type ExpenseRecord = {
 };
 
 export type ExpenseCSVRow = {
+    'Fecha Creación'?: string;
     'Fecha Gasto': string;
+    'Nº Recibido'?: string;
     Negocio: string;
-    Proveedor: string;
+    'Doc.Proveedor'?: string;
+    'Nombre Comercial': string;
+    'Dirección Proveedor'?: string;
+    'Teléfono Proveedor'?: string;
+    'E-mail Proveedor'?: string;
+    'Contacto Proveedor'?: string;
+    'N° Factura'?: string;
+    'Forma de Pago'?: string;
     'Tipo de gasto': string;
-    Total: string;
+    'Concepto del Gasto'?: string;
+    SubTotal?: string;
     Impuestos: string;
-    'Número de Factura'?: string;
+    Total: string;
+    Responsable?: string;
+    'Sale de caja'?: string;
+    Caja?: string;
 };
 
 export type ProcessedExpense = {
@@ -132,8 +145,8 @@ export const parseExpenseRow = (
     }
 
     // Parse numbers
-    const total = parseFloat(row.Total.replace(/[^0-9.-]/g, '')) || 0;
-    const taxes = parseFloat(row.Impuestos.replace(/[^0-9.-]/g, '')) || 0;
+    const total = parseFloat(row.Total?.replace(/[^0-9.-]/g, '') || '0') || 0;
+    const taxes = parseFloat(row.Impuestos?.replace(/[^0-9.-]/g, '') || '0') || 0;
 
     // Match store
     const matchedStore = matchStoreName(row.Negocio, stores);
@@ -141,15 +154,14 @@ export const parseExpenseRow = (
     const expense: ExpenseRecord = {
         date,
         store_name_raw: row.Negocio,
-        provider: row.Proveedor,
+        provider: row['Nombre Comercial'] || 'Desconocido',
         expense_type: row['Tipo de gasto'],
         total,
         taxes,
-        invoice_number: row['Número de Factura'] || undefined,
+        invoice_number: row['N° Factura'] || undefined,
         needs_review: !matchedStore || matchedStore.confidence < 0.8, // Mark for review if no match or low confidence
         store_id: matchedStore?.id
     };
-
     return {
         expense,
         matchedStore
@@ -157,7 +169,7 @@ export const parseExpenseRow = (
 };
 
 /**
- * Batch insert expenses with optimized upsert
+ * Batch insert expenses with simple insert
  */
 export const batchInsertExpenses = async (
     supabase: SupabaseClient,
@@ -173,14 +185,17 @@ export const batchInsertExpenses = async (
         const batch = expenses.slice(i, i + batchSize);
 
         try {
-            // Use upsert to handle duplicates based on invoice_number
-            const { data, error } = await supabase.from('expenses').upsert(batch, {
-                onConflict: 'invoice_number',
-                ignoreDuplicates: false // Update existing records
-            });
+            // Use simple insert (upsert requires unique constraint which may not work with null invoice_numbers)
+            const { data, error } = await supabase.from('expenses').insert(batch).select();
 
             if (error) {
                 Logger.error(`Batch insert error (batch ${i / batchSize + 1}):`, error);
+                Logger.error('Error details:', {
+                    message: error.message,
+                    details: error.details,
+                    hint: error.hint,
+                    code: error.code
+                });
                 errors += batch.length;
             } else {
                 success += batch.length;
