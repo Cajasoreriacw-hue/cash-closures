@@ -260,13 +260,11 @@
 		container.style.position = 'absolute';
 		container.style.left = '-9999px';
 		container.style.top = '0';
-		container.style.width = originalTable.offsetWidth + 'px'; // Maintain width
-		container.style.backgroundColor = '#ffffff'; // Ensure white background
+		container.style.width = originalTable.offsetWidth + 'px';
+		container.style.backgroundColor = '#ffffff';
 
-		// Copy dark mode class if present
-		if (document.documentElement.classList.contains('dark')) {
-			container.classList.add('dark');
-		}
+		// We do NOT add 'dark' class here anymore because we are inlining all styles.
+		// Use white background explicitly for the export.
 
 		document.body.appendChild(container);
 
@@ -275,56 +273,117 @@
 			const clonedTable = originalTable.cloneNode(true) as HTMLElement;
 			container.appendChild(clonedTable);
 
-			// 2. Remove sticky positioning from the clone immediately
-			const stickyElements = clonedTable.querySelectorAll('.sticky');
-			stickyElements.forEach((el) => {
-				(el as HTMLElement).style.position = 'static';
-				(el as HTMLElement).style.removeProperty('left');
-			});
-
-			// 3. Bruteforce sanitize colors on the clone
+			// 2. COMPUTED STYLE INLINING (The Nuclear Solution)
+			// Iterate over all elements and copy computed styles to inline styles.
+			// Then remove all classes to disconnect from Tailwind.
 			const originalElements = originalTable.querySelectorAll('*');
 			const clonedElements = clonedTable.querySelectorAll('*');
 
-			// Helper to copy and sanitise specific styles
-			const copyAndSanitizeStyles = (source: Element, target: HTMLElement) => {
+			// List of critical properties to preserve
+			const propertiesToCopy = [
+				'display',
+				'visibility',
+				'position',
+				'width',
+				'height',
+				'top',
+				'left',
+				'bottom',
+				'right',
+				'margin',
+				'padding',
+				'border',
+				'borderWidth',
+				'borderStyle',
+				'borderColor',
+				'borderRadius',
+				'font',
+				'fontFamily',
+				'fontSize',
+				'fontWeight',
+				'fontStyle',
+				'lineHeight',
+				'textAlign',
+				'textTransform',
+				'textDecoration',
+				'whiteSpace',
+				'color',
+				'background',
+				'backgroundColor',
+				'backgroundImage',
+				'backgroundSize',
+				'backgroundPosition',
+				'backgroundRepeat',
+				'flex',
+				'flexDirection',
+				'flexWrap',
+				'justifyContent',
+				'alignItems',
+				'alignContent',
+				'gap',
+				'grid',
+				'gridTemplateColumns',
+				'gridTemplateRows',
+				'gridGap',
+				'borderCollapse',
+				'borderSpacing',
+				'tableLayout' // Important for tables
+			];
+
+			// Helper to inline styles
+			const inlineStyles = (source: Element, target: HTMLElement) => {
 				const computed = window.getComputedStyle(source);
 
-				// Target properties that might produce oklch
-				// Note: box-shadow and gradients are complex to parse.
-				// We'll safely REMOVE them if they contain oklch to avoid crashes.
-				const colorProps = ['color', 'backgroundColor', 'borderColor', 'outlineColor'];
-				const complexProps = ['boxShadow', 'backgroundImage'];
+				propertiesToCopy.forEach((prop) => {
+					let val = computed.getPropertyValue(prop);
 
-				colorProps.forEach((prop) => {
-					const val = computed.getPropertyValue(prop);
+					// SANITIZE: If value contains oklch, convert it
 					if (val && val.includes('oklch')) {
-						target.style.setProperty(prop, getStandardColor(val), 'important');
+						if (
+							prop.includes('background') ||
+							prop.includes('shadow') ||
+							prop.includes('gradient')
+						) {
+							// Complex props: strip or simplify. Be careful with gradients.
+							// For simplicity in this error case, we fallback to background-color if possible or black/white
+							val = getStandardColor(val);
+						} else {
+							val = getStandardColor(val);
+						}
 					}
+
+					target.style.setProperty(prop, val, 'important');
 				});
 
-				complexProps.forEach((prop) => {
-					const val = computed.getPropertyValue(prop);
-					if (val && val.includes('oklch')) {
-						// For complex props, it's safer to remove/reset them than trying to parse
-						target.style.setProperty(prop, 'none', 'important');
-					}
-				});
+				// Strip classes to ensure no external CSS interferes
+				target.removeAttribute('class');
 			};
 
-			// Sanitize the table itself
-			copyAndSanitizeStyles(originalTable, clonedTable);
+			// Apply to the table itself
+			inlineStyles(originalTable, clonedTable);
+			// Also ensure table specific styles
+			clonedTable.style.borderCollapse = 'collapse';
 
-			// Sanitize all children
+			// Apply to all children
 			originalElements.forEach((orig, index) => {
 				if (clonedElements[index]) {
-					copyAndSanitizeStyles(orig, clonedElements[index] as HTMLElement);
+					inlineStyles(orig, clonedElements[index] as HTMLElement);
 				}
 			});
 
-			// 4. Generate image from the SAFE clone
+			// 3. Remove sticky positioning explicitly (redundant but safe)
+			// (Classes are gone, but inline styles might have copied 'sticky')
+			const allCloned = clonedTable.querySelectorAll('*');
+			allCloned.forEach((el) => {
+				const htmlEl = el as HTMLElement;
+				if (htmlEl.style.position === 'sticky') {
+					htmlEl.style.position = 'static';
+				}
+			});
+
+			// 4. Generate image from the "Clean" clone
 			const canvas = await html2canvas(clonedTable, {
-				scale: 1.5, // Reduced slightly for mobile safety
+				scale: 1.5,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
