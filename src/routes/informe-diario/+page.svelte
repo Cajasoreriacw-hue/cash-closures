@@ -235,15 +235,43 @@
 
 		downloadingPNG = true;
 
+		// Get all sticky elements
+		const stickyElements = tableElement.querySelectorAll('.sticky');
+		const originalPositions: string[] = [];
+
 		try {
+			// Temporarily remove sticky positioning
+			stickyElements.forEach((el, index) => {
+				const htmlEl = el as HTMLElement;
+				originalPositions[index] = htmlEl.style.position;
+				htmlEl.style.position = 'static';
+			});
+
+			// Scroll table container to top
+			const scrollContainer = tableElement.closest('.overflow-x-auto');
+			if (scrollContainer) {
+				scrollContainer.scrollLeft = 0;
+				scrollContainer.scrollTop = 0;
+			}
+
+			// Wait a bit for styles to apply
+			await new Promise((resolve) => setTimeout(resolve, 100));
+
 			const canvas = await html2canvas(tableElement, {
-				scale: 3,
+				scale: 2, // Reduced from 3 for better compatibility
 				backgroundColor: '#ffffff',
-				logging: false,
+				logging: true, // Enable logging for debugging
 				useCORS: true,
-				allowTaint: true,
-				imageTimeout: 0,
-				removeContainer: true
+				allowTaint: false,
+				foreignObjectRendering: false,
+				imageTimeout: 15000,
+				onclone: (clonedDoc) => {
+					// Remove any remaining sticky positioning in the clone
+					const clonedSticky = clonedDoc.querySelectorAll('.sticky');
+					clonedSticky.forEach((el) => {
+						(el as HTMLElement).style.position = 'static';
+					});
+				}
 			});
 
 			const link = document.createElement('a');
@@ -260,8 +288,13 @@
 			}, 100);
 		} catch (err) {
 			Logger.error('Error downloading table as PNG:', err);
+			console.error('Detailed error:', err); // Additional console log for debugging
 			alert('❌ Error al descargar la tabla. Por favor intenta de nuevo.');
 		} finally {
+			// Restore sticky positioning
+			stickyElements.forEach((el, index) => {
+				(el as HTMLElement).style.position = originalPositions[index] || '';
+			});
 			downloadingPNG = false;
 		}
 	};
