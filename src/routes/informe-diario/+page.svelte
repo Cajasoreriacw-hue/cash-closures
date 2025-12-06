@@ -230,14 +230,14 @@
 			canvas.width = 1;
 			canvas.height = 1;
 			const ctx = canvas.getContext('2d');
-			if (!ctx) return '#000000'; // Fallback
+			if (!ctx) return '#000000';
 
 			ctx.fillStyle = color;
 			ctx.fillRect(0, 0, 1, 1);
 			const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
 			return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
 		} catch (e) {
-			return '#000000'; // Fallback safely
+			return '#000000';
 		}
 	};
 
@@ -255,31 +255,37 @@
 
 		downloadingPNG = true;
 
-		// Create a container for our sanitized clone
-		const container = document.createElement('div');
-		container.style.position = 'absolute';
-		container.style.left = '-9999px';
-		container.style.top = '0';
-		container.style.width = originalTable.offsetWidth + 'px';
-		container.style.backgroundColor = '#ffffff';
-
-		// We do NOT add 'dark' class here anymore because we are inlining all styles.
-		// Use white background explicitly for the export.
-
-		document.body.appendChild(container);
+		// STRATEGY: "CLEAN ROOM" IFRAME
+		// We create an iframe with NO external stylesheets.
+		// We convert all styles to inline RGB and inject into the iframe.
+		// html2canvas runs inside this sterile environment where "oklch" variables don't exist.
+		const iframe = document.createElement('iframe');
+		iframe.style.position = 'absolute';
+		iframe.style.left = '-9999px';
+		iframe.style.top = '0';
+		iframe.style.width = Math.max(originalTable.offsetWidth + 50, 1024) + 'px';
+		iframe.style.height = originalTable.offsetHeight + 100 + 'px';
+		iframe.style.visibility = 'hidden';
+		document.body.appendChild(iframe);
 
 		try {
-			// 1. Manually clone the table node
-			const clonedTable = originalTable.cloneNode(true) as HTMLElement;
-			container.appendChild(clonedTable);
+			// Wait for iframe to be ready
+			const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+			if (!iframeDoc) throw new Error('Could not create iframe context');
 
-			// 2. COMPUTED STYLE INLINING (The Nuclear Solution)
-			// Iterate over all elements and copy computed styles to inline styles.
-			// Then remove all classes to disconnect from Tailwind.
+			iframeDoc.open();
+			iframeDoc.write(
+				'<!DOCTYPE html><html><body style="background-color: white; margin: 0; padding: 20px;"></body></html>'
+			);
+			iframeDoc.close();
+
+			// 1. Manually clone the table
+			const clonedTable = originalTable.cloneNode(true) as HTMLElement;
+
+			// 2. Computed Style Inlining & Sanitization
 			const originalElements = originalTable.querySelectorAll('*');
 			const clonedElements = clonedTable.querySelectorAll('*');
 
-			// List of critical properties to preserve
 			const propertiesToCopy = [
 				'display',
 				'visibility',
@@ -327,31 +333,17 @@
 				'gridGap',
 				'borderCollapse',
 				'borderSpacing',
-				'tableLayout' // Important for tables
+				'tableLayout'
 			];
 
-			// Helper to inline styles
-			const inlineStyles = (source: Element, target: HTMLElement) => {
+			const copyStyles = (source: Element, target: HTMLElement) => {
 				const computed = window.getComputedStyle(source);
-
 				propertiesToCopy.forEach((prop) => {
 					let val = computed.getPropertyValue(prop);
-
-					// SANITIZE: If value contains oklch, convert it
+					// Nuking oklch completely
 					if (val && val.includes('oklch')) {
-						if (
-							prop.includes('background') ||
-							prop.includes('shadow') ||
-							prop.includes('gradient')
-						) {
-							// Complex props: strip or simplify. Be careful with gradients.
-							// For simplicity in this error case, we fallback to background-color if possible or black/white
-							val = getStandardColor(val);
-						} else {
-							val = getStandardColor(val);
-						}
+						val = getStandardColor(val);
 					}
-
 					target.style.setProperty(prop, val, 'important');
 				});
 
