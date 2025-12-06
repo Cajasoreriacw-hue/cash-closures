@@ -3,7 +3,6 @@
 	import { Alert } from 'flowbite-svelte';
 	import { getStores } from '$lib/services/closures';
 	import { Logger } from '$lib/utils/logger';
-	import html2canvas from 'html2canvas-pro';
 	import type { PageData } from './$types';
 
 	// Declarar correctamente las props con tipo
@@ -236,6 +235,10 @@
 		downloadingPNG = true;
 
 		try {
+			// 🚀 LAZY LOADING: html2canvas se carga solo cuando se descarga
+			const html2canvasModule = await import('html2canvas-pro');
+			const html2canvas = html2canvasModule.default;
+
 			// html2canvas-pro natively supports oklch and modern CSS colors
 			// Using scale: 3 for high-quality output (3x resolution)
 			const canvas = await html2canvas(table, {
@@ -476,15 +479,15 @@
 			<tbody class="text-xs">
 				<!-- DATÁFONO -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Datáfono</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.datáfono[store]
 							)}"
 						>
@@ -495,15 +498,15 @@
 
 				<!-- EFECTIVO -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Efectivo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.efectivo[store]
 							)}"
 						>
@@ -514,15 +517,15 @@
 
 				<!-- APPARTA -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Apparta</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.apparta[store]
 							)}"
 						>
@@ -533,15 +536,15 @@
 
 				<!-- TRANSFERENCIAS BANCARIAS -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencias Bancarias</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -551,10 +554,10 @@
 				</tr>
 
 				<!-- Separador -->
-				<tr class="bg-fresh-sky-50/50 dark:bg-fresh-sky-900/20">
+				<tr class="bg-fresh-sky-600 dark:bg-fresh-sky-900/20">
 					<td
 						colspan={filteredStores.length + 1}
-						class="px-4 py-2 text-center text-xs font-bold text-fresh-sky-800 dark:text-fresh-sky-300 uppercase tracking-widest"
+						class="px-4 py-2 text-center text-xs font-bold text-fresh-sky-50 dark:text-fresh-sky-300 uppercase tracking-widest"
 					>
 						Plataformas Domicilio
 					</td>
@@ -562,15 +565,15 @@
 
 				<!-- TRANSFERENCIA RAPPI -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Rappi</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_rappi[store]
 							)}"
 						>
@@ -581,15 +584,15 @@
 
 				<!-- TRANSFERENCIA JUSTO -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Justo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-400 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_justo[store]
 							)}"
 						>
@@ -609,13 +612,17 @@
 				</tr>
 
 				<!-- DESCUENTOS (Editable) -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Descuentos</td
 					>
 					{#each filteredStores as store}
-						<td class="p-0 text-center bg-white dark:bg-slate-800 relative group">
+						<td
+							class="p-0 border-r border-gray-400 text-center bg-white dark:bg-slate-800 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.descuentos[store]}
@@ -629,13 +636,17 @@
 				</tr>
 
 				<!-- GASTOS DE CAJA (Editable) -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Gastos de Caja</td
 					>
 					{#each filteredStores as store}
-						<td class="p-0 text-center bg-white dark:bg-slate-800 relative group">
+						<td
+							class="p-0 border-r border-gray-400 text-center bg-white dark:bg-slate-800 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.gastos_caja[store]}
@@ -649,14 +660,16 @@
 
 				<!-- SOBRE DIARIO (Editable) -->
 				<tr
-					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b-2 border-gray-100 dark:border-slate-700"
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-400 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Sobre Diario</td
 					>
 					{#each filteredStores as store}
-						<td class="p-0 text-center bg-white dark:bg-slate-800 relative group">
+						<td
+							class="p-0 border-r border-gray-400 text-center bg-white dark:bg-slate-800 relative group"
+						>
 							<input
 								type="number"
 								bind:value={informeData.sobre_diario[store]}
@@ -669,9 +682,11 @@
 				</tr>
 
 				<!-- RESPONSABLE -->
-				<tr class="bg-gray-50/50 dark:bg-slate-700/20">
+				<tr
+					class="bg-gray-50/50 dark:bg-slate-700/20 border-b border-gray-400 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-gray-100/50 dark:bg-slate-700/50"
+						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-gray-100/50 dark:bg-slate-700/50 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Responsable</td
 					>
 					{#each filteredStores as store}
@@ -684,13 +699,15 @@
 				</tr>
 
 				<!-- OBSERVACIONES -->
-				<tr class="bg-white dark:bg-slate-800">
+				<tr class="bg-white dark:bg-slate-800 border-b border-gray-400 dark:border-slate-700">
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-400 dark:border-slate-700 sticky left-0 z-10"
 						>Observaciones</td
 					>
 					{#each filteredStores as store}
-						<td class="px-4 py-3 text-center text-xs text-gray-500 dark:text-gray-400 italic">
+						<td
+							class="px-4 py-3 text-center text-xs text-gray-800 dark:text-gray-400 italic border-r border-gray-400 dark:border-slate-700"
+						>
 							{observaciones[store] || '-'}
 						</td>
 					{/each}

@@ -46,7 +46,18 @@ export default defineConfig({
 			}
 		})
 	],
+	// Optimizaciones de desarrollo
+	optimizeDeps: {
+		include: ['chart.js', '@supabase/supabase-js', 'fuse.js'],
+		exclude: ['html2canvas-pro', 'jspdf', 'xlsx', 'papaparse']
+	},
 	build: {
+		// Usar esbuild para minificación (más rápido que terser)
+		minify: 'esbuild',
+		// Reducir tamaño de chunks
+		target: 'esnext',
+		// Optimizar CSS
+		cssMinify: 'esbuild',
 		rollupOptions: {
 			output: {
 				manualChunks: (id) => {
@@ -73,6 +84,10 @@ export default defineConfig({
 					// Split @supabase into its own chunk
 					if (id.includes('node_modules/@supabase')) {
 						return 'supabase';
+					}
+					// Split jsPDF into its own chunk
+					if (id.includes('node_modules/jspdf')) {
+						return 'jspdf';
 					}
 					// Group other vendor dependencies
 					if (id.includes('node_modules')) {

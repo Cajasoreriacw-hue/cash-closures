@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Script para aplicar índices de rendimiento a Supabase
+# Este script debe ejecutarse UNA VEZ en tu base de datos Supabase
+
+echo "🚀 Aplicando índices de rendimiento a Supabase..."
+echo ""
+echo "⚠️  IMPORTANTE: Necesitas ejecutar este script en tu consola SQL de Supabase"
+echo ""
+echo "Pasos:"
+echo "1. Abre tu proyecto en Supabase Dashboard"
+echo "2. Ve a SQL Editor"
+echo "3. Copia y pega el contenido de 'supabase-performance-indexes.sql'"
+echo "4. Ejecuta el script"
+echo ""
+echo "📄 Archivo a ejecutar: supabase-performance-indexes.sql"
+echo ""
+echo "✅ Beneficios esperados:"
+echo "   - Consultas 5-10x más rápidas"
+echo "   - Mejor rendimiento en filtros"
+echo "   - Reducción de carga en la base de datos"
+echo ""
+echo "📊 Para verificar que los índices se crearon correctamente, ejecuta:"
+echo ""
+echo "SELECT "
+echo "    schemaname,"
+echo "    tablename,"
+echo "    indexname"
+echo "FROM pg_indexes"
+echo "WHERE schemaname = 'public'"
+echo "    AND tablename IN ('cash_closures', 'cash_envelopes', 'cash_closure_channels', 'cashiers', 'stores')"
+echo "ORDER BY tablename, indexname;"
+echo ""
