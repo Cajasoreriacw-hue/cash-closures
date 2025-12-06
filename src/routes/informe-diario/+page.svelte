@@ -367,23 +367,21 @@
 				}
 			});
 
-			// 3. Remove sticky positioning explicitly (redundant but safe)
-			// (Classes are gone, but inline styles might have copied 'sticky')
-			const allCloned = clonedTable.querySelectorAll('*');
-			allCloned.forEach((el) => {
-				const htmlEl = el as HTMLElement;
-				if (htmlEl.style.position === 'sticky') {
-					htmlEl.style.position = 'static';
-				}
-			});
+			// 3. Inject into Clean Room
+			iframeDoc.body.appendChild(clonedTable);
 
-			// 4. Generate image from the "Clean" clone
+			// Wait for render
+			await new Promise((resolve) => setTimeout(resolve, 500));
+
+			// 4. Capture from the Clean Room with EXPLICIT CONTEXT
 			const canvas = await html2canvas(clonedTable, {
 				scale: 1.5,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
-				allowTaint: false
+				allowTaint: true,
+				window: iframe.contentWindow as Window,
+				ignoreElements: (element) => element.tagName === 'IFRAME'
 			});
 
 			const link = document.createElement('a');
@@ -401,8 +399,8 @@
 			alert(`❌ Error al descargar: ${err.message || err}`);
 		} finally {
 			// Clean up our temporary container
-			if (document.body.contains(container)) {
-				document.body.removeChild(container);
+			if (document.body.contains(iframe)) {
+				document.body.removeChild(iframe);
 			}
 			downloadingPNG = false;
 		}
