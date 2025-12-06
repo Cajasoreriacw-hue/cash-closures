@@ -237,17 +237,22 @@
 
 		try {
 			// html2canvas-pro natively supports oklch and modern CSS colors
+			// Using scale: 3 for high-quality output (3x resolution)
 			const canvas = await html2canvas(table, {
-				scale: 2,
+				scale: 3,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
-				allowTaint: true
+				allowTaint: true,
+				// Improve rendering quality
+				windowWidth: table.scrollWidth,
+				windowHeight: table.scrollHeight
 			});
 
 			const link = document.createElement('a');
 			const dateStr = selectedDate.replace(/-/g, '');
 			link.download = `informe_diario_${dateStr}.png`;
+			// Maximum quality PNG (1.0)
 			link.href = canvas.toDataURL('image/png', 1.0);
 			document.body.appendChild(link);
 			link.click();
