@@ -15,8 +15,8 @@ export default defineConfig({
 				name: 'Monit - Control de Caja',
 				short_name: 'Monit',
 				description: 'Sistema ERP para gestión y control de cierres de caja',
-				theme_color: '#126887',
-				background_color: '#d2eff9',
+				theme_color: '#1fade0',
+				background_color: '#1fade0',
 				display: 'standalone',
 				start_url: '/',
 				icons: [
@@ -36,7 +36,6 @@ export default defineConfig({
 			},
 			injectManifest: {
 				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}'],
-				// Agregar esta línea para que encuentre el marcador
 				injectionPoint: undefined
 			},
 			devOptions: {
@@ -47,6 +46,43 @@ export default defineConfig({
 			}
 		})
 	],
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: (id) => {
+					// Split Chart.js into its own chunk
+					if (id.includes('node_modules/chart.js')) {
+						return 'chart';
+					}
+					// Split html2canvas into its own chunk
+					if (id.includes('node_modules/html2canvas')) {
+						return 'html2canvas';
+					}
+					// Split xlsx into its own chunk
+					if (id.includes('node_modules/xlsx')) {
+						return 'xlsx';
+					}
+					// Split papaparse into its own chunk
+					if (id.includes('node_modules/papaparse')) {
+						return 'papaparse';
+					}
+					// Split flowbite-svelte into its own chunk
+					if (id.includes('node_modules/flowbite-svelte')) {
+						return 'flowbite';
+					}
+					// Split @supabase into its own chunk
+					if (id.includes('node_modules/@supabase')) {
+						return 'supabase';
+					}
+					// Group other vendor dependencies
+					if (id.includes('node_modules')) {
+						return 'vendor';
+					}
+				}
+			}
+		},
+		chunkSizeWarningLimit: 1000 // Increased for large libraries (Chart.js, xlsx, etc.)
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
@@ -73,5 +109,5 @@ export default defineConfig({
 				}
 			}
 		]
-	},
+	}
 });

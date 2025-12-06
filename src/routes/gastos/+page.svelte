@@ -481,6 +481,13 @@
 		uploadStatus = '';
 	};
 
+	const clearFilters = () => {
+		selectedStore = '';
+		selectedCategory = '';
+		startDate = '';
+		endDate = '';
+	};
+
 	const confirmUpload = async () => {
 		if (expensesToUpload.length === 0) return;
 
@@ -693,20 +700,35 @@
 			<section
 				class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 p-5 md:p-6 transition-colors"
 			>
-				<h3
-					class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4"
-				>
-					Filtros
-				</h3>
+				<div class="flex items-center justify-between mb-4">
+					<h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+						Filtros
+					</h3>
+					<button
+						onclick={clearFilters}
+						class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-fresh-sky-600 dark:hover:text-fresh-sky-400 hover:bg-fresh-sky-50 dark:hover:bg-fresh-sky-900/20 rounded-lg transition-all flex items-center gap-1.5"
+					>
+						<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							></path>
+						</svg>
+						Limpiar Filtros
+					</button>
+				</div>
 				<div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+					<!-- Store Filter -->
 					<div class="space-y-2">
 						<label
-							for="filter-year"
+							for="filter-store"
 							class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Sede</label
 						>
 						<select
-							id="filter-year"
-							bind:value={startDate}
+							id="filter-store"
+							bind:value={selectedStore}
 							class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-white"
 						>
 							<option value="">Todas las sedes</option>
@@ -717,18 +739,53 @@
 					</div>
 
 					<!-- Category Filter -->
-					<label class="flex flex-col gap-2">
-						<span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Categoría</span>
+					<div class="space-y-2">
+						<label
+							for="filter-category"
+							class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
+							>Categoría</label
+						>
 						<select
+							id="filter-category"
 							bind:value={selectedCategory}
-							class="h-10 md:h-9 rounded-lg border border-slate-200 dark:border-slate-600 px-3 text-sm bg-white dark:bg-slate-700 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-fresh-sky-500"
+							class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all cursor-pointer font-medium text-gray-700 dark:text-white"
 						>
 							<option value="">Todas las categorías</option>
 							{#each categories as category}
 								<option value={category}>{category}</option>
 							{/each}
 						</select>
-					</label>
+					</div>
+
+					<!-- Start Date Filter -->
+					<div class="space-y-2">
+						<label
+							for="filter-start-date"
+							class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
+							>Fecha Inicio</label
+						>
+						<input
+							id="filter-start-date"
+							type="date"
+							bind:value={startDate}
+							class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium text-gray-700 dark:text-white"
+						/>
+					</div>
+
+					<!-- End Date Filter -->
+					<div class="space-y-2">
+						<label
+							for="filter-end-date"
+							class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
+							>Fecha Fin</label
+						>
+						<input
+							id="filter-end-date"
+							type="date"
+							bind:value={endDate}
+							class="w-full h-11 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-fresh-sky-500/20 focus:border-fresh-sky-500 transition-all font-medium text-gray-700 dark:text-white"
+						/>
+					</div>
 				</div>
 			</section>
 

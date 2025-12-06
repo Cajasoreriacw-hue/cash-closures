@@ -3,6 +3,7 @@
 	import { Alert } from 'flowbite-svelte';
 	import { getStores } from '$lib/services/closures';
 	import { Logger } from '$lib/utils/logger';
+	import html2canvas from 'html2canvas';
 	import type { PageData } from './$types';
 
 	// Declarar correctamente las props con tipo
@@ -215,7 +216,36 @@
 
 	const getCellClass = (value: number) => {
 		if (value === 0) return 'text-gray-500 dark:text-gray-400';
-		return 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold rounded-lg';
+		return 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 font-semibold';
+	};
+
+	const downloadTableAsPNG = async () => {
+		const tableElement = document.getElementById('informe-table');
+		if (!tableElement) return;
+
+		try {
+			const canvas = await html2canvas(tableElement, {
+				scale: 3, // Higher scale for better quality
+				backgroundColor: '#ffffff',
+				logging: false,
+				useCORS: true,
+				allowTaint: true,
+				imageTimeout: 0,
+				removeContainer: true,
+				width: tableElement.scrollWidth,
+				height: tableElement.scrollHeight,
+				windowWidth: tableElement.scrollWidth,
+				windowHeight: tableElement.scrollHeight
+			});
+
+			const link = document.createElement('a');
+			const dateStr = selectedDate.replace(/-/g, '');
+			link.download = `informe_diario_${dateStr}.png`;
+			link.href = canvas.toDataURL('image/png', 1.0); // Maximum quality
+			link.click();
+		} catch (err) {
+			Logger.error('Error downloading table as PNG:', err);
+		}
 	};
 
 	const formatDateDisplay = (dateStr: string) => {
@@ -296,6 +326,22 @@
 				class="h-11 px-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors"
 			>
 				{showColumnToggle ? 'Ocultar' : 'Mostrar'} Columnas
+			</button>
+			<button
+				type="button"
+				onclick={downloadTableAsPNG}
+				disabled={!selectedDate || filteredStores.length === 0}
+				class="h-11 px-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+			>
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+					></path>
+				</svg>
+				Descargar PNG
 			</button>
 		</div>
 	</div>
@@ -379,7 +425,7 @@
 	class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 overflow-hidden"
 >
 	<div class="overflow-x-auto">
-		<table class="w-full text-xs border-collapse table-fixed">
+		<table id="informe-table" class="w-full text-xs border-collapse table-fixed">
 			<colgroup>
 				<col style="width: 180px;" />
 				{#each filteredStores as _}
@@ -400,55 +446,75 @@
 					{/each}
 				</tr>
 			</thead>
-			<tbody class="text-xs divide-y divide-gray-100 dark:divide-slate-700">
+			<tbody class="text-xs">
 				<!-- DATÁFONO -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Datáfono</td
 					>
 					{#each filteredStores as store}
-						<td class="px-4 py-3 text-center {getCellClass(informeData.datáfono[store])}">
+						<td
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+								informeData.datáfono[store]
+							)}"
+						>
 							{formatCurrency(informeData.datáfono[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- EFECTIVO -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Efectivo</td
 					>
 					{#each filteredStores as store}
-						<td class="px-4 py-3 text-center {getCellClass(informeData.efectivo[store])}">
+						<td
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+								informeData.efectivo[store]
+							)}"
+						>
 							{formatCurrency(informeData.efectivo[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- APPARTA -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Apparta</td
 					>
 					{#each filteredStores as store}
-						<td class="px-4 py-3 text-center {getCellClass(informeData.apparta[store])}">
+						<td
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+								informeData.apparta[store]
+							)}"
+						>
 							{formatCurrency(informeData.apparta[store])}
 						</td>
 					{/each}
 				</tr>
 
 				<!-- TRANSFERENCIAS BANCARIAS -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Transferencias Bancarias</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center {getCellClass(
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -468,14 +534,18 @@
 				</tr>
 
 				<!-- TRANSFERENCIA RAPPI -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Transferencia Rappi</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center {getCellClass(informeData.transferencia_rappi[store])}"
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+								informeData.transferencia_rappi[store]
+							)}"
 						>
 							{formatCurrency(informeData.transferencia_rappi[store])}
 						</td>
@@ -483,14 +553,18 @@
 				</tr>
 
 				<!-- TRANSFERENCIA JUSTO -->
-				<tr class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors">
+				<tr
+					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
+				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
 						>Transferencia Justo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center {getCellClass(informeData.transferencia_justo[store])}"
+							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+								informeData.transferencia_justo[store]
+							)}"
 						>
 							{formatCurrency(informeData.transferencia_justo[store])}
 						</td>

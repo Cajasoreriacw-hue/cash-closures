@@ -791,20 +791,24 @@
 					<h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
 						Medios Electrónicos
 					</h3>
-					<div class="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-						<table class="w-full text-xs">
+					<div class="rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto">
+						<table class="w-full text-xs min-w-[400px]">
 							<thead>
 								<tr class="bg-slate-50 dark:bg-slate-700/50">
-									<th class="px-3 py-2 text-left text-slate-600 dark:text-slate-300 font-semibold"
+									<th
+										class="px-2 md:px-3 py-2 text-left text-slate-600 dark:text-slate-300 font-semibold"
 										>Medio</th
 									>
-									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+									<th
+										class="px-2 md:px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
 										>Sistema</th
 									>
-									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+									<th
+										class="px-2 md:px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
 										>Real</th
 									>
-									<th class="px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
+									<th
+										class="px-2 md:px-3 py-2 text-right text-slate-600 dark:text-slate-300 font-semibold"
 										>Diferencia</th
 									>
 								</tr>
@@ -814,33 +818,38 @@
 							>
 								{#each [selectedClosure.channels.dataphone, selectedClosure.channels.rappi, selectedClosure.channels.justo, selectedClosure.channels.appartaPay, selectedClosure.channels.nequi, selectedClosure.channels.bancolombia] as ch}
 									<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-										<td class="px-3 py-2 font-medium text-slate-700 dark:text-slate-200"
+										<td
+											class="px-2 md:px-3 py-2 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap"
 											>{ch.name}</td
 										>
-										<td class="px-3 py-2 text-right">
+										<td class="px-2 md:px-3 py-2 text-right">
 											{#if editMode}
 												<input
 													type="number"
 													bind:value={ch.system}
-													class="w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
+													class="w-20 md:w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
 												/>
 											{:else}
-												${ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+												<span class="text-slate-700 dark:text-slate-200"
+													>${ch.system.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</span
+												>
 											{/if}
 										</td>
-										<td class="px-3 py-2 text-right">
+										<td class="px-2 md:px-3 py-2 text-right">
 											{#if editMode}
 												<input
 													type="number"
 													bind:value={ch.real}
-													class="w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
+													class="w-20 md:w-24 px-1 py-0.5 border border-slate-300 dark:border-slate-600 rounded text-xs bg-white dark:bg-slate-700 text-right text-gray-900 dark:text-white"
 												/>
 											{:else}
-												${ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+												<span class="text-slate-700 dark:text-slate-200"
+													>${ch.real.toLocaleString('es-CO', { maximumFractionDigits: 0 })}</span
+												>
 											{/if}
 										</td>
 										<td
-											class="px-3 py-2 text-right font-medium"
+											class="px-2 md:px-3 py-2 text-right font-medium whitespace-nowrap"
 											class:text-red-500={ch.real - ch.system !== 0}
 											class:text-green-500={ch.real - ch.system === 0}
 										>
