@@ -351,15 +351,19 @@
 				target.removeAttribute('class');
 			};
 
-			// Apply to the table itself
-			inlineStyles(originalTable, clonedTable);
-			// Also ensure table specific styles
-			clonedTable.style.borderCollapse = 'collapse';
+			// Apply to table & children
+			copyStyles(originalTable, clonedTable);
+			clonedTable.style.borderCollapse = 'collapse'; // Force collapse
 
-			// Apply to all children
 			originalElements.forEach((orig, index) => {
 				if (clonedElements[index]) {
-					inlineStyles(orig, clonedElements[index] as HTMLElement);
+					copyStyles(orig, clonedElements[index] as HTMLElement);
+
+					// Force static position on children
+					const el = clonedElements[index] as HTMLElement;
+					if (el.style.position === 'sticky') {
+						el.style.position = 'static';
+					}
 				}
 			});
 
