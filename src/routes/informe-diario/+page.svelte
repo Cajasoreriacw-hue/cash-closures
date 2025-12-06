@@ -219,32 +219,50 @@
 		return 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 font-semibold';
 	};
 
+	let downloadingPNG = $state(false);
+
 	const downloadTableAsPNG = async () => {
 		const tableElement = document.getElementById('informe-table');
-		if (!tableElement) return;
+		if (!tableElement) {
+			alert('No se encontró la tabla para descargar');
+			return;
+		}
+
+		if (!selectedDate) {
+			alert('Por favor selecciona una fecha primero');
+			return;
+		}
+
+		downloadingPNG = true;
 
 		try {
 			const canvas = await html2canvas(tableElement, {
-				scale: 3, // Higher scale for better quality
+				scale: 3,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
 				allowTaint: true,
 				imageTimeout: 0,
-				removeContainer: true,
-				width: tableElement.scrollWidth,
-				height: tableElement.scrollHeight,
-				windowWidth: tableElement.scrollWidth,
-				windowHeight: tableElement.scrollHeight
+				removeContainer: true
 			});
 
 			const link = document.createElement('a');
 			const dateStr = selectedDate.replace(/-/g, '');
 			link.download = `informe_diario_${dateStr}.png`;
-			link.href = canvas.toDataURL('image/png', 1.0); // Maximum quality
+			link.href = canvas.toDataURL('image/png', 1.0);
+			document.body.appendChild(link);
 			link.click();
+			document.body.removeChild(link);
+
+			// Show success message
+			setTimeout(() => {
+				alert('✅ Tabla descargada exitosamente');
+			}, 100);
 		} catch (err) {
 			Logger.error('Error downloading table as PNG:', err);
+			alert('❌ Error al descargar la tabla. Por favor intenta de nuevo.');
+		} finally {
+			downloadingPNG = false;
 		}
 	};
 
@@ -330,18 +348,25 @@
 			<button
 				type="button"
 				onclick={downloadTableAsPNG}
-				disabled={!selectedDate || filteredStores.length === 0}
+				disabled={!selectedDate || filteredStores.length === 0 || downloadingPNG}
 				class="h-11 px-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 			>
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-					></path>
-				</svg>
-				Descargar PNG
+				{#if downloadingPNG}
+					<div
+						class="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"
+					></div>
+					Descargando...
+				{:else}
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+						></path>
+					</svg>
+					Descargar PNG
+				{/if}
 			</button>
 		</div>
 	</div>
@@ -420,27 +445,28 @@
 {/if}
 
 <!-- Tabla de informe -->
-<!-- Tabla de informe -->
 <section
 	class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-none dark:border dark:border-slate-700 border border-gray-100 overflow-hidden"
 >
 	<div class="overflow-x-auto">
-		<table id="informe-table" class="w-full text-xs border-collapse table-fixed">
+		<table id="informe-table" class="w-full text-xs border-collapse" style="min-width: 800px;">
 			<colgroup>
-				<col style="width: 180px;" />
+				<col style="width: 180px; min-width: 180px;" />
 				{#each filteredStores as _}
-					<col style="width: auto;" />
+					<col style="min-width: 120px;" />
 				{/each}
 			</colgroup>
 			<thead>
 				<tr class="bg-gray-900 dark:bg-slate-950">
 					<th
-						class="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider first:rounded-tl-xl"
+						class="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider first:rounded-tl-xl sticky left-0 bg-gray-900 dark:bg-slate-950 z-10"
 					>
 						Método de Pago
 					</th>
 					{#each filteredStores as store}
-						<th class="px-4 py-3 text-center text-xs font-bold text-white uppercase tracking-tight">
+						<th
+							class="px-3 py-3 text-center text-xs font-bold text-white uppercase tracking-tight whitespace-nowrap"
+						>
 							{store}
 						</th>
 					{/each}
@@ -452,12 +478,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Datáfono</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.datáfono[store]
 							)}"
 						>
@@ -471,12 +497,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Efectivo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.efectivo[store]
 							)}"
 						>
@@ -490,12 +516,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Apparta</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.apparta[store]
 							)}"
 						>
@@ -509,12 +535,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencias Bancarias</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -538,12 +564,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Rappi</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_rappi[store]
 							)}"
 						>
@@ -557,12 +583,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-200 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-200 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Justo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center border-r border-gray-200 dark:border-slate-700 {getCellClass(
+							class="px-3 py-3 text-center border-r border-gray-200 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_justo[store]
 							)}"
 						>
