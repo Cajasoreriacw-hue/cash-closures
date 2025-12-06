@@ -380,7 +380,6 @@
 				logging: false,
 				useCORS: true,
 				allowTaint: true,
-				window: iframe.contentWindow as Window,
 				ignoreElements: (element) => element.tagName === 'IFRAME'
 			});
 
