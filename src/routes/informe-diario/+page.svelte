@@ -221,6 +221,33 @@
 
 	let downloadingPNG = $state(false);
 
+	// Helper function to convert oklch to rgb (approximation)
+	const convertOklchToRgb = (element: HTMLElement) => {
+		const computedStyle = window.getComputedStyle(element);
+		const props = [
+			'color',
+			'backgroundColor',
+			'borderColor',
+			'borderTopColor',
+			'borderRightColor',
+			'borderBottomColor',
+			'borderLeftColor'
+		];
+
+		props.forEach((prop) => {
+			const value = computedStyle.getPropertyValue(prop);
+			if (value && value.includes('oklch')) {
+				// Get the computed RGB value
+				const tempDiv = document.createElement('div');
+				tempDiv.style.color = value;
+				document.body.appendChild(tempDiv);
+				const rgbValue = window.getComputedStyle(tempDiv).color;
+				document.body.removeChild(tempDiv);
+				element.style.setProperty(prop, rgbValue, 'important');
+			}
+		});
+	};
+
 	const downloadTableAsPNG = async () => {
 		const tableElement = document.getElementById('informe-table');
 		if (!tableElement) {
@@ -255,22 +282,33 @@
 			}
 
 			// Wait a bit for styles to apply
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			await new Promise((resolve) => setTimeout(resolve, 200));
 
 			const canvas = await html2canvas(tableElement, {
-				scale: 2, // Reduced from 3 for better compatibility
+				scale: 2,
 				backgroundColor: '#ffffff',
-				logging: true, // Enable logging for debugging
+				logging: false,
 				useCORS: true,
 				allowTaint: false,
 				foreignObjectRendering: false,
 				imageTimeout: 15000,
+				ignoreElements: (element) => {
+					return element.classList.contains('animate-spin');
+				},
 				onclone: (clonedDoc) => {
-					// Remove any remaining sticky positioning in the clone
+					// Remove sticky positioning in the clone
 					const clonedSticky = clonedDoc.querySelectorAll('.sticky');
 					clonedSticky.forEach((el) => {
 						(el as HTMLElement).style.position = 'static';
 					});
+
+					// Convert colors in clone to RGB (fixes oklch error)
+					const clonedTable = clonedDoc.getElementById('informe-table');
+					if (clonedTable) {
+						const allClonedElements = clonedTable.querySelectorAll('*');
+						allClonedElements.forEach((el) => convertOklchToRgb(el as HTMLElement));
+						convertOklchToRgb(clonedTable as HTMLElement);
+					}
 				}
 			});
 
