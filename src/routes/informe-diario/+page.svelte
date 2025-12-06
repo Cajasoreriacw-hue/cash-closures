@@ -221,8 +221,23 @@
 
 	let downloadingPNG = $state(false);
 
-	// Helper function to convert oklch to rgb (approximation)
-	const convertOklchToRgb = (element: HTMLElement) => {
+	// Robust color converter using Canvas to ensure RGB output
+	const getStandardColor = (color: string) => {
+		if (!color || !color.includes('oklch')) return color;
+
+		const canvas = document.createElement('canvas');
+		canvas.width = 1;
+		canvas.height = 1;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return color;
+
+		ctx.fillStyle = color;
+		ctx.fillRect(0, 0, 1, 1);
+		const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+		return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+	};
+
+	const convertColorsInElement = (element: HTMLElement) => {
 		const computedStyle = window.getComputedStyle(element);
 		const props = [
 			'color',
@@ -237,20 +252,14 @@
 		props.forEach((prop) => {
 			const value = computedStyle.getPropertyValue(prop);
 			if (value && value.includes('oklch')) {
-				// Get the computed RGB value
-				const tempDiv = document.createElement('div');
-				tempDiv.style.color = value;
-				document.body.appendChild(tempDiv);
-				const rgbValue = window.getComputedStyle(tempDiv).color;
-				document.body.removeChild(tempDiv);
-				element.style.setProperty(prop, rgbValue, 'important');
+				element.style.setProperty(prop, getStandardColor(value), 'important');
 			}
 		});
 	};
 
 	const downloadTableAsPNG = async () => {
-		const tableElement = document.getElementById('informe-table');
-		if (!tableElement) {
+		const originalTable = document.getElementById('informe-table');
+		if (!originalTable) {
 			alert('No se encontró la tabla para descargar');
 			return;
 		}
@@ -262,54 +271,68 @@
 
 		downloadingPNG = true;
 
-		// Get all sticky elements
-		const stickyElements = tableElement.querySelectorAll('.sticky');
-		const originalPositions: string[] = [];
+		// Create a container for our sanitized clone
+		const container = document.createElement('div');
+		container.style.position = 'absolute';
+		container.style.left = '-9999px';
+		container.style.top = '0';
+		container.style.width = originalTable.offsetWidth + 'px'; // Maintain width
+		container.style.backgroundColor = '#ffffff'; // Ensure white background
+		document.body.appendChild(container);
 
 		try {
-			// Temporarily remove sticky positioning
-			stickyElements.forEach((el, index) => {
-				const htmlEl = el as HTMLElement;
-				originalPositions[index] = htmlEl.style.position;
-				htmlEl.style.position = 'static';
+			// 1. Manually clone the table node
+			const clonedTable = originalTable.cloneNode(true) as HTMLElement;
+			container.appendChild(clonedTable);
+
+			// 2. Remove sticky positioning from the clone immediately
+			const stickyElements = clonedTable.querySelectorAll('.sticky');
+			stickyElements.forEach((el) => {
+				(el as HTMLElement).style.position = 'static';
+				(el as HTMLElement).style.removeProperty('left'); // Remove sticky left
 			});
 
-			// Scroll table container to top
-			const scrollContainer = tableElement.closest('.overflow-x-auto');
-			if (scrollContainer) {
-				scrollContainer.scrollLeft = 0;
-				scrollContainer.scrollTop = 0;
-			}
+			// 3. Bruteforce sanitize colors on the clone
+			// We iterate the ORIGINAL elements to get their computed styles (which might be oklch)
+			// and apply the converted RGB to the CLONED elements inline.
+			const originalElements = originalTable.querySelectorAll('*');
+			const clonedElements = clonedTable.querySelectorAll('*');
 
-			// Wait a bit for styles to apply
-			await new Promise((resolve) => setTimeout(resolve, 200));
+			// Helper to copy and sanitise specific styles
+			const copyAndSanitizeStyles = (source: Element, target: HTMLElement) => {
+				const computed = window.getComputedStyle(source);
+				// We specifically target color properties that might be oklch
+				const props = ['color', 'backgroundColor', 'borderColor'];
+				props.forEach((prop) => {
+					const val = computed.getPropertyValue(prop);
+					if (val.includes('oklch')) {
+						target.style.setProperty(prop, getStandardColor(val), 'important');
+					} else if (val) {
+						// Ensure we carry over styles if they are critical (like bg colors from classes)
+						// But for simple classes, they are already on the clone.
+						// We only force inline style if it was computed as oklch or meaningful.
+						// Actually, better to just fix oklch. The classes on clone handle the rest.
+					}
+				});
+			};
 
-			const canvas = await html2canvas(tableElement, {
+			// Sanitize the table itself
+			copyAndSanitizeStyles(originalTable, clonedTable);
+
+			// Sanitize all children
+			originalElements.forEach((orig, index) => {
+				if (clonedElements[index]) {
+					copyAndSanitizeStyles(orig, clonedElements[index] as HTMLElement);
+				}
+			});
+
+			// 4. Generate image from the SAFE clone
+			const canvas = await html2canvas(clonedTable, {
 				scale: 2,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
-				allowTaint: false,
-				foreignObjectRendering: false,
-				imageTimeout: 15000,
-				ignoreElements: (element) => {
-					return element.classList.contains('animate-spin');
-				},
-				onclone: (clonedDoc) => {
-					// Remove sticky positioning in the clone
-					const clonedSticky = clonedDoc.querySelectorAll('.sticky');
-					clonedSticky.forEach((el) => {
-						(el as HTMLElement).style.position = 'static';
-					});
-
-					// Convert colors in clone to RGB (fixes oklch error)
-					const clonedTable = clonedDoc.getElementById('informe-table');
-					if (clonedTable) {
-						const allClonedElements = clonedTable.querySelectorAll('*');
-						allClonedElements.forEach((el) => convertOklchToRgb(el as HTMLElement));
-						convertOklchToRgb(clonedTable as HTMLElement);
-					}
-				}
+				allowTaint: false
 			});
 
 			const link = document.createElement('a');
@@ -320,19 +343,13 @@
 			link.click();
 			document.body.removeChild(link);
 
-			// Show success message
-			setTimeout(() => {
-				alert('✅ Tabla descargada exitosamente');
-			}, 100);
+			setTimeout(() => alert('✅ Tabla descargada exitosamente'), 100);
 		} catch (err) {
-			Logger.error('Error downloading table as PNG:', err);
-			console.error('Detailed error:', err); // Additional console log for debugging
-			alert('❌ Error al descargar la tabla. Por favor intenta de nuevo.');
+			Logger.error('Error downloading PNG:', err);
+			alert('❌ Error al descargar. Intenta de nuevo.');
 		} finally {
-			// Restore sticky positioning
-			stickyElements.forEach((el, index) => {
-				(el as HTMLElement).style.position = originalPositions[index] || '';
-			});
+			// Clean up our temporary container
+			document.body.removeChild(container);
 			downloadingPNG = false;
 		}
 	};
