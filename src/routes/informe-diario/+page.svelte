@@ -3,7 +3,7 @@
 	import { Alert } from 'flowbite-svelte';
 	import { getStores } from '$lib/services/closures';
 	import { Logger } from '$lib/utils/logger';
-	import html2canvas from 'html2canvas';
+	import html2canvas from 'html2canvas-pro';
 	import type { PageData } from './$types';
 
 	// Declarar correctamente las props con tipo
@@ -221,29 +221,9 @@
 
 	let downloadingPNG = $state(false);
 
-	// Robust color converter using Canvas to ensure RGB output
-	const getStandardColor = (color: string) => {
-		if (!color || !color.includes('oklch')) return color;
-
-		try {
-			const canvas = document.createElement('canvas');
-			canvas.width = 1;
-			canvas.height = 1;
-			const ctx = canvas.getContext('2d');
-			if (!ctx) return '#000000';
-
-			ctx.fillStyle = color;
-			ctx.fillRect(0, 0, 1, 1);
-			const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-			return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-		} catch (e) {
-			return '#000000';
-		}
-	};
-
 	const downloadTableAsPNG = async () => {
-		const originalTable = document.getElementById('informe-table');
-		if (!originalTable) {
+		const table = document.getElementById('informe-table');
+		if (!table) {
 			alert('No se encontró la tabla para descargar');
 			return;
 		}
@@ -255,132 +235,14 @@
 
 		downloadingPNG = true;
 
-		// STRATEGY: "CLEAN ROOM" IFRAME
-		// We create an iframe with NO external stylesheets.
-		// We convert all styles to inline RGB and inject into the iframe.
-		// html2canvas runs inside this sterile environment where "oklch" variables don't exist.
-		const iframe = document.createElement('iframe');
-		iframe.style.position = 'absolute';
-		iframe.style.left = '-9999px';
-		iframe.style.top = '0';
-		iframe.style.width = Math.max(originalTable.offsetWidth + 50, 1024) + 'px';
-		iframe.style.height = originalTable.offsetHeight + 100 + 'px';
-		iframe.style.visibility = 'hidden';
-		document.body.appendChild(iframe);
-
 		try {
-			// Wait for iframe to be ready
-			const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-			if (!iframeDoc) throw new Error('Could not create iframe context');
-
-			iframeDoc.open();
-			iframeDoc.write(
-				'<!DOCTYPE html><html><body style="background-color: white; margin: 0; padding: 20px;"></body></html>'
-			);
-			iframeDoc.close();
-
-			// 1. Manually clone the table
-			const clonedTable = originalTable.cloneNode(true) as HTMLElement;
-
-			// 2. Computed Style Inlining & Sanitization
-			const originalElements = originalTable.querySelectorAll('*');
-			const clonedElements = clonedTable.querySelectorAll('*');
-
-			const propertiesToCopy = [
-				'display',
-				'visibility',
-				'position',
-				'width',
-				'height',
-				'top',
-				'left',
-				'bottom',
-				'right',
-				'margin',
-				'padding',
-				'border',
-				'borderWidth',
-				'borderStyle',
-				'borderColor',
-				'borderRadius',
-				'font',
-				'fontFamily',
-				'fontSize',
-				'fontWeight',
-				'fontStyle',
-				'lineHeight',
-				'textAlign',
-				'textTransform',
-				'textDecoration',
-				'whiteSpace',
-				'color',
-				'background',
-				'backgroundColor',
-				'backgroundImage',
-				'backgroundSize',
-				'backgroundPosition',
-				'backgroundRepeat',
-				'flex',
-				'flexDirection',
-				'flexWrap',
-				'justifyContent',
-				'alignItems',
-				'alignContent',
-				'gap',
-				'grid',
-				'gridTemplateColumns',
-				'gridTemplateRows',
-				'gridGap',
-				'borderCollapse',
-				'borderSpacing',
-				'tableLayout'
-			];
-
-			const copyStyles = (source: Element, target: HTMLElement) => {
-				const computed = window.getComputedStyle(source);
-				propertiesToCopy.forEach((prop) => {
-					let val = computed.getPropertyValue(prop);
-					// Nuking oklch completely
-					if (val && val.includes('oklch')) {
-						val = getStandardColor(val);
-					}
-					target.style.setProperty(prop, val, 'important');
-				});
-
-				// Strip classes to ensure no external CSS interferes
-				target.removeAttribute('class');
-			};
-
-			// Apply to table & children
-			copyStyles(originalTable, clonedTable);
-			clonedTable.style.borderCollapse = 'collapse'; // Force collapse
-
-			originalElements.forEach((orig, index) => {
-				if (clonedElements[index]) {
-					copyStyles(orig, clonedElements[index] as HTMLElement);
-
-					// Force static position on children
-					const el = clonedElements[index] as HTMLElement;
-					if (el.style.position === 'sticky') {
-						el.style.position = 'static';
-					}
-				}
-			});
-
-			// 3. Inject into Clean Room
-			iframeDoc.body.appendChild(clonedTable);
-
-			// Wait for render
-			await new Promise((resolve) => setTimeout(resolve, 500));
-
-			// 4. Capture from the Clean Room with EXPLICIT CONTEXT
-			const canvas = await html2canvas(clonedTable, {
-				scale: 1.5,
+			// html2canvas-pro natively supports oklch and modern CSS colors
+			const canvas = await html2canvas(table, {
+				scale: 2,
 				backgroundColor: '#ffffff',
 				logging: false,
 				useCORS: true,
-				allowTaint: true,
-				ignoreElements: (element) => element.tagName === 'IFRAME'
+				allowTaint: true
 			});
 
 			const link = document.createElement('a');
@@ -394,13 +256,8 @@
 			setTimeout(() => alert('✅ Tabla descargada exitosamente'), 100);
 		} catch (err: any) {
 			Logger.error('Error downloading PNG:', err);
-			// Show actual error to the user for better debugging
 			alert(`❌ Error al descargar: ${err.message || err}`);
 		} finally {
-			// Clean up our temporary container
-			if (document.body.contains(iframe)) {
-				document.body.removeChild(iframe);
-			}
 			downloadingPNG = false;
 		}
 	};
