@@ -124,7 +124,7 @@
 {/if}
 
 <!-- Main App Content (hidden during splash) -->
-<div class:hidden={showSplash && !splashCompleted}>
+<div class:hidden={showSplash && !splashCompleted} class="bg-neutral-50 dark:bg-slate-900">
 	{#if data.session}
 		<!-- Desktop/Tablet Navigation -->
 		<nav
