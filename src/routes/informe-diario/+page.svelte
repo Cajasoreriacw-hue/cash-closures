@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { Alert } from 'flowbite-svelte';
 	import { getStores } from '$lib/services/closures';
 	import { Logger } from '$lib/utils/logger';
@@ -233,6 +233,7 @@
 		}
 
 		downloadingPNG = true;
+		await tick();
 
 		try {
 			// 🚀 LAZY LOADING: html2canvas se carga solo cuando se descarga
@@ -621,16 +622,27 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group"
+							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+								informeData.descuentos[store]
+							)}"
 						>
-							<input
-								type="number"
-								bind:value={informeData.descuentos[store]}
-								class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent"
-								placeholder="0"
-							/>
-							<div class="h-10"></div>
-							<!-- Spacer to give height -->
+							{#if downloadingPNG}
+								<span
+									class="flex items-center justify-center w-full h-full py-2 text-xs font-semibold"
+								>
+									{formatCurrency(informeData.descuentos[store])}
+								</span>
+							{:else}
+								<input
+									type="number"
+									bind:value={informeData.descuentos[store]}
+									class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium bg-transparent {getCellClass(
+										informeData.descuentos[store]
+									)}"
+									placeholder="0"
+								/>
+								<div class="h-10"></div>
+							{/if}
 						</td>
 					{/each}
 				</tr>
@@ -645,15 +657,27 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group"
+							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+								informeData.gastos_caja[store]
+							)}"
 						>
-							<input
-								type="number"
-								bind:value={informeData.gastos_caja[store]}
-								class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent"
-								placeholder="0"
-							/>
-							<div class="h-10"></div>
+							{#if downloadingPNG}
+								<span
+									class="flex items-center justify-center w-full h-full py-2 text-xs font-semibold"
+								>
+									{formatCurrency(informeData.gastos_caja[store])}
+								</span>
+							{:else}
+								<input
+									type="number"
+									bind:value={informeData.gastos_caja[store]}
+									class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium bg-transparent {getCellClass(
+										informeData.gastos_caja[store]
+									)}"
+									placeholder="0"
+								/>
+								<div class="h-10"></div>
+							{/if}
 						</td>
 					{/each}
 				</tr>
@@ -668,15 +692,27 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group"
+							class="p-0 border-r border-gray-300 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+								informeData.sobre_diario[store]
+							)}"
 						>
-							<input
-								type="number"
-								bind:value={informeData.sobre_diario[store]}
-								class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium text-gray-700 dark:text-gray-200 bg-transparent"
-								placeholder="0"
-							/>
-							<div class="h-10"></div>
+							{#if downloadingPNG}
+								<span
+									class="flex items-center justify-center w-full h-full py-2 text-xs font-semibold"
+								>
+									{formatCurrency(informeData.sobre_diario[store])}
+								</span>
+							{:else}
+								<input
+									type="number"
+									bind:value={informeData.sobre_diario[store]}
+									class="py-2 w-full h-full absolute inset-0 text-center border-0 focus:outline-none focus:bg-fresh-sky-50/30 dark:focus:bg-fresh-sky-900/20 text-sm font-medium bg-transparent {getCellClass(
+										informeData.sobre_diario[store]
+									)}"
+									placeholder="0"
+								/>
+								<div class="h-10"></div>
+							{/if}
 						</td>
 					{/each}
 				</tr>
