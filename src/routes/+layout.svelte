@@ -5,6 +5,7 @@
 	import { createBrowserClient } from '@supabase/ssr';
 	import { page } from '$app/stores';
 	import SplashScreen from '$lib/components/SplashScreen.svelte';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import { onMount } from 'svelte';
 
 	import { Drawer, Dropdown } from 'flowbite-svelte';
@@ -161,6 +162,7 @@
 
 			<!-- Right: User Info and Logout -->
 			<div class="flex items-center gap-2 lg:gap-4">
+				<ThemeToggle />
 				<div
 					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-linear-to-r from-gray-50 to-gray-50/50 rounded-xl border border-gray-100"
 				>
@@ -210,6 +212,7 @@
 
 			<!-- User Avatar & Menu Button -->
 			<div class="flex items-center gap-3">
+				<ThemeToggle />
 				<div
 					data-user-avatar
 					class="flex items-center justify-center w-8 h-8 rounded-full bg-fresh-sky-500 text-white font-semibold text-sm shadow-soft cursor-pointer"
