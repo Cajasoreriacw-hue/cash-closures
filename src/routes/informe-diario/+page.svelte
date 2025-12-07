@@ -242,6 +242,12 @@
 
 			// html2canvas-pro natively supports oklch and modern CSS colors
 			// Using scale: 3 for high-quality output (3x resolution)
+			// Hack: switch to border-collapse separate to ensure html2canvas catches all borders
+			const originalCollapse = table.style.borderCollapse;
+			const originalSpacing = table.style.borderSpacing;
+			table.style.borderCollapse = 'separate';
+			table.style.borderSpacing = '0';
+
 			const canvas = await html2canvas(table, {
 				scale: 3,
 				backgroundColor: '#ffffff',
@@ -252,6 +258,10 @@
 				windowWidth: table.scrollWidth,
 				windowHeight: table.scrollHeight
 			});
+
+			// Revert styles
+			table.style.borderCollapse = originalCollapse;
+			table.style.borderSpacing = originalSpacing;
 
 			const link = document.createElement('a');
 			const dateStr = selectedDate.replace(/-/g, '');
@@ -622,9 +632,9 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
 								informeData.descuentos[store]
-							)}"
+							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
 							{#if downloadingPNG}
 								<span
@@ -657,9 +667,9 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
 								informeData.gastos_caja[store]
-							)}"
+							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
 							{#if downloadingPNG}
 								<span
@@ -692,9 +702,9 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="p-0 border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
 								informeData.sobre_diario[store]
-							)}"
+							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
 							{#if downloadingPNG}
 								<span
