@@ -128,7 +128,7 @@
 	{#if data.session}
 		<!-- Desktop/Tablet Navigation -->
 		<nav
-			class="hidden md:flex items-center justify-between px-4 lg:px-6 py-3 border-b border-gray-100 bg-white/95 backdrop-blur-lg shadow-soft sticky top-0 z-50"
+			class="hidden md:flex items-center justify-between px-4 lg:px-6 py-3 border-b border-gray-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-soft dark:shadow-none sticky top-0 z-50 transition-colors duration-300"
 		>
 			<!-- Left: Logo and App Name -->
 			<div class="flex items-center gap-2 lg:gap-3">
@@ -138,8 +138,10 @@
 					class="flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-xl"
 				/>
 				<div>
-					<h1 class="text-base lg:text-lg font-bold text-gray-900">Monit</h1>
-					<p class="text-[8px] lg:text-xs text-gray-500 hidden lg:block">Control de Caja</p>
+					<h1 class="text-base lg:text-lg font-bold text-gray-900 dark:text-white">Monit</h1>
+					<p class="text-[8px] lg:text-xs text-gray-500 dark:text-gray-400 hidden lg:block">
+						Control de Caja
+					</p>
 				</div>
 			</div>
 
@@ -164,7 +166,7 @@
 			<div class="flex items-center gap-2 lg:gap-4">
 				<ThemeToggle />
 				<div
-					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-linear-to-r from-gray-50 to-gray-50/50 rounded-xl border border-gray-100"
+					class="hidden lg:flex items-center gap-3 px-3 py-2 bg-linear-to-r from-gray-50 to-gray-50/50 dark:from-slate-800 dark:to-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-700 transition-colors"
 				>
 					<div
 						class="flex items-center justify-center w-8 h-8 rounded-full bg-fresh-sky-500 text-white font-semibold text-sm shadow-soft"
@@ -172,14 +174,14 @@
 						{userDisplayName.charAt(0).toUpperCase()}
 					</div>
 					<div>
-						<p class="text-sm font-semibold text-gray-900">{userDisplayName}</p>
-						<p class="text-xs text-gray-500">{data.user?.email}</p>
+						<p class="text-sm font-semibold text-gray-900 dark:text-white">{userDisplayName}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-400">{data.user?.email}</p>
 					</div>
 				</div>
 				<button
 					type="button"
 					onclick={handleLogout}
-					class="flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 text-xs lg:text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all border border-red-200 hover:border-red-300"
+					class="flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 text-xs lg:text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all border border-red-200 hover:border-red-300 dark:border-red-900/30"
 				>
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
@@ -196,7 +198,7 @@
 
 		<!-- Mobile Top Bar -->
 		<nav
-			class="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white/95 backdrop-blur-lg shadow-soft sticky top-0 z-50"
+			class="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-soft dark:shadow-none sticky top-0 z-50 transition-colors duration-300"
 		>
 			<!-- Logo -->
 			<div class="flex items-center gap-2">
@@ -206,7 +208,7 @@
 					class="flex items-center justify-center w-9 h-9 rounded-xl"
 				/>
 				<div>
-					<h1 class="text-base font-bold text-gray-900">Monit</h1>
+					<h1 class="text-base font-bold text-gray-900 dark:text-white">Monit</h1>
 				</div>
 			</div>
 
@@ -266,7 +268,7 @@
 				<button
 					type="button"
 					onclick={() => (drawerHidden = !drawerHidden)}
-					class="p-2 text-gray-600 hover:bg-fresh-sky-50 hover:text-fresh-sky-600 rounded-xl transition-all duration-200"
+					class="p-2 text-gray-600 dark:text-gray-300 hover:bg-fresh-sky-50 dark:hover:bg-fresh-sky-900/20 hover:text-fresh-sky-600 dark:hover:text-fresh-sky-400 rounded-xl transition-all duration-200"
 					aria-label="Toggle menu"
 				>
 					{#if !drawerHidden}
