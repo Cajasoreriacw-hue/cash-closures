@@ -345,7 +345,8 @@
 				}
 
 				doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-				doc.text(d.date, colX.date, y + 6.5);
+				const formattedDate = new Date(d.date + 'T00:00:00').toLocaleDateString();
+				doc.text(formattedDate, colX.date, y + 6.5);
 				doc.text(d.store, colX.store, y + 6.5);
 
 				// Badge para el método (simulado con texto color)
@@ -712,26 +713,24 @@
 						{#each paginatedDescuadres as d}
 							<tr class="hover:bg-fresh-sky-50/10 dark:hover:bg-fresh-sky-900/10 transition-colors">
 								<td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap"
-									>{new Date(d.date).toLocaleDateString()}</td
+									>{new Date(d.date + 'T00:00:00').toLocaleDateString()}</td
 								>
 								<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{d.store}</td>
 								<td class="px-6 py-4 text-gray-600 dark:text-gray-400">{d.cashier}</td>
 								<td class="px-6 py-4">
-								<span
-							class={
-								'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
-								(d.metodo === 'Efectivo'
-									? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/40'
-									: d.metodo === 'Datáfono'
-									? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
-									: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')
-							}
-						>
-							{d.metodo}
-						</span>
-						</td>
-						<td class="px-6 py-4 text-right font-bold text-red-600 dark:text-red-400">
-							{d.valor.toLocaleString('es-CO', {
+									<span
+										class={'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
+											(d.metodo === 'Efectivo'
+												? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/40'
+												: d.metodo === 'Datáfono'
+													? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
+													: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')}
+									>
+										{d.metodo}
+									</span>
+								</td>
+								<td class="px-6 py-4 text-right font-bold text-red-600 dark:text-red-400">
+									{d.valor.toLocaleString('es-CO', {
 										style: 'currency',
 										currency: 'COP',
 										maximumFractionDigits: 0
@@ -770,20 +769,18 @@
 						<div>
 							<span
 								class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider"
-								>{new Date(d.date).toLocaleDateString()}</span
+								>{new Date(d.date + 'T00:00:00').toLocaleDateString()}</span
 							>
 							<h3 class="text-base font-bold text-gray-900 dark:text-white mt-1">{d.store}</h3>
 							<p class="text-sm text-gray-500 dark:text-gray-400">{d.cashier}</p>
 						</div>
 						<span
-							class={
-								'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
+							class={'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ' +
 								(d.metodo === 'Efectivo'
 									? 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/40'
 									: d.metodo === 'Datáfono'
-									? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
-									: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')
-							}
+										? 'bg-purple-50 text-purple-700 border-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/40'
+										: 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/40')}
 						>
 							{d.metodo}
 						</span>
