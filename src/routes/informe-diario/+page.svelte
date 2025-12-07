@@ -493,12 +493,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Datáfono</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.datáfono[store]
 							)}"
 						>
@@ -512,12 +512,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Efectivo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.efectivo[store]
 							)}"
 						>
@@ -531,12 +531,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Apparta</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.apparta[store]
 							)}"
 						>
@@ -550,12 +550,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencias Bancarias</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -579,12 +579,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Rappi</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_rappi[store]
 							)}"
 						>
@@ -598,12 +598,12 @@
 					class="hover:bg-fresh-sky-50/30 dark:hover:bg-fresh-sky-900/10 transition-colors border-b border-gray-300 dark:border-slate-700"
 				>
 					<td
-						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-medium text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-slate-700/30 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
 						>Transferencia Justo</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_justo[store]
 							)}"
 						>
