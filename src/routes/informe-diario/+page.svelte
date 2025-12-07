@@ -632,7 +632,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center relative group {getCellClass(
 								informeData.descuentos[store]
 							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
@@ -667,7 +667,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center relative group {getCellClass(
 								informeData.gastos_caja[store]
 							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
@@ -702,7 +702,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="border-r border-b border-gray-300 dark:border-slate-700 text-center bg-white dark:bg-slate-800 relative group {getCellClass(
+							class="border-r border-b border-gray-300 dark:border-slate-700 text-center relative group {getCellClass(
 								informeData.sobre_diario[store]
 							)} {downloadingPNG ? 'px-3 py-3' : 'p-0'}"
 						>
