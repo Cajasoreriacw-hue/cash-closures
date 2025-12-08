@@ -214,8 +214,8 @@
 	};
 
 	const getCellClass = (value: number) => {
-		if (value === 0) return 'text-gray-500 dark:text-gray-400';
-		return 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 font-semibold';
+		if (value === 0) return 'text-lime-500 dark:text-lime-400';
+		return 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-semibold';
 	};
 
 	let downloadingPNG = $state(false);
@@ -318,9 +318,7 @@
 	};
 </script>
 
-<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-	Informe Diario por Sedes
-</h1>
+<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Informe Diario</h1>
 
 {#if validationError}
 	<Alert color="yellow" dismissable class="mb-4">
@@ -498,7 +496,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.datáfono[store]
 							)}"
 						>
@@ -517,7 +515,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.efectivo[store]
 							)}"
 						>
@@ -536,7 +534,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.apparta[store]
 							)}"
 						>
@@ -555,7 +553,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -565,10 +563,10 @@
 				</tr>
 
 				<!-- Separador -->
-				<tr class="bg-fresh-sky-600 dark:bg-fresh-sky-900/20">
+				<tr class="bg-orange-500 dark:bg-orange-900/20">
 					<td
 						colspan={filteredStores.length + 1}
-						class="px-4 py-2 text-center text-xs font-bold text-fresh-sky-50 dark:text-fresh-sky-300 uppercase tracking-widest"
+						class="px-4 py-2 text-center text-xs font-bold text-orange-100 dark:text-orange-300 uppercase tracking-widest"
 					>
 						Plataformas Domicilio
 					</td>
@@ -729,15 +727,15 @@
 
 				<!-- RESPONSABLE -->
 				<tr
-					class="bg-gray-50/50 dark:bg-slate-700/20 border-b border-gray-300 dark:border-slate-700"
+					class="bg-indigo-500 dark:bg-indigo-700/20 border-b border-indigo-300 dark:border-indigo-700"
 				>
 					<td
-						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-gray-100/50 dark:bg-slate-700/50 border-r border-b border-gray-300 dark:border-slate-700 sticky left-0 z-10"
+						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-indigo-500 dark:bg-indigo-700/50 border-r border-b border-indigo-300 dark:border-indigo-700 sticky left-0 z-10"
 						>Responsable</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center font-semibold text-xs text-gray-600 border-r border-b border-gray-300 dark:border-slate-700 dark:text-gray-400 uppercase tracking-wide"
+							class="px-4 py-3 text-center font-semibold text-xs text-white border-r border-b border-indigo-300 dark:border-indigo-700 uppercase tracking-wide"
 						>
 							{responsables[store] || '-'}
 						</td>
