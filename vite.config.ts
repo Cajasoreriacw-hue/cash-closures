@@ -55,7 +55,7 @@ export default defineConfig({
 		// Usar esbuild para minificación (más rápido que terser)
 		minify: 'esbuild',
 		// Reducir tamaño de chunks
-		target: 'es2020',
+		target: 'es2015',
 		// Optimizar CSS
 		cssMinify: 'esbuild',
 		rollupOptions: {
