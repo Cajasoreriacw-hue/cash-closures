@@ -27,6 +27,26 @@
 </head>
 
 <body data-sveltekit-preload-data="hover">
+	<!-- Splash Screen Crítico (HTML/CSS Puro) -->
+	<div id="initial-splash"
+		style="position: fixed; inset: 0; background-color: #1fade0; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.5s ease-out;">
+		<img src="/icon-512.svg" alt="Monit"
+			style="width: 128px; height: 128px; border-radius: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 24px;">
+		<h1
+			style="color: white; font-family: system-ui, -apple-system, sans-serif; font-weight: bold; font-size: 24px; margin: 0;">
+			Monit</h1>
+		<p
+			style="color: rgba(255,255,255,0.9); font-family: system-ui, -apple-system, sans-serif; font-size: 14px; margin-top: 8px;">
+			Cargando sistema...</p>
+		<script>
+			// Fallback de seguridad: si JS carga, este script ayudará a ocultarlo cuando Svelte monte
+			// Pero si Svelte falla, el usuario verá esto indefinidamente (mejor que blanco)
+			window.addEventListener('load', () => {
+				// Esperamos un poco para asegurar que Svelte tome control, si no, se queda.
+				// Svelte debería eliminarlo o ocultarlo. 
+			});
+		</script>
+	</div>
 	<div style="display: contents">%sveltekit.body%</div>
 </body>
 

@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => {
 
 		build: {
 			minify: isProd ? 'esbuild' : false,
-			target: 'es2020',
+			target: 'es2015',
 			cssMinify: isProd ? 'esbuild' : false,
 			sourcemap: false,
 

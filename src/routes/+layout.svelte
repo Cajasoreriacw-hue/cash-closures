@@ -32,6 +32,13 @@
 
 	// Check if splash has been shown in this session
 	onMount(() => {
+		// Remove HTML Splash
+		const htmlSplash = document.getElementById('initial-splash');
+		if (htmlSplash) {
+			htmlSplash.style.opacity = '0';
+			setTimeout(() => htmlSplash.remove(), 500);
+		}
+
 		const hasShownSplash = sessionStorage.getItem('splashShown');
 		if (hasShownSplash) {
 			showSplash = false;
