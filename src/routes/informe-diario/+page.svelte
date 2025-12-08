@@ -318,7 +318,9 @@
 	};
 </script>
 
-<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Informe Diario</h1>
+<h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
+	<span class="material-symbols-rounded"> dashboard </span> Informe Diario
+</h1>
 
 {#if validationError}
 	<Alert color="yellow" dismissable class="mb-4">
@@ -730,7 +732,7 @@
 					class="bg-indigo-500 dark:bg-indigo-700/20 border-b border-indigo-900 dark:border-indigo-700"
 				>
 					<td
-						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-indigo-500 dark:bg-indigo-700/50 border-r border-b border-indigo-900 dark:border-indigo-700 sticky left-0 z-10"
+						class="px-4 py-3 font-bold text-white dark:text-gray-200 bg-indigo-500 dark:bg-indigo-700/50 border-r border-b border-indigo-900 dark:border-indigo-700 sticky left-0 z-10"
 						>Responsable</td
 					>
 					{#each filteredStores as store}
