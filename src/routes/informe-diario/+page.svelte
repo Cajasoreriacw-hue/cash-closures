@@ -214,7 +214,7 @@
 	};
 
 	const getCellClass = (value: number) => {
-		if (value === 0) return 'text-lime-500 dark:text-lime-400';
+		if (value === 0) return 'text-zinc-500 dark:text-zinc-400';
 		return 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-semibold';
 	};
 
@@ -496,7 +496,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.datáfono[store]
 							)}"
 						>
@@ -515,7 +515,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.efectivo[store]
 							)}"
 						>
@@ -534,7 +534,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.apparta[store]
 							)}"
 						>
@@ -553,7 +553,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b bg-lime-100 dark:bg-lime-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencias_bancarias[store]
 							)}"
 						>
@@ -582,7 +582,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_rappi[store]
 							)}"
 						>
@@ -601,7 +601,7 @@
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-3 py-3 text-center border-r border-b border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
+							class="px-3 py-3 text-center border-r border-b bg-neutral-100 dark:bg-neutral-900/20 border-gray-300 dark:border-slate-700 whitespace-nowrap {getCellClass(
 								informeData.transferencia_justo[store]
 							)}"
 						>
@@ -727,15 +727,15 @@
 
 				<!-- RESPONSABLE -->
 				<tr
-					class="bg-indigo-500 dark:bg-indigo-700/20 border-b border-indigo-300 dark:border-indigo-700"
+					class="bg-indigo-500 dark:bg-indigo-700/20 border-b border-indigo-900 dark:border-indigo-700"
 				>
 					<td
-						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-indigo-500 dark:bg-indigo-700/50 border-r border-b border-indigo-300 dark:border-indigo-700 sticky left-0 z-10"
+						class="px-4 py-3 font-bold text-gray-700 dark:text-gray-200 bg-indigo-500 dark:bg-indigo-700/50 border-r border-b border-indigo-900 dark:border-indigo-700 sticky left-0 z-10"
 						>Responsable</td
 					>
 					{#each filteredStores as store}
 						<td
-							class="px-4 py-3 text-center font-semibold text-xs text-white border-r border-b border-indigo-300 dark:border-indigo-700 uppercase tracking-wide"
+							class="px-4 py-3 text-center font-semibold text-xs text-white border-r border-b border-indigo-900 dark:border-indigo-700 uppercase tracking-wide"
 						>
 							{responsables[store] || '-'}
 						</td>
@@ -774,8 +774,8 @@
 			<span class="text-gray-600 dark:text-gray-400">Sin diferencia ($0)</span>
 		</div>
 		<div class="flex items-center gap-2">
-			<div class="w-2 h-2 rounded-full bg-red-500 dark:bg-red-400"></div>
-			<span class="text-red-700 dark:text-red-400 font-medium"
+			<div class="w-2 h-2 rounded-full bg-rose-500 dark:bg-rose-400"></div>
+			<span class="text-rose-700 dark:text-rose-400 font-medium"
 				>Diferencia (Sobrante o Faltante)</span
 			>
 		</div>
