@@ -12,6 +12,21 @@
 	<link rel="manifest" href="/manifest.json" />
 	<link rel="apple-touch-icon" href="/icon-192.svg" />
 	<script>
+		// CRASH REPORTER - DEBUGGING ONLY
+		window.onerror = function (msg, url, lineNo, columnNo, error) {
+			const div = document.createElement('div');
+			div.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:9999;padding:20px;font-size:16px;white-space:pre-wrap;overflow:auto;max-height:100vh;';
+			div.textContent = 'Global Error:\n' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nCol: ' + columnNo + '\nStack: ' + (error ? error.stack : 'no stack');
+			document.body.appendChild(div);
+			return false;
+		};
+		window.onunhandledrejection = function (event) {
+			const div = document.createElement('div');
+			div.style.cssText = 'position:fixed;top:50%;left:0;width:100%;background:blue;color:white;z-index:9999;padding:20px;font-size:16px;white-space:pre-wrap;overflow:auto;max-height:50vh;';
+			div.textContent = 'Unhandled Promise:\n' + event.reason;
+			document.body.appendChild(div);
+		};
+
 		if (
 			localStorage.theme === 'dark' ||
 			(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
