@@ -10,7 +10,7 @@ export default defineConfig({
 			srcDir: './src',
 			strategies: 'injectManifest',
 			filename: 'service-worker.ts',
-			selfDestroying: process.env.SELF_DESTROYING_SW === 'true',
+			selfDestroying: true,
 			manifest: {
 				name: 'Monit - Control de Caja',
 				short_name: 'Monit',
