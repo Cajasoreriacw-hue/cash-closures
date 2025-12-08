@@ -17,8 +17,10 @@
 	let { supabase, session, user } = $derived(data);
 
 	let drawerHidden = $state(true);
-	let showSplash = $state(true);
-	let splashCompleted = $state(false);
+	// Simplificamos: El splash HTML maneja la carga inicial.
+	// Ya no necesitamos bloquear el renderizado de Svelte.
+	let showSplash = $state(false);
+	let splashCompleted = $state(true);
 
 	const transitionParams = {
 		x: -320,
@@ -30,26 +32,15 @@
 		drawerHidden = true;
 	};
 
-	// Check if splash has been shown in this session
 	onMount(() => {
-		// Remove HTML Splash
+		// Remove HTML Splash immediately when Svelte mounts
 		const htmlSplash = document.getElementById('initial-splash');
 		if (htmlSplash) {
+			htmlSplash.style.transition = 'opacity 0.5s ease-out';
 			htmlSplash.style.opacity = '0';
 			setTimeout(() => htmlSplash.remove(), 500);
 		}
-
-		const hasShownSplash = sessionStorage.getItem('splashShown');
-		if (hasShownSplash) {
-			showSplash = false;
-			splashCompleted = true;
-		}
 	});
-
-	function handleSplashComplete() {
-		splashCompleted = true;
-		sessionStorage.setItem('splashShown', 'true');
-	}
 
 	async function handleLogout() {
 		await supabase.auth.signOut();
@@ -126,13 +117,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 </svelte:head>
 
-<!-- Splash Screen -->
-{#if showSplash && !splashCompleted && data.session}
-	<SplashScreen onComplete={handleSplashComplete} />
-{/if}
-
-<!-- Main App Content (hidden during splash) -->
-<div class:hidden={showSplash && !splashCompleted} class="bg-neutral-50 dark:bg-slate-900">
+<!-- Main App Content -->
+<div class="bg-neutral-50 dark:bg-slate-900">
 	{#if data.session}
 		<!-- Desktop/Tablet Navigation -->
 		<nav
