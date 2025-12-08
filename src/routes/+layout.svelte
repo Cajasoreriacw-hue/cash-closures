@@ -1,4 +1,5 @@
 <script lang="ts">
+	import 'core-js/actual';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { goto, invalidateAll } from '$app/navigation';
